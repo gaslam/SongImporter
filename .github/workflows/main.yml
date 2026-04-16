@@ -24,3 +24,12 @@ jobs:
         working-directory: ${{ env.SOURCE_DIR }}
         run: |
           git fetch --all --tags -f
+
+      - name: Try to cache the Qt-Installation
+        id: cache-qt
+        uses: actions/cache@v3
+        env: 
+          cache-name: cache-qt
+        with:
+          path: ${{ runner.temp }}\Qt
+          key: ${{ runner.os }}-Qt-${{ env.QT_VERSION }}
