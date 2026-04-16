@@ -4,18 +4,13 @@ on: [push, pull_request, workflow_dispatch]
     
 defaults:
   run:
-    shell: msys2 {0}
+    shell: cmd
 
 jobs:
   build:
     runs-on: windows-2019
 
     steps:
-      - uses: msys2/setup-msys2@v2
-        with:
-          install: mingw-w64-x86_64-toolchain
-          msystem: mingw64
-          release: false
 
       - name: (1) Checkout repo
         uses: actions/checkout@v4
