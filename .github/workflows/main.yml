@@ -11,17 +11,29 @@ jobs:
     runs-on: windows-2025
 
     steps:
-      - uses: msys2/setup-msys2@v2
+    
+      - name: (1) setup mysys2
+        uses: msys2/setup-msys2@v2
         with:
           install: mingw-w64-x86_64-toolchain
           msystem: mingw64
           release: false
 
-      - name: (1) Checkout repo
+      - name: (2) Checkout repo
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: (2) Get all tags for correct version determination
+      - name: (3) Get all tags for correct version determination
         run: |
           git fetch --all --tags -f
+      - name: (4) Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+            version: '6.10.1'
+            host: 'windows'
+            target: 'desktop'
+            arch: 'win64_mingw'
+            dir: '${{github.workspace}}/qt/'
+            install-deps: 'true'
+            
