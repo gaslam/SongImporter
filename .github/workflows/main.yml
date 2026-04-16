@@ -10,5 +10,15 @@ on:
     branches:
     - 'main'
     - 'dev'
+
+    
+defaults:
+  run:
+    shell: cmd
+
+env:
+  SOURCE_DIR:   ${{ github.workspace }}
+  QT_VERSION:   6.10.1
+  ARTIFACT:     songimporter.zip
 jobs:
 
