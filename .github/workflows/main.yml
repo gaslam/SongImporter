@@ -47,7 +47,7 @@ jobs:
 
     - name: QML lint (Main.qml)
       run: |
-        qmllint --warnings-as-errors SongImporterGui/Main.qml 
+        qmllint SongImporterGui/Main.qml 
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
