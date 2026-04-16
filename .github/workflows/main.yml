@@ -43,4 +43,4 @@ jobs:
       run: cmake --build ${{env.BUILD_FOLDER}} --config ${{ env.BUILD_TYPE }}
       
     - name: Analyse QML
-      run: qmllint '${{env.BUILD_FOLDER}}\SongImporterGui\${{env.BUILD_TYPE}}\appSongImporterGui.exe'
+      run: qmllint -I SongImporterGui ${{ env.SOURCE_DIR }}/SongImporterGui/
