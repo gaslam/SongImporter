@@ -33,6 +33,7 @@ jobs:
         arch: 'win64_mingw'
         install-deps: true
         dir: "${{env.SOURCE_DIR}}/qt"
+        tools: 'mingw'
 
     - name: Configure CMake Project
       working-directory: ${{env.SOURCE_DIR}}
