@@ -34,10 +34,12 @@ jobs:
 
 
     - name: Configure CMake
+      shell: powershell
       run: |
-          cmake -S . -B ${{ env.BUILD_DIR }} -G "MinGW Makefiles" ^
-            -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} ^
-            -DCMAKE_PREFIX_PATH="C:\Qt\6.10.1\mingw_64"
+        cmake -S . -B build `
+          -G "MinGW Makefiles" `
+          -DCMAKE_BUILD_TYPE=Release `
+          -DCMAKE_PREFIX_PATH="C:\Qt\6.10.1\mingw_64"
 
     - name: Build project
       run: |
