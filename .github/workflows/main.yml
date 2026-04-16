@@ -17,6 +17,11 @@ jobs:
       uses: actions/checkout@v2
       with:
         submodules: recursive
+
+    - name: Create dir
+      run: |
+        mkdir ${{env.SOURCE_DIR}}/build
+
                
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
