@@ -19,3 +19,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
+
+      - name: Get all tags for correct version determination
+        working-directory: ${{ env.SOURCE_DIR }}
+        run: |
+          git fetch --all --tags -f
