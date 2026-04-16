@@ -1,35 +1,14 @@
 name: Windows GUI Release
-on: [push, pull_request, workflow_dispatch]
-env: 
-  SOURCE_DIR: ${{ github.workspace }}
-  QT_VERSION: 6.10.1
-  SONGIMPORTER_LIB_GUI_DIR: ${{ github.workspace }}\SongImporterGui
-  SONGIMPORTER_LIB_SOURCE_DIR: ${{ github.workspace }}\SongImporterLib
-  SONGIMPORTER_LIB_ARTIFACT_WITHOUT_ZIP_ENDING: SongImporterLib
-  SONGIMPORTER_LIB_BUILD_DIR_NAME: buildSongImporter
-
-  
-
-  
+on:
+  push:
+    branches:
+      - 'main'
+      - 'dev'
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+    - 'main'
+    - 'dev'
 jobs:
-  build:
-    runs-on: windows-2025
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
 
-      - name: Get all tags for correct version determination
-        working-directory: ${{ env.SOURCE_DIR }}
-        run: |
-          git fetch --all --tags -f
-
-      - name: Try to cache the Qt-Installation
-        id: cache-qt
-        uses: actions/cache@v3
-        env: 
-          cache-name: cache-qt
-        with:
-          path: ${{ runner.temp }}\Qt
-          key: ${{ runner.os }}-Qt-${{ env.QT_VERSION }}
