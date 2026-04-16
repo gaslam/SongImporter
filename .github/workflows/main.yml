@@ -1,0 +1,13 @@
+name: Windows GUI Release
+on: [push, pull_request, workflow_dispatch]
+env: 
+  SOURCE_DIR: ${{ github.workspace }}
+  QT_VERSION: 6.10.1
+  SONGIMPORTER_LIB_GUI_DIR: ${{ github.workspace }}\SongImporterGui
+  SONGIMPORTER_LIB_SOURCE_DIR: ${{ github.workspace }}\SongImporterLib
+  SONGIMPORTER_LIB_ARTIFACT_WITHOUT_ZIP_ENDING: SongImporterLib
+  SONGIMPORTER_LIB_BUILD_DIR_NAME: buildSongImporter
+
+  
+
+  
