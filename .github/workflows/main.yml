@@ -21,4 +21,16 @@ env:
   QT_VERSION:   6.10.1
   ARTIFACT:     songimporter.zip
 jobs:
+  build:
+    runs-on:  windows-2019
 
+    steps:
+      - name: (1) Checkout repo
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: (2) Get all tags for correct version determination
+        working-directory:  ${{ github.workspace }}
+        run: |
+          git fetch --all --tags -f
