@@ -7,6 +7,7 @@ env:
   QT_VERSION: "6.10.1"
   SOURCE_DIR: ${{ github.workspace }}
   BUILD_TYPE: Release
+  BUILD_FOLDER: ${{ github.workspace }}/build
 
 jobs:
   build:
@@ -20,7 +21,7 @@ jobs:
 
     - name: Create dir
       run: |
-        mkdir ${{env.SOURCE_DIR}}/build
+        mkdir ${{env.BUILD_FOLDER}}
 
                
     - name: Install Qt
@@ -36,7 +37,7 @@ jobs:
 
     - name: Configure CMake Project
       working-directory: ${{env.SOURCE_DIR}}
-      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -G "Visual Studio 17 2022" -B ${{env.SOURCE_DIR}}/build
+      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -G "Visual Studio 17 2022" -B ${{env.BUILD_FOLDER}}
       
     - name: Build project
-      run: cmake --build ${{env.SOURCE_DIR}}/build --config ${{ env.BUILD_TYPE }}
+      run: cmake --build ${{env.BUILD_FOLDER}} --config ${{ env.BUILD_TYPE }}
