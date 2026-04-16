@@ -30,10 +30,9 @@ jobs:
         version: ${{env.QT_VERSION}}
         host: 'windows'
         target: 'desktop'
-        arch: 'win64_mingw'
+        arch: 'win64_msvc2022_64'
         install-deps: true
         dir: "${{env.SOURCE_DIR}}/qt"
-        tools: 'tools_mingw'
 
     - name: Configure CMake Project
       working-directory: ${{env.SOURCE_DIR}}
