@@ -4,7 +4,7 @@ on: [push, pull_request, workflow_dispatch]
     
 defaults:
   run:
-    shell: mysis2 {0}
+    shell: mysys2 {0}
 
 env:
   SOURCE_DIR:   ${{ github.workspace }}
