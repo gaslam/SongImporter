@@ -35,5 +35,5 @@ jobs:
         dir: "${{env.SOURCE_DIR}}/qt"
 
     - name: Configure CMake Project
-      working-directory: SOURCE_DIR
+      working-directory: ${{env.SOURCE_DIR}}
       run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G "MinGW Makefiles" -B ${{env.SOURCE_DIR}}/build
