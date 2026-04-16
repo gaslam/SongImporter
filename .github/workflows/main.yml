@@ -36,7 +36,7 @@ jobs:
 
     - name: Configure CMake Project
       working-directory: ${{env.SOURCE_DIR}}
-      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -B ${{env.SOURCE_DIR}}/build
+      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -G "Visual Studio 17 2022" -B ${{env.SOURCE_DIR}}/build
       
     - name: Build project
       run: cmake --build ${{env.SOURCE_DIR}}/build --config ${{ env.BUILD_TYPE }}
