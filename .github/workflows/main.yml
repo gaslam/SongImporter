@@ -4,28 +4,24 @@ on: [push, pull_request, workflow_dispatch]
     
 defaults:
   run:
-    shell: mysys2 {0}
+    shell: msys2 {0}
 
-env:
-  SOURCE_DIR:   ${{ github.workspace }}
-  QT_VERSION:   6.10.1
-  ARTIFACT:     songimporter.zip
 jobs:
   build:
-    runs-on:  windows-2019
+    runs-on: windows-2019
 
     steps:
-      - uses: msys2/setup-msys2@v2   
+      - uses: msys2/setup-msys2@v2
         with:
-            install: mingw-w64-x86_64-toolchain
-            msystem: mingw64
-            release: false
+          install: mingw-w64-x86_64-toolchain
+          msystem: mingw64
+          release: false
+
       - name: (1) Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - name: (2) Get all tags for correct version determination
-        working-directory:  ${{ github.workspace }}
         run: |
           git fetch --all --tags -f
