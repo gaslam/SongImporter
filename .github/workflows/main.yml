@@ -2,38 +2,4 @@ name: Windows GUI Release
 on: [push, pull_request, workflow_dispatch]
 
     
-defaults:
-  run:
-    shell: msys2 {0}
-
-jobs:
-  build:
-    runs-on: windows-2025
-
-    steps:
-    
-      - name: (1) setup mysys2
-        uses: msys2/setup-msys2@v2
-        with:
-          install: mingw-w64-x86_64-toolchain
-          msystem: mingw64
-          release: false
-
-      - name: (2) Checkout repo
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: (3) Get all tags for correct version determination
-        run: |
-          git fetch --all --tags -f
-      - name: (4) Install Qt
-        uses: jurplel/install-qt-action@v2
-        with:
-            version: '6.10.1'
-            host: 'windows'
-            target: 'desktop'
-            arch: 'win64_mingw'
-            dir: '${{github.workspace}}/qt/'
-            install-deps: 'true'
             
