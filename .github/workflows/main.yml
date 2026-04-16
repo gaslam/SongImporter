@@ -6,6 +6,7 @@ on: [push, pull_request, workflow_dispatch]
 env:
   QT_VERSION: "6.10.1"
   SOURCE_DIR: ${{ github.workspace }}
+  BUILD_TYPE: Release
 
 jobs:
   build:
@@ -27,3 +28,9 @@ jobs:
         arch: 'win64_mingw'
         install-deps: true
         dir: "${{env.SOURCE_DIR}}/qt"
+
+    - name: Configure CMake Project
+      working-directory: SOURCE_DIR
+      env:
+        CMAKE_PREFIX_PATH: ${{env.Qt6_Dir}}
+      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G "MinGW Makefiles" -B ${{env.SOURCE_DIR}}/build
