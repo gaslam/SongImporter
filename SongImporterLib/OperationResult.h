@@ -16,6 +16,13 @@ public:
 	}
 	const bool bIsSuccessful;
 	const QString errorMessage;
+
+	static inline OperationResult succeed() { return OperationResult(); }
+	static inline OperationResult fail(const QString& error) { 
+		constexpr bool bIsSuccessful = false;
+
+		return OperationResult(bIsSuccessful,error);
+	}
 };
 Q_DECLARE_METATYPE(OperationResult)
 
