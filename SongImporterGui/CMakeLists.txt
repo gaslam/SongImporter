@@ -20,6 +20,7 @@ qt_add_qml_module(appSongImporterGui
     QML_FILES
         Main.qml
         Theme.qml
+        Button.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
