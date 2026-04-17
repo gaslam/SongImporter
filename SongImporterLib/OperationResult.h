@@ -4,7 +4,7 @@
 
 struct OperationResult {
 	Q_GADGET
-	Q_PROPERTY(bool isSuccessful MEMBER bIsSuccessful READ)
+	Q_PROPERTY(bool isSuccessful MEMBER bIsSuccessful)
 	Q_PROPERTY(QString errorMessage MEMBER errorMessage)
 
 public:
