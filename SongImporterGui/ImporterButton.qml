@@ -20,8 +20,8 @@ Rectangle {
              ? hoverColor
              : backgroundColor
 
-    implicitWidth: label.implicitWidth + label.font.pointSize
-    implicitHeight: label.implicitHeight + label.font.pointSize
+    implicitWidth: label.implicitWidth + label.font.pixelSize
+    implicitHeight: label.implicitHeight + label.font.pixelSize
 
     Behavior on color{
         ColorAnimation {
@@ -44,8 +44,10 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
-            buttonDown()
             buttonClicked()
+        }
+        onPressed:{
+            buttonDown()
         }
         onReleased: {
             buttonUp()
