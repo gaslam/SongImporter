@@ -4,7 +4,7 @@
 
 struct OperationResult {
 	Q_GADGET
-	Q_PROPERTY(bool isSuccessful MEMBER bIsSuccessful)
+	Q_PROPERTY(bool isSuccessful MEMBER bIsSuccessful READ)
 	Q_PROPERTY(QString errorMessage MEMBER errorMessage)
 
 public:
@@ -14,12 +14,12 @@ public:
 	{
 
 	}
-	const bool bIsSuccessful;
-	const QString errorMessage;
+	bool bIsSuccessful;
+	QString errorMessage;
 
 	static inline OperationResult succeed() { return OperationResult(); }
 	static inline OperationResult fail(const QString& error) { 
-		constexpr bool bIsSuccessful = false;
+		constexpr bool bIsSuccessful{ false };
 
 		return OperationResult(bIsSuccessful,error);
 	}
