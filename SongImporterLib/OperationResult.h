@@ -8,6 +8,12 @@ struct OperationResult {
 	Q_PROPERTY(QString errorMessage MEMBER errorMessage)
 
 public:
+	OperationResult(const bool succesfull = true, const QString& error = "") : 
+		bIsSuccessful(succesfull), 
+		errorMessage(error)
+	{
+
+	}
 	const bool bIsSuccessful;
 	const QString errorMessage;
 };
