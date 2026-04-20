@@ -21,9 +21,14 @@ OperationResult IsFolderRule::validate(const QVariant & value) const
         return OperationResult::fail("Directory does not exist. Enter a valid directory!");
     }
 
-    if (!actualDirectory.isReadable() || actualDirectory.isEmpty())
+    if (!actualDirectory.isReadable())
     {
         return OperationResult::fail("Directory is not readable. Enter a valid directory!");
+    }
+
+    if (actualDirectory.isEmpty())
+    {
+        return OperationResult::fail("Directory is empty. Enter a valid directory!");
     }
 	return OperationResult::succeed();
 }
