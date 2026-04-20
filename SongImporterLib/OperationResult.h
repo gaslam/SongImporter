@@ -24,7 +24,7 @@ public:
 		return OperationResult(bIsSuccessful,error);
 	}
 
-	operator bool() const { return bIsSuccessful; }
+	explicit operator bool() const { return bIsSuccessful; }
 };
 Q_DECLARE_METATYPE(OperationResult)
 
