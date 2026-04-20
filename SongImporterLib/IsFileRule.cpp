@@ -48,6 +48,6 @@ OperationResult IsFileRule::validate(const QVariant& value) const
 		return OperationResult::fail("The file is not readable");
 	}
 
-	return OperationResult::succeed;
+	return OperationResult::succeed();
 }
 

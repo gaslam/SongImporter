@@ -5,7 +5,8 @@
 class IsFileRule  : public Rule
 {
 	Q_OBJECT
-
+		QML_ELEMENT
+		QML_IMPLEMENTS_INTERFACES(Rule)
 public:
 	IsFileRule(QObject *parent);
 	~IsFileRule();
