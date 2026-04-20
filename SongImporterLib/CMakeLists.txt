@@ -17,7 +17,9 @@ add_library(SongImporterLib STATIC
  OperationResult.h
  Rule.h
  IsFileRule.h
- IsFileRule.cpp)
+ IsFileRule.cpp
+ IsFolderRule.h
+ IsFolderRule.cpp)
 
 target_link_libraries(SongImporterLib PRIVATE Qt${QT_VERSION_MAJOR}::Core)
 
