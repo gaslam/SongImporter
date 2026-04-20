@@ -14,7 +14,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 add_library(SongImporterLib STATIC
   SongImporterLib.cpp
   SongImporterLib.h
- OperationResult.h)
+ OperationResult.h
+ Rule.h)
 
 target_link_libraries(SongImporterLib PRIVATE Qt${QT_VERSION_MAJOR}::Core)
 
