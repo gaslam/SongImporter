@@ -6,6 +6,7 @@
 class Rule
 {
 public:
+	virtual ~Rule() = default;
 	virtual OperationResult validate(const QVariant& value) const = 0;
 };
 #endif
