@@ -1,6 +1,5 @@
 #include "IsFileValidator.h"
 #include <QFileInfo>
-#include <QUrl>
 
 using State = QValidator::State;
 
