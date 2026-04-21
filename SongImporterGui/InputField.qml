@@ -1,7 +1,6 @@
 ﻿import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Fusion
-import QtQuick.Layouts
 
 
 GridLayout {
@@ -53,6 +52,7 @@ signal inputTextChanged(string text)
         padding: 4
         color: Theme.black
         onTextEdited:{
+            root.valueText = text;
             inputTextChanged(text)
         }
 
