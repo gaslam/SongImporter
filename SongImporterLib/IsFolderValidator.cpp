@@ -1,6 +1,5 @@
 #include "IsFolderValidator.h"
 #include <QDir>
-#include <QValidator>
 
 using State = QValidator::State;
 
