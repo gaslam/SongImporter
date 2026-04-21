@@ -82,7 +82,7 @@ signal inputTextChanged(string text)
     // --- Bottom long text (wraps) ---
     Text {
         Layout.row: 2
-        text: inputValidator.errorMessage
+        text: inputValidator !== null ? inputValidator.errorMessage : ""
         color: "red"
         font.pointSize: 8
 
