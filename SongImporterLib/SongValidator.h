@@ -1,10 +1,6 @@
 #ifndef RULE_H
 #define RULE_H
-#include "OperationResult.h"
-#include <QVariant>
 #include <QValidator>
-#include <QtQml/qqmlregistration.h>
-#include <QObject>
 
 
 class SongValidator : public QValidator
