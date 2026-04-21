@@ -39,7 +39,7 @@ signal inputTextChanged(string text)
         text: root.valueText
         activeFocusOnTab: true
         font.pointSize: 10
-        cursorVisible: false
+        cursorVisible: activeFocus
 
         Layout.fillWidth: true
         Layout.minimumWidth: 0      // allow shrinking!
