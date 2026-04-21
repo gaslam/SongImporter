@@ -25,6 +25,7 @@ signal inputTextChanged(string text)
         text: headerText
         color: Theme.black
         font.pointSize: 8
+        Layout.leftMargin: 4
 
         Layout.fillWidth: true
         wrapMode: Text.NoWrap
@@ -88,7 +89,7 @@ signal inputTextChanged(string text)
         Layout.fillWidth: true
         wrapMode: Text.WordWrap   // adapts to narrow width
 
-        anchors.margins: 3
+        Layout.leftMargin: 4
         elide: Text.ElideRight
         maximumLineCount: 3
     }
