@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ISFOLDERVALIDATOR_H
+#define ISFOLDERVALIDATOR_H
 
 #include "SongValidator.h"
 
@@ -12,4 +13,6 @@ public:
 	// Inherited via QValidator
 	State validate(QString&, int&) const override;
 };
+#endif // !ISFOLDERVALIDATOR_H
+
 

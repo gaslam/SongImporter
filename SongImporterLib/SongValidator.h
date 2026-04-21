@@ -1,5 +1,5 @@
-#ifndef RULE_H
-#define RULE_H
+#ifndef SONGVALIDATOR_H
+#define SONGVALIDATOR_H
 #include <QValidator>
 
 

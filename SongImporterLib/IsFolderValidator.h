@@ -1,5 +1,5 @@
-#ifndef ISFOLDERRULE_H
-#define ISFOLDERRULE_H
+#ifndef ISFOLDERVALIDATOR_H
+#define ISFOLDERVALIDATOR_H
 
 #include "SongValidator.h"
 
