@@ -1,5 +1,6 @@
-#include "IsFolderRule.h"
-#include "IsFileRule.h"
+#include "IsFolderValidator.h"
+#include "IsFileValidator.h"
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -10,10 +11,12 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-	IsFolderRule isFolderRule{ &app };
-    IsFileRule isFileRule{ &app };
-	engine.rootContext()->setContextProperty("isFolderRule", &isFolderRule);
-    engine.rootContext()->setContextProperty("isFileRule", &isFileRule);
+    qmlRegisterUncreatableType<SongValidator>(
+        "SongImporterGui", 1, 0, "SongValidator",
+        "Abstract base class for custom SongValidators"
+    );
+    qmlRegisterType<IsFolderValidator>("SongImporterLib.Rules", 1, 0, "IsFolderValidator");
+    qmlRegisterType<IsFileValidator>("SongImporterLib.Rules", 1, 0, "IsFileValidator");
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

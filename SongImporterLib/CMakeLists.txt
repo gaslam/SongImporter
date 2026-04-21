@@ -8,20 +8,20 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Qml Gui)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Qml Gui)
 
 add_library(SongImporterLib STATIC
   SongImporterLib.cpp
   SongImporterLib.h
  OperationResult.h
- Rule.h
- IsFileRule.h
- IsFileRule.cpp
- IsFolderRule.h
- IsFolderRule.cpp)
+ SongValidator.h
+ IsFileValidator.h
+ IsFileValidator.cpp
+ IsFolderValidator.h
+ IsFolderValidator.cpp)
 
-target_link_libraries(SongImporterLib PRIVATE Qt${QT_VERSION_MAJOR}::Core)
+target_link_libraries(SongImporterLib PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Gui)
 
 target_compile_definitions(SongImporterLib PRIVATE SONGIMPORTERLIB_LIBRARY)
 
