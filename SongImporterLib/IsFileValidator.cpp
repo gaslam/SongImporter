@@ -36,5 +36,5 @@ State IsFileValidator::validate(QString& value, int&) const
 	}
 	clearErrorMessage();
 	return State::Acceptable;
-};
+}
 
