@@ -34,6 +34,12 @@ jobs:
         arch: 'win64_msvc2022_64'
         install-deps: true
         dir: "${{env.SOURCE_DIR}}/qt"
+        
+    - name: Cache Qt
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.SOURCE_DIR }}/qt
+        key: qt-${{ runner.os }}-${{ env.QT_VERSION }}-msvc2022
 
     - name: Configure CMake Project
       working-directory: ${{env.SOURCE_DIR}}
