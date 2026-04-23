@@ -9,7 +9,7 @@ GridLayout {
     //Allows for buttons to be added
     columns:2
 
-    Layout.fillWidth: true
+    width:parent.width
     anchors.top: parent.top
 
     property string headerText: "header"
