@@ -32,13 +32,11 @@ signal inputTextChanged(string text)
         Layout.fillWidth: true
         wrapMode: Text.NoWrap
         elide: Text.ElideRight
-        Layout.preferredHeight: 16
     }
 
     TextField {
         Layout.row: 1
         id: input
-        Layout.preferredHeight: 28
         text: root.valueText
         activeFocusOnTab: true
         font.pointSize: 10
@@ -96,6 +94,5 @@ signal inputTextChanged(string text)
         Layout.leftMargin: 4
         elide: Text.ElideRight
         maximumLineCount: 3
-        Layout.preferredHeight: 36
     }
 }
