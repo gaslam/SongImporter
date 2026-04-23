@@ -24,6 +24,7 @@ jobs:
         mkdir ${{env.BUILD_FOLDER}}
         
     - name: Cache Qt
+      id: cache-qt
       uses: actions/cache@v4
       with:
         path: ${{ env.SOURCE_DIR }}/qt
@@ -31,6 +32,7 @@ jobs:
 
                
     - name: Install Qt
+      if: steps.cache-qt.outputs.cache-hit != 'true'
       uses: jurplel/install-qt-action@v4
       with:
         aqtversion: '==3.3.*'
