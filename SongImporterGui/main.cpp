@@ -18,7 +18,10 @@ int main(int argc, char *argv[])
     );
     qmlRegisterType<IsFolderValidator>("SongImporterLib.Rules", 1, 0, "IsFolderValidator");
     qmlRegisterType<IsFileValidator>("SongImporterLib.Rules", 1, 0, "IsFileValidator");
-    qmlRegisterType<SoftwareUtils>("SongImporterLib.Utils", 1, 0, "SoftwareUtils");
+    qmlRegisterSingletonType<SoftwareUtils>("SongImporterLib.Utils", 1, 0, "SoftwareUtils",
+        [&app](QQmlEngine*, QJSEngine*) -> QObject* {
+            return new SoftwareUtils(&app);
+        });
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
