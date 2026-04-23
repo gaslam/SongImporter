@@ -37,5 +37,9 @@ signals:
 
 private:
 	SupportedSoftware m_SupportedSoftware{ Rekordbox }; // default
+
+	QHash<SupportedSoftware, QList<SupportedAudioFormats>> m_SupportedAudioFormats{ {
+			Rekordbox, {MP3,AIFF}
+	} };
 };
 
