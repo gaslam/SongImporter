@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QHash>
 
 class SoftwareUtils  : public QObject
 {
