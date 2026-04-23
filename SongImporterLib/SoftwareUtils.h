@@ -13,12 +13,14 @@ class SoftwareUtils  : public QObject
 		FLAC,
 		ALAC,
 		AAC,
-
 	};
 	Q_ENUM(SupportedAudioFormats)
 
 public:
 	SoftwareUtils(QObject *parent);
 	~SoftwareUtils();
+
+public slots:
+	[[nodiscard]] static SupportedAudioFormats stringToAudioFormat(const QString& audioFormat);
 };
 
