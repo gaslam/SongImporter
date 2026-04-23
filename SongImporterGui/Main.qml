@@ -1,4 +1,5 @@
 import QtQuick
+import SongImporterLib.Rules
 
 Window {
     width: 640
@@ -6,5 +7,4 @@ Window {
     visible: true
     title: qsTr("Hello World")
 
-InputField{}
 }
