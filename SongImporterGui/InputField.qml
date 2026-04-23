@@ -6,13 +6,16 @@ import QtQuick.Controls.Fusion
 GridLayout {
     id: root
     rows: 3
+    //Allows for buttons to be added
+    columns:2
 
-    Layout.fillWidth: true
+    width:parent.width
     anchors.top: parent.top
 
     property string headerText: "header"
     property string valueText: "value"
     property alias inputValidator: input.validator
+    property alias inputVerticalCenter: input.verticalCenter
 
 signal inputTextChanged(string text)
 
@@ -34,14 +37,12 @@ signal inputTextChanged(string text)
     TextField {
         Layout.row: 1
         id: input
-
         text: root.valueText
         activeFocusOnTab: true
         font.pointSize: 10
         cursorVisible: activeFocus
 
         Layout.fillWidth: true
-        Layout.minimumWidth: 0      // allow shrinking!
         Layout.maximumWidth: root.width
 
         horizontalAlignment: Text.AlignLeft
