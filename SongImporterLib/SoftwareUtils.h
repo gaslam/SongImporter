@@ -6,6 +6,7 @@ class SoftwareUtils  : public QObject
 {
 	Q_OBJECT
 	enum SupportedAudioFormats {
+		UNKNOWN,
 		MP3,
 		AIFF,
 		WAV,
