@@ -8,6 +8,22 @@ SoftwareUtils::SoftwareUtils(QObject *parent)
 SoftwareUtils::~SoftwareUtils()
 {}
 
+SoftwareUtils::SupportedSoftware SoftwareUtils::supportedSoftware() const
+{
+	return m_SupportedSoftware;
+}
+
+void SoftwareUtils::supportedSoftware(const SupportedSoftware& software)
+{
+	if (m_SupportedSoftware == software)
+	{
+		return;
+	}
+
+	m_SupportedSoftware = software;
+	emit supportedSoftwareChanged(software);
+}
+
 SoftwareUtils::SupportedAudioFormats SoftwareUtils::stringToAudioFormat(const QString & audioFormat)
 {
 	QString audioFormatUpper{ audioFormat.toUpper()};

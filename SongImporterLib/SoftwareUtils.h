@@ -21,11 +21,21 @@ class SoftwareUtils  : public QObject
 	};
 	Q_ENUM(SupportedSoftware)
 
+	Q_PROPERTY(SupportedSoftware supportedSoftware READ supportedSoftware WRITE supportedSoftware NOTIFY supportedSoftwareChanged)
+
 public:
 	SoftwareUtils(QObject *parent);
 	~SoftwareUtils();
 
 public slots:
-	[[nodiscard]] static SupportedAudioFormats stringToAudioFormat(const QString& audioFormat);
+	[[nodiscard]] SupportedAudioFormats stringToAudioFormat(const QString& audioFormat);
+	[[nodiscard]] SupportedSoftware supportedSoftware() const;
+	void supportedSoftware(const SupportedSoftware& software);
+
+signals:
+	void supportedSoftwareChanged(const SupportedSoftware& software);
+
+private:
+	SupportedSoftware m_SupportedSoftware{ Rekordbox }; // default
 };
 
