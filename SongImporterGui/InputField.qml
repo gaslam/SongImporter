@@ -43,7 +43,6 @@ signal inputTextChanged(string text)
         cursorVisible: activeFocus
 
         Layout.fillWidth: true
-        Layout.minimumWidth: 0      // allow shrinking!
         Layout.maximumWidth: root.width
 
         horizontalAlignment: Text.AlignLeft
