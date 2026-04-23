@@ -16,6 +16,11 @@ class SoftwareUtils  : public QObject
 	};
 	Q_ENUM(SupportedAudioFormats)
 
+	enum SupportedSoftware {
+		Rekordbox,
+	};
+	Q_ENUM(SupportedSoftware)
+
 public:
 	SoftwareUtils(QObject *parent);
 	~SoftwareUtils();
