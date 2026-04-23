@@ -24,6 +24,11 @@ void SoftwareUtils::supportedSoftware(const SupportedSoftware& software)
 	emit supportedSoftwareChanged(software);
 }
 
+QList<SoftwareUtils::SupportedAudioFormats> SoftwareUtils::supportedAudioFormats() const
+{
+	return m_SupportedAudioFormats[m_SupportedSoftware];
+}
+
 SoftwareUtils::SupportedAudioFormats SoftwareUtils::stringToAudioFormat(const QString & audioFormat)
 {
 	QString audioFormatUpper{ audioFormat.toUpper()};

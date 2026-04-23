@@ -32,6 +32,8 @@ public slots:
 	[[nodiscard]] SupportedSoftware supportedSoftware() const;
 	void supportedSoftware(const SupportedSoftware& software);
 
+	[[nodiscard]] QList<SupportedAudioFormats> supportedAudioFormats() const;
+
 signals:
 	void supportedSoftwareChanged(const SupportedSoftware& software);
 
