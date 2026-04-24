@@ -8,5 +8,7 @@ class FileUtils  : public QObject
 
 public:
 	FileUtils(QObject *parent);
+
+	[[nodiscard]] inline static QString getUserMusicFolder();
 };
 
