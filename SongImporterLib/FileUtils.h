@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QStandardPaths>
 
 class FileUtils  : public QObject
 {
@@ -8,7 +9,11 @@ class FileUtils  : public QObject
 
 public:
 	FileUtils(QObject *parent);
-
-	[[nodiscard]] inline static QString getUserMusicFolder();
+public slots:
+	//Rather can constantly calling QStandardPaths, I can just type this.
+	[[nodiscard]] inline static QString getUserMusicFolder()
+	{
+		return QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
+	}
 };
 
