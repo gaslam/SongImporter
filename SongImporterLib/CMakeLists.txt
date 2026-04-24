@@ -21,7 +21,9 @@ add_library(SongImporterLib STATIC
  IsFolderValidator.h
  IsFolderValidator.cpp
  SoftwareUtils.h
- SoftwareUtils.cpp)
+ SoftwareUtils.cpp
+ FileUtils.h
+ FileUtils.cpp)
 
 target_link_libraries(SongImporterLib PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui)
 
