@@ -1,6 +1,7 @@
 #include "IsFolderValidator.h"
 #include "IsFileValidator.h"
 #include "SoftwareUtils.h"
+#include "FileUtils.h"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -21,6 +22,10 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType<SoftwareUtils>("SongImporterLib.Utils", 1, 0, "SoftwareUtils",
         [&app](QQmlEngine*, QJSEngine*) -> QObject* {
             return new SoftwareUtils(&app);
+        });
+    qmlRegisterSingletonType<FileUtils>("SongImporterLib.Utils", 1, 0, "FileUtils",
+        [&app](QQmlEngine*, QJSEngine*) -> QObject* {
+            return new FileUtils(&app);
         });
     QObject::connect(
         &engine,

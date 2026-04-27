@@ -17,6 +17,7 @@ set_source_files_properties(Theme.qml
 
 qt_add_qml_module(appSongImporterGui
     URI SongImporterGui
+    RESOURCES Resources/resources.qrc
     QML_FILES
         Main.qml
         Theme.qml
