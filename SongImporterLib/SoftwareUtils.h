@@ -1,7 +1,5 @@
 #pragma once
 
-#include <QObject>
-
 class SoftwareUtils  : public QObject
 {
 	Q_OBJECT

@@ -1,10 +1,8 @@
 #ifndef FILEUTILS_H
 #define FILEUTILS_H
-#include <QObject>
 #include <QStandardPaths>
 #include <QFile>
 #include <QUrl>
-#include "OperationResult.h"
 
 class FileUtils : public QObject
 {
