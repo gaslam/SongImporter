@@ -44,7 +44,6 @@ jobs:
         dir: "${{env.SOURCE_DIR}}/qt"
         cache: 'true'
         cache-key-prefix: qt-${{ runner.os }}-${{ env.QT_VERSION }}-msvc2022
-        archives: 'qtbase icu'
 
 
     - name: Configure CMake Project
