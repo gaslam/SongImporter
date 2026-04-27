@@ -35,6 +35,7 @@ jobs:
         install-deps: true
         dir: "${{env.SOURCE_DIR}}/qt"
         cache: 'true'
+        cache-key-prefix: qt-${{ runner.os }}-${{ env.QT_VERSION }}-msvc2022
 
 
     - name: Configure CMake Project
