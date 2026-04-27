@@ -25,8 +25,10 @@ add_library(SongImporterLib STATIC
  FileUtils.h
  FileUtils.cpp)
 
+ target_compile_definitions(SongImporterLib PRIVATE SONGIMPORTERLIB_LIBRARY)
+
+target_precompile_headers(SongImporterLib PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/stdafx.h
+)
+
 target_link_libraries(SongImporterLib PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui)
-
-target_compile_definitions(SongImporterLib PRIVATE SONGIMPORTERLIB_LIBRARY)
-
-target_precompile_headers(SongImporterLib PUBLIC stdafx.h)
