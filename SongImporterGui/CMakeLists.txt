@@ -8,9 +8,8 @@ find_package(Qt6 REQUIRED COMPONENTS Quick)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
-qt_add_executable(appSongImporterGui
-    main.cpp
-)
+set(app_icon_resource_windows "${CMAKE_CURRENT_SOURCE_DIR}/Resources/resources.rc")
+    qt_add_executable(appSongImporterGui main.cpp ${app_icon_resource_windows})
 
 set_source_files_properties(Theme.qml
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
