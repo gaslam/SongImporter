@@ -1,17 +1,17 @@
-#pragma once
-
+#ifndef FILEUTILS_H
+#define FILEUTILS_H
 #include <QObject>
 #include <QStandardPaths>
 #include <QFile>
 #include <QUrl>
 #include "OperationResult.h"
 
-class FileUtils  : public QObject
+class FileUtils : public QObject
 {
 	Q_OBJECT
 
 public:
-	FileUtils(QObject *parent);
+	FileUtils(QObject* parent);
 public slots:
 	//Rather can constantly calling QStandardPaths, I can just type this.
 	[[nodiscard]] inline static QString getUserMusicFolder()
@@ -26,7 +26,7 @@ public slots:
 
 		if (!f.exists())
 		{
-			const QString error{ url.toString() + " cannot be read. Set the permisions to read to continue."};
+			const QString error{ url.toString() + " cannot be read. Set the permisions to read to continue." };
 			return OperationResult::fail(error);
 		}
 
@@ -52,4 +52,5 @@ public slots:
 		return OperationResult::fail(error);
 	}
 };
+#endif // !FILEUTILS_H
 
