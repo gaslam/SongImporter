@@ -32,6 +32,7 @@ qrc_*.cpp
 Thumbs.db
 *.res
 *.rc
+!SongImporterGui/Resources/resources.rc
 /.qmake.cache
 /.qmake.stash
 
