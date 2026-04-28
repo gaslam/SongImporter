@@ -1,4 +1,5 @@
 ﻿import QtQuick 2.3
+import SongImporterLib.Utils
 
 
 DropArea{
@@ -28,10 +29,24 @@ DropArea{
         opacity: 0
     }
 
-    onEntered:
-    {
-        background.opacity = 0.5
+onEntered: function(drag)
+{
+    background.opacity = 0.5
+}
+
+onPositionChanged: function(drag) {
+    let isValid = true
+
+    for (let i = 0; i < drag.urls.length; i++) {
+        if (!SoftwareUtils.supportsAudioFormatFromUrl(
+                SoftwareUtils.rekordBox,
+                drag.urls[i])) {
+            isValid = false
+        }
     }
+
+    drag.accepted = isValid
+}
 
     onExited:
     {
