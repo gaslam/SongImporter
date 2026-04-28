@@ -1,6 +1,7 @@
 #pragma once
 #include <QStandardPaths>
 #include <QDir>
+#include <QUrl>
 
 class SoftwareUtils  : public QObject
 {
@@ -58,6 +59,18 @@ public slots:
 	{
 		const SupportedAudioFormats audio{ stringToAudioFormat(audioFormat) };
 		return supportsAudioFormat(software,audio);
+	}
+
+	[[nodiscard]] inline static bool supportsAudioFormatFromUrl(const SupportedSoftware& software, const QUrl& file)
+	{
+		const QFileInfo info{ file.toLocalFile()};
+
+		if (!info.exists())
+		{
+			return false;
+		}
+		const SupportedAudioFormats audio{ stringToAudioFormat(info.suffix()) };
+		return supportsAudioFormat(software, audio);
 	}
 
 private:
