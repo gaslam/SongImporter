@@ -3,3 +3,4 @@ project(SongImporter)
 
 add_subdirectory(SongImporterGui)
 add_subdirectory(SongImporterLib)
+add_subdirectory(ThirdParty)
