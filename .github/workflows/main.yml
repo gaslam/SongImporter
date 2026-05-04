@@ -22,6 +22,13 @@ jobs:
     - name: Create dir
       run: |
         mkdir ${{env.BUILD_FOLDER}}
+        
+    - name: Cache Qt
+      id: cache-qt
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.SOURCE_DIR }}/qt
+        key: qt-${{ runner.os }}-${{ env.QT_VERSION }}-msvc2022
 
                
     - name: Install Qt
