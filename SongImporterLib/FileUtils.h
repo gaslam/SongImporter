@@ -17,6 +17,11 @@ public slots:
 		return QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
 	}
 
+	[[nodiscard]] inline static QString toLocalFile(const QUrl& url)
+	{
+		return url.toLocalFile();
+	}
+
 	[[nodiscard]] inline static OperationResult isNonEmptyZipFile(const QUrl& url)
 	{
 		QFile f(url.toString());

@@ -23,6 +23,9 @@ RowLayout {
 			Layout.column: 1
 			Layout.row:1
 			text: root.buttonText
+			onButtonClicked:{
+			root.buttonClicked()
+			}
         }
 	}
 }
