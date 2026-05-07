@@ -7,7 +7,7 @@ env:
   QT_VERSION: "6.10.1"
   SOURCE_DIR: ${{ github.workspace }}
   BUILD_TYPE: Release
-  BUILD_FOLDER: ${{ github.workspace }}/build
+  BUILD_FOLDER: "${{ github.workspace }}/build"
 defaults:
   run:
    shell: pwsh
