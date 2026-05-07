@@ -32,6 +32,7 @@ jobs:
         host: 'windows'
         target: 'desktop'
         arch: 'win64_mingw'
+        modules: 'qt5compat'
         install-deps: true
         dir: "${{env.SOURCE_DIR}}/qt"
         cache: 'true'
