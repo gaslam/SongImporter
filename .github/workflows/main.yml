@@ -40,7 +40,7 @@ jobs:
 
     - name: Configure CMake Project
       working-directory: ${{env.SOURCE_DIR}}
-      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -G "MinGW Makefiles" -B ${{env.BUILD_FOLDER}} -DZLIB_INCLUDE_DIR=${{ github.workspace }}/thirdparty/zlib/include -DZLIB_LIBRARY=${{ github.workspace }}/thirdparty/zlib/lib/libz.dll.a -DQuaZip-Qt6_DIR=${{ github.workspace }}\thirdparty\quazip\lib\cmake\QuaZip-Qt6-1.5
+      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -G "MinGW Makefiles" -B ${{env.BUILD_FOLDER}}
       
     - name: Build project
       run: cmake --build ${{env.BUILD_FOLDER}} --config ${{ env.BUILD_TYPE }}
