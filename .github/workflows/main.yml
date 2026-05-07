@@ -31,7 +31,7 @@ jobs:
         version: ${{env.QT_VERSION}}
         host: 'windows'
         target: 'desktop'
-        arch: 'win64_msvc2022_64'
+        arch: 'win64_mingw'
         install-deps: true
         dir: "${{env.SOURCE_DIR}}/qt"
         cache: 'true'
