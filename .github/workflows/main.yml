@@ -41,6 +41,7 @@ jobs:
         dir: "${{env.SOURCE_DIR}}/qt"
         cache: 'true'
         cache-key-prefix: qt-${{ runner.os }}-${{ env.QT_VERSION }}-msvc2022
+        tools: 'tools_mingw'
 
 
     - name: Configure CMake Project
