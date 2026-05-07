@@ -10,7 +10,7 @@ env:
   BUILD_FOLDER: ${{ github.workspace }}/build
 defaults:
   run:
-   shell: bash  
+   shell: pwsh
 
 jobs:
   build:
