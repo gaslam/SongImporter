@@ -26,7 +26,7 @@ jobs:
     - name: Clean branch name with regex  
       shell: bash
       run: |
-        CLEANED_BRANCH=$(echo "${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}" | sed -E 's/[^a-zA-Z0-9]+/-/g')
+        CLEANED_BRANCH=$(echo "${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}" | sed -E 's/\/-/g')
         echo "CLEANED_BRANCH=$CLEANED_BRANCH" >> $GITHUB_ENV
 
                
