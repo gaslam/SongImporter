@@ -8,7 +8,6 @@ env:
   SOURCE_DIR: ${{ github.workspace }}
   BUILD_TYPE: Release
   BUILD_FOLDER: ${{ github.workspace }}/build
-  CLEANED_BRANCH: $(echo "${{ github.workspace }}" | sed -E 's/\//-/g')
 
 jobs:
   build:
@@ -25,10 +24,10 @@ jobs:
         mkdir ${{env.BUILD_FOLDER}}
 
     - name: Clean branch name with regex  
-      id: clean_branch  
-      run: |  
-        # Use sed to replace non-alphanumeric chars with '-'    
-        echo "CLEANED_BRANCH=$CLEANED_BRANCH" >> $GITHUB_ENV 
+      shell: bash
+      run: |
+        CLEANED_BRANCH=$(echo "${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}" | sed -E 's/[^a-zA-Z0-9]+/-/g')
+        echo "CLEANED_BRANCH=$CLEANED_BRANCH" >> $GITHUB_ENV
 
                
     - name: Install Qt
