@@ -46,7 +46,7 @@ jobs:
     - name: Configure CMake Project
       working-directory: ${{env.SOURCE_DIR}}
       #song importer path will get fixed. {{ github.workspace }} uses \ which causes errors when building
-      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -G "MinGW Makefiles" -B ${{env.BUILD_FOLDER}} -DZLIB_INCLUDE_DIR=D:/a/SongImporter/SongImporter/thirdparty/zlib/include -DZLIB_LIBRARY=D:/a/SongImporter/SongImporter/thirdparty/zlib/lib/libz.dll.a -DQuaZip-Qt6_DIR=D:/a/SongImporter/SongImporter/thirdparty/quazip/lib/cmake/QuaZip-Qt6-1.5
+      run: 'cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -G "MinGW Makefiles" -B ${{env.BUILD_FOLDER}} -DZLIB_INCLUDE_DIR=${{ github.workspace }}\thirdparty\zlib\include -DZLIB_LIBRARY=${{ github.workspace }}\thirdparty\zlib\lib\libz.dll.a -DQuaZip-Qt6_DIR=${{ github.workspace }}\thirdparty\quazip\lib\cmake\QuaZip-Qt6-1.5'
       
     - name: Build project
       run: cmake --build ${{env.BUILD_FOLDER}} --config ${{ env.BUILD_TYPE }}
