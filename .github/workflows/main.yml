@@ -7,7 +7,7 @@ env:
   QT_VERSION: "6.10.1"
   SOURCE_DIR: ${{ github.workspace }}
   BUILD_TYPE: Release
-  BUILD_FOLDER: ${{ github.workspace }}/build
+  BUILD_FOLDER: "${{ github.workspace }}/build"
 defaults:
   run:
    shell: pwsh
@@ -44,15 +44,8 @@ jobs:
 
 
     - name: Configure CMake Project
-      working-directory: ${{env.SOURCE_DIR}}
-      shell: bash
       run: |
-        cmake -S "${{ github.workspace }}" -B "${{ github.workspace }}/build" \
-          -G "MinGW Makefiles" \
-          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-          -DZLIB_INCLUDE_DIR='${{ github.workspace }}/thirdparty/zlib/include' \
-          -DZLIB_LIBRARY='${{ github.workspace }}/thirdparty/zlib/lib/libz.dll.a' \
-          -DQuaZip-Qt6_DIR='${{ github.workspace }}/thirdparty/quazip/lib/cmake/QuaZip-Qt6-1.5'
+        cmake -S "${{ github.workspace }}" -B "${{ github.workspace }}/build" -G "MinGW Makefiles"
       
     - name: Build project
       run: cmake --build ${{env.BUILD_FOLDER}} --config ${{ env.BUILD_TYPE }}
