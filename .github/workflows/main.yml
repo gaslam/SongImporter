@@ -45,7 +45,7 @@ jobs:
 
     - name: Configure CMake Project
       run: |
-        cmake -S "${{ github.workspace }}" -B "${{ github.workspace }}/build" -G "MinGW Makefiles"
+        cmake -S "${{ github.workspace }}" -B "${{ github.workspace }}/build" -G "MinGW Makefiles" -DQuaZip-Qt6_DIR=${{ github.workspace }}/thirdparty/quazip/lib/cmake/QuaZip-Qt6-1.5
       
     - name: Build project
       run: cmake --build ${{env.BUILD_FOLDER}} --config ${{ env.BUILD_TYPE }}
