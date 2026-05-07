@@ -32,9 +32,6 @@ target_precompile_headers(SongImporterLib PUBLIC
 )
 
 
-target_include_directories(SongImporterLib PRIVATE ${ZLIB_INCLUDE_DIR})
-target_link_directories(SongImporterLib PRIVATE ${ZLIB_LIBRARY})
-
 find_package(ZLIB REQUIRED)
 find_package(QuaZip-Qt6 REQUIRED)
 
