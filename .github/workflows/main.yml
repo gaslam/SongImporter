@@ -8,6 +8,7 @@ env:
   SOURCE_DIR: ${{ github.workspace }}
   BUILD_TYPE: Release
   BUILD_FOLDER: ${{ github.workspace }}/build
+  CLEANED_BRANCH: $(echo "${{ github.workspace }}" | sed -E 's/\//-/g')
 
 jobs:
   build:
@@ -26,8 +27,7 @@ jobs:
     - name: Clean branch name with regex  
       id: clean_branch  
       run: |  
-        # Use sed to replace non-alphanumeric chars with '-'  
-        CLEANED_BRANCH=$(echo "${{ github.workspace }}" | sed -E 's/\//-/g')  
+        # Use sed to replace non-alphanumeric chars with '-'    
         echo "CLEANED_BRANCH=$CLEANED_BRANCH" >> $GITHUB_ENV 
 
                
