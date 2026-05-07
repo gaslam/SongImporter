@@ -23,6 +23,13 @@ jobs:
       run: |
         mkdir ${{env.BUILD_FOLDER}}
 
+            - name: Clean branch name with regex  
+      id: clean_branch  
+      run: |  
+        # Use sed to replace non-alphanumeric chars with '-'  
+        CLEANED_BRANCH=$(echo "${{ github.workspace }}" | sed -E 's/[^a-zA-Z0-9]+/-/g')  
+        echo "CLEANED_BRANCH=$CLEANED_BRANCH" >> $GITHUB_ENV 
+
                
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
