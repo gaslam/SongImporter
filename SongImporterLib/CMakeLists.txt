@@ -33,6 +33,8 @@ target_precompile_headers(SongImporterLib PUBLIC
 
 set(ZLIB_ROOT "${CMAKE_SOURCE_DIR}/thirdparty/zlib")
 
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/ThirdParty/quazip/lib/cmake/QuaZip-Qt6-1.5")
+
 find_package(ZLIB REQUIRED)
 find_package(QuaZip-Qt6 REQUIRED)
 
