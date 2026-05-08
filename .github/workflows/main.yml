@@ -40,6 +40,7 @@ jobs:
         dir: "${{env.SOURCE_DIR}}/qt"
         cache: true
         modules: 'qt5compat'
+        key: '${{runner.os}}_QT_${{env.QT_VERSION}}_msvc2022'
 
 
     - name: Configure CMake Project
