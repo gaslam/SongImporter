@@ -37,6 +37,7 @@ jobs:
         target: 'desktop'
         arch: 'win64_msvc2022_64'
         dir: ${{env.SOURCE_DIR}}/Qt
+        cache: true
 
 
     - name: Configure CMake Project
