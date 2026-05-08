@@ -88,3 +88,6 @@ CMakeLists.txt.user*
 
 # Deployment directory
 deploy/
+
+# ThirdParty directory
+!ThirdParty/**
