@@ -39,6 +39,7 @@ jobs:
         install-deps: true
         dir: "${{env.SOURCE_DIR}}/qt"
         cache: true
+        modules: 'qt5compat'
 
 
     - name: Configure CMake Project
