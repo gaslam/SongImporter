@@ -34,6 +34,7 @@ target_precompile_headers(SongImporterLib PUBLIC
 
 find_package(ZLIB REQUIRED)
 find_package(QuaZip-Qt6 REQUIRED)
+find_package(TagLib 2.0.0 REQUIRED)
 
-target_link_libraries(SongImporterLib PUBLIC ZLIB::ZLIB QuaZip::QuaZip)
+target_link_libraries(SongImporterLib PUBLIC ZLIB::ZLIB QuaZip::QuaZip TagLib::tag)
 target_link_libraries(SongImporterLib PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui)
