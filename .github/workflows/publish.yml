@@ -6,7 +6,7 @@ on:
       # keep this for now
       - dev
     tags:
-      - "release"
+      - "Release"
 
 jobs:
  build:
