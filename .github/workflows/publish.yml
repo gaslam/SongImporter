@@ -1,1 +1,11 @@
+name: Windows Deployment
+on:
+  pull_request:
+    branches:
+      - main
+      # keep this for now
+      - dev
 
+jobs:
+ build:
+  uses: ./.github/workflows/main.yml
