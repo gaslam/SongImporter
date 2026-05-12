@@ -13,8 +13,14 @@ jobs:
   needs: build
   runs-on: windows-2025
   steps:
-   - name: "Make deploy folder"
-     run: |
-       mkdir deploy
-       ls ${{needs.build.outputs.build_folder}}
+  - name: Download artifact
+    uses: actions/download-artifact@v4
+    with:
+     name: workspace-folder
+     path: artifacts
+          
+  - name: "Make deploy folder"
+    run: |
+      mkdir deploy
+      ls @artifacts
     # Move-Item -Path ${{needs.build.outputs.build_folder}}/SongImporterGui/${{needs.build.outputs.build_type}}/appSongImporterGui.exe -Destination ./deploy/appSongImporterGui.exe
