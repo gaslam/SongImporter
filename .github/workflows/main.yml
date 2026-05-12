@@ -1,5 +1,15 @@
 name: Windows GUI Release
-on: [pull_request,workflow_call]
+on:
+    pull_request:
+      branches:
+        - dev
+    workflow_call:
+      outputs:
+       build_folder:
+        value: ${{ jobs.build.outputs.build_folder }}
+
+       build_type:
+        value: ${{ jobs.build.outputs.build_type }}
 
     
             
@@ -15,7 +25,10 @@ defaults:
 jobs:
   build:
     runs-on: windows-2025
-    
+
+    outputs:
+      build_folder: ${{ steps.vars.outputs.build_folder }}
+      build_type: ${{ steps.vars.outputs.build_type }}
 
     steps:
     - name: Checkout repo
@@ -58,3 +71,8 @@ jobs:
           qmllint $_.FullName
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
         }
+    - name: Export variables
+      id: vars
+      run: |
+        echo "build_folder=${env:BUILD_FOLDER}" >> $env:GITHUB_OUTPUT
+        echo "build_type=${env:BUILD_TYPE}" >> $env:GITHUB_OUTPUT
