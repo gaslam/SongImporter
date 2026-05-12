@@ -23,3 +23,7 @@ jobs:
     run: |
       mkdir deploy
       Move-Item -Path artifacts/build/SongImporterGui/Release/appSongImporterGui.exe -Destination ./deploy/appSongImporterGui.exe
+      
+  - name: "Configure exe"
+    run: |
+      windeployqt
