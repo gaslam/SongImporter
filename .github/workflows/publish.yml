@@ -16,4 +16,5 @@ jobs:
    - name: "Make deploy folder"
      run: |
        mkdir deploy
-       Move-Item -Path ${{needs.build.outputs.build_folder}}/SongImporterGui/${{needs.build.outputs.build_type}}/appSongImporterGui.exe -Destination ./deploy/appSongImporterGui.exe
+       ls ${{needs.build.outputs.build_folder}}
+    # Move-Item -Path ${{needs.build.outputs.build_folder}}/SongImporterGui/${{needs.build.outputs.build_type}}/appSongImporterGui.exe -Destination ./deploy/appSongImporterGui.exe
