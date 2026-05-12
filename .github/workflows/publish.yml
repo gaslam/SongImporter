@@ -22,4 +22,4 @@ jobs:
   - name: "Make deploy folder"
     run: |
       mkdir deploy
-      ls artifacts/build
+      Move-Item -Path artifacts/build/SongImporterGui/Release/appSongImporterGui.exe -Destination ./deploy/appSongImporterGui.exe
