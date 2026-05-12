@@ -13,8 +13,6 @@ jobs:
   needs: build
   runs-on: windows-2025
   steps:
-   - run: echo "${{ needs.build.outputs.build_type }}"
-   - run: echo "${{ needs.build.outputs.build_folder }}"
    - name: "Make deploy folder"
      run: |
        mkdir deploy
