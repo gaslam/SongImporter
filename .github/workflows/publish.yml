@@ -22,7 +22,7 @@ jobs:
       target: 'desktop'
       arch: 'win64_msvc2022_64'
       install-deps: true
-      dir: "${{github.workflow}}/qt"
+      dir: "${{github.workspace}}/qt"
       cache: true
       cache-key-prefix: '${{runner.os}}_QT_${{needs.build.outputs.qt_version}}_msvc2022'
       
