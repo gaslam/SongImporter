@@ -22,4 +22,4 @@ jobs:
   - name: "Make deploy folder"
     run: |
       mkdir deploy
-      ls artifacts
+      ls artifacts/build
