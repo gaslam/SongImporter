@@ -58,3 +58,9 @@ jobs:
           qmllint $_.FullName
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
         }
+
+    - name: Upload build folder
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-folder
+        path: build
