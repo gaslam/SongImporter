@@ -76,3 +76,9 @@ jobs:
       run: |
         echo "build_folder=${env:BUILD_FOLDER}" >> $env:GITHUB_OUTPUT
         echo "build_type=${env:BUILD_TYPE}" >> $env:GITHUB_OUTPUT
+        - name: Upload build folder
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-folder
+        path: build
