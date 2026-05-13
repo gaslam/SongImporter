@@ -1,0 +1,55 @@
+name: Windows Deployment
+permissions:
+  contents: write
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "Release"
+
+jobs:
+ build:
+   uses: ./.github/workflows/main.yml
+ deploy:
+  needs: build
+  runs-on: windows-2025
+  steps:
+  - name: Install Qt
+    uses: jurplel/install-qt-action@v4
+    with:
+      aqtversion: '==3.3.*'
+      version: ${{needs.build.outputs.qt_version}}
+      host: 'windows'
+      target: 'desktop'
+      arch: 'win64_msvc2022_64'
+      install-deps: true
+      dir: "${{github.workspace}}/qt"
+      cache: true
+      cache-key-prefix: '${{runner.os}}_QT_${{needs.build.outputs.qt_version}}_msvc2022'
+      
+  - name: Download artifact
+    uses: actions/download-artifact@v4
+    with:
+     name: workspace-folder
+     path: artifacts
+          
+  - name: "Make deploy folder"
+    run: |
+      mkdir deploy
+      Move-Item -Path artifacts/build/SongImporterGui/Release/appSongImporterGui.exe -Destination ./deploy/appSongImporterGui.exe
+      
+  - name: "Configure exe"
+    run: |
+     windeployqt "./deploy/appSongImporterGui.exe" --no-translations --no-opengl-sw --no-system-d3d-compiler --qmldir "artifacts/SongImporterGui/"
+     
+
+  - name: Package app
+    run: |
+      Compress-Archive -Path deploy\* -DestinationPath SongImporterGui-Windows.zip
+    
+  - name: Release
+    uses: softprops/action-gh-release@v2
+    with:
+     files: SongImporterGui-Windows.zip
+      

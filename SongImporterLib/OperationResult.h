@@ -23,6 +23,8 @@ public:
 
 		return OperationResult(bIsSuccessful,error);
 	}
+
+	explicit operator bool() const { return bIsSuccessful; }
 };
 Q_DECLARE_METATYPE(OperationResult)
 

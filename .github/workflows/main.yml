@@ -1,5 +1,19 @@
 name: Windows GUI Release
-on: [push, pull_request, workflow_dispatch]
+on:
+    pull_request:
+      branches:
+        - dev
+        - main
+    workflow_call:
+      outputs:
+       build_folder:
+        value: ${{ jobs.build.outputs.build_folder }}
+
+       build_type:
+        value: ${{ jobs.build.outputs.build_type }}
+        
+       qt_version:
+        value: ${{jobs.build.outputs.qt_version}}
 
     
             
@@ -7,15 +21,24 @@ env:
   QT_VERSION: "6.10.1"
   SOURCE_DIR: ${{ github.workspace }}
   BUILD_TYPE: Release
-  BUILD_FOLDER: ${{ github.workspace }}/build
+  BUILD_FOLDER: "${{ github.workspace }}/build"
+defaults:
+  run:
+   shell: pwsh
 
 jobs:
   build:
     runs-on: windows-2025
 
+    outputs:
+      build_folder: ${{ env.BUILD_FOLDER }}
+      build_type: ${{ env.BUILD_TYPE }}
+      qt_version: ${{env.QT_VERSION}}
+      
+
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v6
       with:
         submodules: recursive
 
@@ -34,10 +57,14 @@ jobs:
         arch: 'win64_msvc2022_64'
         install-deps: true
         dir: "${{env.SOURCE_DIR}}/qt"
+        cache: true
+        modules: 'qt5compat'
+        cache-key-prefix: '${{runner.os}}_QT_${{env.QT_VERSION}}_msvc2022'
+
 
     - name: Configure CMake Project
-      working-directory: ${{env.SOURCE_DIR}}
-      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}  -G "Visual Studio 17 2022" -B ${{env.BUILD_FOLDER}}
+      run: |
+        cmake -S "${{ github.workspace }}" -B "${{ github.workspace }}/build" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
       
     - name: Build project
       run: cmake --build ${{env.BUILD_FOLDER}} --config ${{ env.BUILD_TYPE }}
@@ -50,3 +77,9 @@ jobs:
           qmllint $_.FullName
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
         }
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: workspace-folder
+        path: .
