@@ -1,10 +1,10 @@
 name: Windows Deployment
+permissions:
+  contents: write
 on:
   push:
     branches:
       - main
-      # keep this for now
-      - dev
     tags:
       - "Release"
 
@@ -51,7 +51,5 @@ jobs:
   - name: Release
     uses: softprops/action-gh-release@v2
     with:
-     files: SongImporterGui.zip
-    env:
-     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     files: SongImporterGui-Windows.zip
       
