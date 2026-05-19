@@ -24,7 +24,9 @@ add_library(SongImporterLib STATIC
  SoftwareUtils.cpp
  FileUtils.h
  FileUtils.cpp
- Song.h)
+ Song.h
+ BytesTracker.h
+ BytesTracker.cpp)
 
  target_compile_definitions(SongImporterLib PRIVATE SONGIMPORTERLIB_LIBRARY)
 
