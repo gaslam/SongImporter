@@ -20,6 +20,13 @@ public:
 	QString albumArtists;
 	QString filename;
 	unsigned int bpm;
+
+	operator bool()
+	{
+		const bool bIsEmpty{ this->filename.isEmpty() };
+
+		return !bIsEmpty;
+	}
 };
 
 Q_DECLARE_METATYPE(Song)
