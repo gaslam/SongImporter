@@ -23,7 +23,8 @@ add_library(SongImporterLib STATIC
  SoftwareUtils.h
  SoftwareUtils.cpp
  FileUtils.h
- FileUtils.cpp)
+ FileUtils.cpp
+ Song.h)
 
  target_compile_definitions(SongImporterLib PRIVATE SONGIMPORTERLIB_LIBRARY)
 
