@@ -1,4 +1,4 @@
-#ifdef SONG_H
+#ifndef SONG_H
 #define SONG_H
 
 struct Song {
