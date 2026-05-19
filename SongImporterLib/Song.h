@@ -21,6 +21,16 @@ public:
 	QString filename;
 	unsigned int bpm;
 
+	bool operator==(const Song& other) const
+	{
+		return filename == other.filename;
+	}
+
+	bool operator==(const QString& filename) const
+	{
+		return this->filename == filename;
+	}
+
 	operator bool()
 	{
 		const bool bIsEmpty{ this->filename.isEmpty() };
