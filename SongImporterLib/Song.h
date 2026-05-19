@@ -12,23 +12,6 @@ struct Song {
 	Q_PROPERTY(QString filename MEMBER filename)
 
 public:
-	Song(const unsigned int& songYear,
-		const QString& songTitle,
-		const QString& songAlbum,
-		const QString& songArtists,
-		const QString& songAlbumArtists,
-		const QString& songFile,
-		const unsigned int songBpm):
-		year{songYear},
-		album{songAlbum},
-		title{songTitle},
-		artists{songArtists},
-		albumArtists{songAlbumArtists},
-		filename{songFile},
-		bpm{songBpm}
-	{
-
-	}
 
 	unsigned int year;
 	QString title;
