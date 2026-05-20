@@ -1,12 +1,13 @@
-#include "IsFolderValidator.h"
-#include "IsFileValidator.h"
-#include "SoftwareUtils.h"
-#include "FileUtils.h"
-#include "Song.h"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <SongValidator.h>
+#include <IsFolderValidator.h>
+#include <IsFileValidator.h>
+#include <Song.h>
+#include <SoftwareUtils.h>
+#include <FileUtils.h>
 
 
 int main(int argc, char *argv[])
