@@ -91,3 +91,11 @@ deploy/
 
 # ThirdParty directory
 !ThirdParty/**
+
+# Build directories
+/build/*
+/SongImporterGui/build/*
+/SongImporterLib/build/*
+
+# Qt Creator
+.qtcreator/
