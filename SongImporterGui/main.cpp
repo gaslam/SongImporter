@@ -3,6 +3,7 @@
 #include "SoftwareUtils.h"
 #include "FileUtils.h"
 #include "Song.h"
+#include "BytesTracker.h"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -37,7 +38,11 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
     engine.loadFromModule("SongImporterGui", "Main");
 
-
+    BytesTracker tracker{};
+    if(tracker.checkSpaceAvailable(QList<QUrl>{QUrl{ "E:/testfill.txt" }}, "E:/"))
+    {
+        qInfo() << "yey";
+    }
 
     return app.exec();
 }
