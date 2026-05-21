@@ -9,6 +9,7 @@ on:
         upload_artifact:
          required: false
          type: boolean
+         default: false
       outputs:
        build_folder:
         value: ${{ jobs.build.outputs.build_folder }}
