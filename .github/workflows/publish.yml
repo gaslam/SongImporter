@@ -29,6 +29,7 @@ jobs:
       dir: "${{github.workspace}}/qt"
       cache: true
       tools: 'tools_mingw1310'
+      modules: 'qt5compat'
       cache-key-prefix: '${{runner.os}}_QT_${{needs.build.outputs.qt_version}}_${{needs.build.outputs.qt_arch}}'
       
   - name: Download artifact
@@ -40,14 +41,14 @@ jobs:
   - name: "Make deploy folder"
     run: |
       mkdir deploy
-      Move-Item -Path artifacts/build/SongImporterGui/Release/appSongImporterGui.exe -Destination ./deploy/appSongImporterGui.exe
+      Move-Item -Path artifacts/build/SongImporterGui/appSongImporterGui.exe -Destination ./deploy/appSongImporterGui.exe
       
   - name: "Copy libraries"
     run: |
-      Move-Item -Path artifacts/build/build/${{ needs.build.outputs.output_release_folder }}/SongImporterLib/libSongImporterLib.dll -Destination ./deploy/libSongImporterLib.dll
-      Move-Item -Path artifacts/build/build/ThirdParty/quazip/bin/libquazip1-qt6.dll -Destination ./deploy/libquazip1-qt6.dll
-      Move-Item -Path artifacts/build/build/ThirdParty/taglib/bin/libtag.dll -Destination ./deploy/libtag.dll
-      Move-Item -Path artifacts/build/build/ThirdParty/zlib/bin/libz.dll -Destination ./deploy/libz.dll
+      Move-Item -Path artifacts/build/SongImporterLib/libSongImporterLib.dll -Destination ./deploy/libSongImporterLib.dll
+      Move-Item -Path artifacts/ThirdParty/quazip/bin/libquazip1-qt6.dll -Destination ./deploy/libquazip1-qt6.dll
+      Move-Item -Path artifacts/ThirdParty/taglib/bin/libtag.dll -Destination ./deploy/libtag.dll
+      Move-Item -Path artifacts/ThirdParty/zlib/bin/libz.dll -Destination ./deploy/libz.dll
       
   - name: "Configure exe"
     run: |
