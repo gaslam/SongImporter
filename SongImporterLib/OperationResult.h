@@ -1,8 +1,9 @@
 #ifndef OPERATIONRESULT_H
 #define OPERATIONRESULT_H
 #include <QMetaType>
+#include "SongImporterLib_global.h"
 
-struct OperationResult {
+struct SONGIMPORTERLIB_EXPORT OperationResult {
 	Q_GADGET
 	Q_PROPERTY(bool isSuccessful MEMBER bIsSuccessful)
 	Q_PROPERTY(QString errorMessage MEMBER errorMessage)

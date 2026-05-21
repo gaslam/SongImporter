@@ -1,11 +1,13 @@
-#include "IsFolderValidator.h"
-#include "IsFileValidator.h"
-#include "SoftwareUtils.h"
-#include "FileUtils.h"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <SongValidator.h>
+#include <IsFolderValidator.h>
+#include <IsFileValidator.h>
+#include <Song.h>
+#include <SoftwareUtils.h>
+#include <FileUtils.h>
 
 
 int main(int argc, char *argv[])
@@ -19,6 +21,7 @@ int main(int argc, char *argv[])
     );
     qmlRegisterType<IsFolderValidator>("SongImporterLib.Rules", 1, 0, "IsFolderValidator");
     qmlRegisterType<IsFileValidator>("SongImporterLib.Rules", 1, 0, "IsFileValidator");
+    qRegisterMetaType<Song>("song");
     qmlRegisterSingletonType<SoftwareUtils>("SongImporterLib.Utils", 1, 0, "SoftwareUtils",
         [&app](QQmlEngine*, QJSEngine*) -> QObject* {
             return new SoftwareUtils(&app);
