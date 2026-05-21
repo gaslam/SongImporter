@@ -40,11 +40,11 @@ jobs:
   - name: "Make deploy folder"
     run: |
       mkdir deploy
-      Move-Item -Path artifacts/build/SongImporterGui/${{ needs.build.outputs.output_release_folder }}/appSongImporterGui.exe -Destination ./deploy/appSongImporterGui.exe
+      Move-Item -Path artifacts/build/SongImporterGui/${{ needs.build.outputs.output_release_folder_name }}/appSongImporterGui.exe -Destination ./deploy/appSongImporterGui.exe
       
   - name: "Copy libraries"
     run: |
-      Move-Item -Path artifacts/build/build/${{ needs.build.outputs.output_release_folder }}/SongImporterLib/libSongImporterLib.dll -Destination ./deploy/libSongImporterLib.dll
+      Move-Item -Path artifacts/build/build/${{ needs.build.outputs.output_release_folder_name }}/SongImporterLib/libSongImporterLib.dll -Destination ./deploy/libSongImporterLib.dll
       Move-Item -Path artifacts/build/build/ThirdParty/quazip/bin/libquazip1-qt6.dll -Destination ./deploy/libquazip1-qt6.dll
       Move-Item -Path artifacts/build/build/ThirdParty/taglib/bin/libtag.dll -Destination ./deploy/libtag.dll
       Move-Item -Path artifacts/build/build/ThirdParty/zlib/bin/libz.dll -Destination ./deploy/libz.dll
