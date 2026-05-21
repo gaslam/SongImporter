@@ -11,6 +11,8 @@ on:
 jobs:
  build:
    uses: ./.github/workflows/main.yml
+   with:
+     upload_artifact: true
  deploy:
   needs: build
   runs-on: windows-2025
@@ -22,11 +24,12 @@ jobs:
       version: ${{needs.build.outputs.qt_version}}
       host: 'windows'
       target: 'desktop'
-      arch: 'win64_msvc2022_64'
+      arch: ${{needs.build.outputs.qt_arch}}
       install-deps: true
       dir: "${{github.workspace}}/qt"
       cache: true
-      cache-key-prefix: '${{runner.os}}_QT_${{needs.build.outputs.qt_version}}_msvc2022'
+      tools: 'tools_mingw1310'
+      cache-key-prefix: '${{runner.os}}_QT_${{needs.build.outputs.qt_version}}_${{needs.build.outputs.qt_arch}}'
       
   - name: Download artifact
     uses: actions/download-artifact@v4
