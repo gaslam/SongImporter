@@ -5,6 +5,10 @@ on:
         - dev
         - main
     workflow_call:
+      inputs:
+        upload_artifact:
+         required: false
+         type: boolean
       outputs:
        build_folder:
         value: ${{ jobs.build.outputs.build_folder }}
@@ -29,7 +33,7 @@ defaults:
 jobs:
   build:
     runs-on: windows-2025
-
+    
     outputs:
       build_folder: ${{ env.BUILD_FOLDER }}
       build_type: ${{ env.BUILD_TYPE }}
@@ -77,8 +81,9 @@ jobs:
           qmllint $_.FullName
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
         }
-    
-    - name: Upload artifact
+
+    - if: ${{ inputs.upload_artifact }}
+      name: Upload artifact if requested
       uses: actions/upload-artifact@v4
       with:
         name: workspace-folder
