@@ -65,7 +65,7 @@ jobs:
         install-deps: true
         dir: "${{env.SOURCE_DIR}}/qt"
         cache: true
-        tools: 'tools_mingw'
+        tools: 'tools_mingw1310'
         modules: 'qt5compat'
         cache-key-prefix: '${{runner.os}}_QT_${{env.QT_VERSION}}_${{env.QT_ARCH}}'
 
