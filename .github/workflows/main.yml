@@ -27,6 +27,7 @@ env:
   SOURCE_DIR: ${{ github.workspace }}
   BUILD_TYPE: Release
   BUILD_FOLDER: "${{ github.workspace }}/build"
+  QT_COMPILER: "mingw_64"
 defaults:
   run:
    shell: pwsh
@@ -39,6 +40,7 @@ jobs:
       build_folder: ${{ env.BUILD_FOLDER }}
       build_type: ${{ env.BUILD_TYPE }}
       qt_version: ${{env.QT_VERSION}}
+      compiler: ${{env.QT_COMPILER}}
       
 
     steps:
@@ -59,12 +61,12 @@ jobs:
         version: ${{env.QT_VERSION}}
         host: 'windows'
         target: 'desktop'
-        arch: 'win64_msvc2022_64'
+        arch: ${{env.QT_COMPILER}}
         install-deps: true
         dir: "${{env.SOURCE_DIR}}/qt"
         cache: true
         modules: 'qt5compat'
-        cache-key-prefix: '${{runner.os}}_QT_${{env.QT_VERSION}}_msvc2022'
+        cache-key-prefix: '${{runner.os}}_QT_${{env.QT_VERSION}}_${{env.QT_COMPILER}}'
 
 
     - name: Configure CMake Project
