@@ -19,6 +19,8 @@ on:
         
        qt_version:
         value: ${{jobs.build.outputs.qt_version}}
+       output_release_folder:
+        value: 
 
     
             
@@ -41,6 +43,7 @@ jobs:
       build_type: ${{ env.BUILD_TYPE }}
       qt_version: ${{env.QT_VERSION}}
       qt_arch: ${{env.QT_ARCH}}
+      output_folder: "${{ env.BUILD_FOLDER }}/Desktop_Qt_6_10_1_MinGW_64_bit-Release"
       
 
     steps:
