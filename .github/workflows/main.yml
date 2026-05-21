@@ -27,7 +27,7 @@ env:
   SOURCE_DIR: ${{ github.workspace }}
   BUILD_TYPE: Release
   BUILD_FOLDER: "${{ github.workspace }}/build"
-  QT_COMPILER: "mingw_64"
+  QT_ARCH: "win64_mingw"
 defaults:
   run:
    shell: pwsh
@@ -40,7 +40,7 @@ jobs:
       build_folder: ${{ env.BUILD_FOLDER }}
       build_type: ${{ env.BUILD_TYPE }}
       qt_version: ${{env.QT_VERSION}}
-      compiler: ${{env.QT_COMPILER}}
+      qt_arch: ${{env.QT_ARCH}}
       
 
     steps:
@@ -61,12 +61,12 @@ jobs:
         version: ${{env.QT_VERSION}}
         host: 'windows'
         target: 'desktop'
-        arch: ${{env.QT_COMPILER}}
+        arch: ${{env.QT_ARCH}}
         install-deps: true
         dir: "${{env.SOURCE_DIR}}/qt"
         cache: true
-        modules: 'qt5compat'
-        cache-key-prefix: '${{runner.os}}_QT_${{env.QT_VERSION}}_${{env.QT_COMPILER}}'
+        tools: 'tools_mingw'
+        cache-key-prefix: '${{runner.os}}_QT_${{env.QT_VERSION}}_${{env.QT_ARCH}}'
 
 
     - name: Configure CMake Project
