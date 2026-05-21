@@ -1,7 +1,7 @@
 #ifndef SONGIMPORTERLIB_H
 #define SONGIMPORTERLIB_H
 
-class SongImporterLib
+class SONGIMPORTERLIB_EXPORT SongImporterLib
 {
 public:
     SongImporterLib();

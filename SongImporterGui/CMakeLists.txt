@@ -6,29 +6,43 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick Svg)
 
-
 set(CMAKE_AUTORCC ON)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
-set(app_icon_resource_windows "${CMAKE_CURRENT_SOURCE_DIR}/Resources/resources.rc")
-    qt_add_executable(appSongImporterGui main.cpp ${app_icon_resource_windows} ${CMAKE_CURRENT_SOURCE_DIR}/Resources/resources.qrc)
+set(app_icon "")
 
-set_source_files_properties(Theme.qml
+if(WIN32)
+    set(app_icon "${CMAKE_CURRENT_SOURCE_DIR}/Resources/resources.rc")
+endif()
+
+qt_add_executable(appSongImporterGui
+   main.cpp ${app_icon} Resources/resources.qrc
+)
+
+set (components_folder "Components")
+set (forms_folder "Forms")
+set (styles_folder "Styles")
+
+set(plain_qml_files
+    Main.qml
+    ${components_folder}/ImporterButton.qml
+    ${components_folder}/InputField.qml
+    ${components_folder}/InputFieldButton.qml
+    ${components_folder}/FileDropArea.qml
+    ${forms_folder}/SongExportForm.qml
+)
+set(qml_singletons
+       ${styles_folder}/Theme.qml
+)
+set_source_files_properties(${qml_singletons}
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 qt_add_qml_module(appSongImporterGui
     URI SongImporterGui
-    RESOURCES Resources/resources.qrc
-    QML_FILES
-        Main.qml
-        Theme.qml
-        ImporterButton.qml
-        InputField.qml
-        InputFieldButton.qml
-        FileDropArea.qml
-        SongExportForm.qml
+    QML_FILES ${plain_qml_files} ${qml_singletons}
 )
+
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
@@ -46,10 +60,12 @@ target_include_directories(appSongImporterGui
 )
 
 target_link_libraries(appSongImporterGui
-    PUBLIC SongImporterLib Qt6::Quick Qt6::Svg
+    PRIVATE SongImporterLib Qt6::Quick Qt6::Svg
 )
 
-target_precompile_headers(appSongImporterGui PUBLIC stdafx.h)
+target_precompile_headers(appSongImporterGui PUBLIC
+    stdafx.h
+)
 
 include(GNUInstallDirs)
 install(TARGETS appSongImporterGui

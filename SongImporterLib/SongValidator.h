@@ -3,7 +3,7 @@
 #include <QValidator>
 
 
-class SongValidator : public QValidator
+class SONGIMPORTERLIB_EXPORT SongValidator : public QValidator
 {
 	Q_OBJECT
 	Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)

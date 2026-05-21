@@ -5,6 +5,11 @@ on:
         - dev
         - main
     workflow_call:
+      inputs:
+        upload_artifact:
+         required: false
+         type: boolean
+         default: false
       outputs:
        build_folder:
         value: ${{ jobs.build.outputs.build_folder }}
@@ -14,6 +19,8 @@ on:
         
        qt_version:
         value: ${{jobs.build.outputs.qt_version}}
+       output_release_folder:
+        value: ${{jobs.build.outputs.output_folder}}
 
     
             
@@ -22,6 +29,7 @@ env:
   SOURCE_DIR: ${{ github.workspace }}
   BUILD_TYPE: Release
   BUILD_FOLDER: "${{ github.workspace }}/build"
+  QT_ARCH: "win64_mingw"
 defaults:
   run:
    shell: pwsh
@@ -29,11 +37,13 @@ defaults:
 jobs:
   build:
     runs-on: windows-2025
-
+    
     outputs:
       build_folder: ${{ env.BUILD_FOLDER }}
       build_type: ${{ env.BUILD_TYPE }}
       qt_version: ${{env.QT_VERSION}}
+      qt_arch: ${{env.QT_ARCH}}
+      output_folder: "${{ env.BUILD_FOLDER }}/Desktop_Qt_6_10_1_MinGW_64_bit-Release"
       
 
     steps:
@@ -54,17 +64,18 @@ jobs:
         version: ${{env.QT_VERSION}}
         host: 'windows'
         target: 'desktop'
-        arch: 'win64_msvc2022_64'
+        arch: ${{env.QT_ARCH}}
         install-deps: true
         dir: "${{env.SOURCE_DIR}}/qt"
         cache: true
+        tools: 'tools_mingw1310'
         modules: 'qt5compat'
-        cache-key-prefix: '${{runner.os}}_QT_${{env.QT_VERSION}}_msvc2022'
+        cache-key-prefix: '${{runner.os}}_QT_${{env.QT_VERSION}}_${{env.QT_ARCH}}'
 
 
     - name: Configure CMake Project
       run: |
-        cmake -S "${{ github.workspace }}" -B "${{ github.workspace }}/build" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        cmake -S "${{ github.workspace }}" -B "${{ github.workspace }}/build" -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
       
     - name: Build project
       run: cmake --build ${{env.BUILD_FOLDER}} --config ${{ env.BUILD_TYPE }}
@@ -77,8 +88,9 @@ jobs:
           qmllint $_.FullName
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
         }
-    
-    - name: Upload artifact
+
+    - if: ${{ inputs.upload_artifact }}
+      name: Upload artifact if requested
       uses: actions/upload-artifact@v4
       with:
         name: workspace-folder

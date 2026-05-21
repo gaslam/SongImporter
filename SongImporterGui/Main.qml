@@ -1,5 +1,4 @@
 import QtQuick
-import SongImporterLib.Rules
 
 Window {
     width: 640
