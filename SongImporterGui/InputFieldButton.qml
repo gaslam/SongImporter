@@ -11,11 +11,14 @@ RowLayout {
     property alias inputValidator: inputField.inputValidator
 
 	signal buttonClicked()
-	signal onInputTextChanged(string text)
+	signal inputTextChanged(string text)
 
 	InputField{
 		id: inputField
-		onInputTextChanged: root.inputTextChanged(text)
+		onInputTextChanged: function(text)
+		{
+			root.inputTextChanged(text)
+		}
 		headerText: root.headerText
 		valueText: root.valueText
 	   ImporterButton{
