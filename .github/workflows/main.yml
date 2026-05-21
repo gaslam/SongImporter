@@ -19,6 +19,8 @@ on:
         
        qt_version:
         value: ${{jobs.build.outputs.qt_version}}
+       qt_arch:
+        value: ${{jobs.build.outputs.qt_arch}}
 
     
             
