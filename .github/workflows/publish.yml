@@ -40,7 +40,7 @@ jobs:
   - name: "Make deploy folder"
     run: |
       mkdir deploy
-      Move-Item -Path artifacts/build/SongImporterGui/${{ needs.build.outputs.output_release_folder_name }}/appSongImporterGui.exe -Destination ./deploy/appSongImporterGui.exe
+      Move-Item -Path artifacts/build/build/${{ needs.build.outputs.output_release_folder_name }}/appSongImporterGui.exe -Destination ./deploy/appSongImporterGui.exe
       
   - name: "Copy libraries"
     run: |
