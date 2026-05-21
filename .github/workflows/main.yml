@@ -43,7 +43,7 @@ jobs:
       build_type: ${{ env.BUILD_TYPE }}
       qt_version: ${{env.QT_VERSION}}
       qt_arch: ${{env.QT_ARCH}}
-      output_folder: "${{ env.BUILD_FOLDER }}/Desktop_Qt_6_10_1_MinGW_64_bit-Release"
+      output_folder_name: "Desktop_Qt_6_10_1_MinGW_64_bit-Release"
       
 
     steps:
