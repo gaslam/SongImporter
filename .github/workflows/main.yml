@@ -20,7 +20,7 @@ on:
        qt_version:
         value: ${{jobs.build.outputs.qt_version}}
        output_release_folder:
-        value: 
+        value: ${{jobs.build.outputs.output_folder}}
 
     
             
