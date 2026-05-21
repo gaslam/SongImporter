@@ -10,8 +10,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui)
-
 add_library(SongImporterLib SHARED
   SongImporterLib_global.h
   SongImporterLib.cpp
