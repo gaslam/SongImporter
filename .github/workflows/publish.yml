@@ -29,6 +29,7 @@ jobs:
       dir: "${{github.workspace}}/qt"
       cache: true
       tools: 'tools_mingw1310'
+      modules: 'qt5compat'
       cache-key-prefix: '${{runner.os}}_QT_${{needs.build.outputs.qt_version}}_${{needs.build.outputs.qt_arch}}'
       
   - name: Download artifact
