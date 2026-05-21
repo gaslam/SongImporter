@@ -20,16 +20,20 @@ qt_add_executable(appSongImporterGui
    main.cpp ${app_icon} Resources/resources.qrc
 )
 
+set (components_folder "Components")
+set (forms_folder "Forms")
+set (styles_folder "Styles")
+
 set(plain_qml_files
     Main.qml
-    ImporterButton.qml
-    InputField.qml
-    InputFieldButton.qml
-    FileDropArea.qml
-    SongExportForm.qml
+    ${components_folder}/ImporterButton.qml
+    ${components_folder}/InputField.qml
+    ${components_folder}/InputFieldButton.qml
+    ${components_folder}/FileDropArea.qml
+    ${forms_folder}/SongExportForm.qml
 )
 set(qml_singletons
-       Styles/Theme.qml
+       ${styles_folder}/Theme.qml
 )
 set_source_files_properties(${qml_singletons}
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
