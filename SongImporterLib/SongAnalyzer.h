@@ -13,6 +13,9 @@ class SONGIMPORTERLIB_EXPORT SongAnalyzer : public QObject
 public:
     explicit SongAnalyzer(const QString& file,QObject *parent = nullptr);
 
+public slots:
+    void startProcess();
+
 signals:
 
     void songProcessed(const Song& song, const TagLib::FileRef& ref);

@@ -1,9 +1,42 @@
 #include "SongAnalyzer.h"
 
+#include <FileRef.h>
+#include <QFileInfo>
+#include <taglib/tpropertymap.h>
+#include "Song.h"
+
+using namespace TagLib;
+
 SongAnalyzer::SongAnalyzer(const QString& file, QObject *parent)
     : QObject{parent},
     m_FileToProcess{file}
 {}
+
+void SongAnalyzer::startProcess()
+{
+    FileRef file{m_FileToProcess.toStdString().c_str()};
+
+
+    if(file.isNull())
+    {
+        emit errorReceived(QString{"Cannot read file: %1.\nFile might not exist or cannot be read."}.arg(m_FileToProcess));
+        return;
+    }
+
+    Song song;
+    auto result{getSongFromFileRef(file,song)};
+
+    if(!result)
+    {
+        emit errorReceived(result.errorMessage);
+        return;
+    }
+
+    emit songProcessed(song,file);
+
+}
+
+
 OperationResult SongAnalyzer::getSongFromFileRef (const TagLib::FileRef& file,Song& song)
 {
     //Get the tag and check if it's valid
