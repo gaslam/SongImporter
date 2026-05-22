@@ -25,6 +25,8 @@ add_library(SongImporterLib SHARED
   FileUtils.h
   FileUtils.cpp
   Song.h
+  BytesTracker.h
+  BytesTracker.cpp
 )
 
 target_compile_definitions(SongImporterLib PRIVATE SONGIMPORTERLIB_LIBRARY)

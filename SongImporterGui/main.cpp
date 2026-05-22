@@ -8,6 +8,7 @@
 #include <Song.h>
 #include <SoftwareUtils.h>
 #include <FileUtils.h>
+#include <BytesTracker.h>
 
 
 int main(int argc, char *argv[])
@@ -37,8 +38,6 @@ int main(int argc, char *argv[])
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
     engine.loadFromModule("SongImporterGui", "Main");
-
-
 
     return app.exec();
 }
