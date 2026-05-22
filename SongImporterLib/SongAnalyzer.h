@@ -19,6 +19,8 @@ signals:
     void errorReceived(const QString& error);
 private:
     const QString m_FileToProcess;
+
+    [[nodiscard]] OperationResult getSongFromFileRef (const TagLib::FileRef& file,Song& song);
 };
 
 #endif // SONGANALYZER_H
