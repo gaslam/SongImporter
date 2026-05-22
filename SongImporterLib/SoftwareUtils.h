@@ -2,8 +2,9 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QUrl>
+#include <QuaZip.h>
 
-class SoftwareUtils  : public QObject
+class SONGIMPORTERLIB_EXPORT SoftwareUtils  : public QObject
 {
 	Q_OBJECT
 	enum SupportedAudioFormats {
@@ -53,6 +54,13 @@ public slots:
 		}
 
 		return m_SupportedFileFormats[software].contains(audio);
+	}
+
+	[[nodiscard]] inline static bool test()
+	{
+		QuaZip zip{ "test.zip" };
+
+		return true;
 	}
 
 	[[nodiscard]] inline static bool supportsAudioFormats(const SupportedSoftware& software, const QString& audioFormat)

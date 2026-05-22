@@ -3,7 +3,7 @@
 
 #include "SongValidator.h"
 
-class IsFileValidator  : public SongValidator
+class SONGIMPORTERLIB_EXPORT IsFileValidator  : public SongValidator
 {
 	Q_OBJECT
 

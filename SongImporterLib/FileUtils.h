@@ -3,8 +3,9 @@
 #include <QStandardPaths>
 #include <QFile>
 #include <QUrl>
+#include <quazip.h>
 
-class FileUtils : public QObject
+class SONGIMPORTERLIB_EXPORT FileUtils : public QObject
 {
 	Q_OBJECT
 
@@ -20,6 +21,12 @@ public slots:
 	[[nodiscard]] inline static QString toLocalFile(const QUrl& url)
 	{
 		return url.toLocalFile();
+	}
+
+	[[nodiscard]] inline static QString test()
+	{
+		QuaZip zip{ "test.zip" };
+		return zip.getCurrentFileName();
 	}
 
 	[[nodiscard]] inline static OperationResult isNonEmptyZipFile(const QUrl& url)
