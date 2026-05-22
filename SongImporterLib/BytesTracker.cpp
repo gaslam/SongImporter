@@ -8,7 +8,7 @@
 OperationResult BytesTracker::checkSpaceAvailable(const QList<QUrl>& files, const QString& destination)
 {
 	qint64 size{};
-	foreach(const auto& file, files)
+    foreach(const QUrl& file, files)
 	{
 
 		if (FileUtils::isNonEmptyZipFile(file))
@@ -35,20 +35,23 @@ OperationResult BytesTracker::checkSpaceAvailable(const QList<QUrl>& files, cons
 		}
 	}
 
-    QStorageInfo storage = QStorageInfo{destination};
+    const QStorageInfo storage {destination};
 
-    auto bytesAv{storage.bytesAvailable()};
-    qint64 newSize{size + m_TotalBytes};
+    const qint64 bytesAv{storage.bytesAvailable()};
+    const qint64 newSize{size + m_TotalBytes};
 
     if(bytesAv < newSize)
     {
+        QString bytesAvStr{sizeToString(bytesAv)};
+        QString totalBytesStr{sizeToString(newSize)};
 
-        const QString error{QString{"test"}};
+        const QString error{QString{"Cannot add new songs due to not enough space.\nOnly %1 available on disk: %2.\nTotal combined file size: %3"}
+            .arg(bytesAvStr,storage.rootPath(),totalBytesStr)};
+
         return OperationResult::fail(error);
     }
 
     m_TotalBytes = newSize;
-
 
 	return OperationResult::succeed();
 }
