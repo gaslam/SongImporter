@@ -3,6 +3,10 @@
 
 #include <QObject>
 
+struct Song;
+namespace TagLib{
+ class FileRef;
+}
 class SONGIMPORTERLIB_EXPORT SongAnalyzer : public QObject
 {
     Q_OBJECT
@@ -11,6 +15,8 @@ public:
 
 signals:
 
+    void songProcessed(const Song& song, const TagLib::FileRef& ref);
+    void errorReceived(const QString& error);
 private:
     const QString m_FileToProcess;
 };
