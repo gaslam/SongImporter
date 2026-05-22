@@ -19,74 +19,79 @@ void SongAnalyzer::startProcess()
 {
     const QString zipExt{".zip"};
     int split = m_FileToProcess.indexOf(zipExt);
-    //TODO: try to make this more efficient
-    //If not, make this more readable
     //Checks if the filepath is a zip file
     if (split != -1)
     {
         split += zipExt.length();
 
         QString zipPath{ m_FileToProcess.left(split)};
-        QString filename { m_FileToProcess.mid(split + 1)};
-
-        // Open the zip
-        QuaZip zip(zipPath);
-
-        if (!zip.open(QuaZip::mdUnzip)) {
-
-            const QString error{ "Cannot open ZIP archive: " + zipPath};
-            emit errorReceived(error);
-            return;
-        }
-
-        if (!zip.setCurrentFile(filename))
-        {
-            const QString error{ QString{"File: %1 not found inside zip: %2"}.arg(zipPath,filename)};
-            emit errorReceived(error);
-            return;
-        }
-
-        // Open the zip file
-        QuaZipFile zipFile(&zip);
-
-        if (!zipFile.open(QIODevice::ReadOnly)) {
-            const QString error{ "Failed to open:" + filename};
-            emit errorReceived(error);
-            return;
-        }
-
-        QByteArray data{zipFile.readAll()};
-            //TODO: try to make this more efficient
-        try{
-            TagLib::ByteVector bv(data.constData(), data.size());
-            TagLib::ByteVectorStream memStream(bv);
-            FileRef file {&memStream};
-            if(file.isNull())
-            {
-                emit errorReceived(QString{"Cannot read file: %1.\nFile might not exist or cannot be read."}.arg(m_FileToProcess));
-                return;
-            }
-
-            Song song;
-            auto result{getSongFromFileRef(file,song)};
-
-            if(!result)
-            {
-                emit errorReceived(result.errorMessage);
-                return;
-            }
-
-            emit songProcessed(song,file);
-
-        }catch (std::exception& e){
-            const QString error{ QString{"%1 for file: %2"}.arg(e.what(),zipPath)};
-            emit errorReceived(error);
-            return;
-        }
-        zipFile.close();
+        QString fileName { m_FileToProcess.mid(split + 1)};
+        getSongFromZip(zipPath,fileName);
     }
-    else {
-        FileRef file {m_FileToProcess.toStdString().c_str()};
+    else
+    {
+        getSongFromFile();
+    }
+
+
+}
+
+void SongAnalyzer::getSongFromFile()
+{
+    FileRef file {m_FileToProcess.toStdString().c_str()};
+    if(file.isNull())
+    {
+        const QString error{QString{"Cannot read file: %1.\nFile might not exist or cannot be read."}.arg(m_FileToProcess)};
+        emit errorReceived(error);
+        return;
+    }
+    Song song;
+    auto result{getSongFromFileRef(file,song)};
+
+    if(!result)
+    {
+        emit errorReceived(result.errorMessage);
+        return;
+    }
+    emit songProcessed(song,file);
+}
+
+void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filename)
+{
+    //TODO: try to make this more efficient
+    //If not, make this more readable
+    // Open the zip
+    QuaZip zip(zipPath);
+
+    if (!zip.open(QuaZip::mdUnzip)) {
+
+        const QString error{ "Cannot open ZIP archive: " + zipPath};
+        emit errorReceived(error);
+        return;
+    }
+
+    if (!zip.setCurrentFile(filename))
+    {
+        const QString error{ QString{"File: %1 not found inside zip: %2"}.arg(zipPath,filename)};
+        emit errorReceived(error);
+        return;
+    }
+
+    // Open the zip file
+    QuaZipFile zipFile(&zip);
+
+    if (!zipFile.open(QIODevice::ReadOnly)) {
+        const QString error{ "Failed to open:" + filename};
+        emit errorReceived(error);
+        return;
+    }
+
+    QByteArray data{zipFile.readAll()};
+    //TODO: try to make this more efficient
+    try{
+        TagLib::ByteVector bv(data.constData(), data.size());
+        TagLib::ByteVectorStream memStream(bv);
+        FileRef file {&memStream};
         if(file.isNull())
         {
             emit errorReceived(QString{"Cannot read file: %1.\nFile might not exist or cannot be read."}.arg(m_FileToProcess));
@@ -101,10 +106,16 @@ void SongAnalyzer::startProcess()
             emit errorReceived(result.errorMessage);
             return;
         }
+        song.filename = m_FileToProcess;
 
         emit songProcessed(song,file);
-    }
 
+    }catch (std::exception& e){
+        const QString error{ QString{"%1 for file: %2"}.arg(e.what(),zipPath)};
+        emit errorReceived(error);
+        return;
+    }
+    zipFile.close();
 }
 
 
