@@ -3,13 +3,16 @@
 
 #include <QObject>
 
-class SongAnalyzer : public QObject
+class SONGIMPORTERLIB_EXPORT SongAnalyzer : public QObject
 {
     Q_OBJECT
 public:
-    explicit SongAnalyzer(QObject *parent = nullptr);
+    explicit SongAnalyzer(const QString& file,QObject *parent = nullptr);
 
 signals:
+
+private:
+    const QString m_FileToProcess;
 };
 
 #endif // SONGANALYZER_H
