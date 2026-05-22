@@ -1,7 +1,7 @@
 #ifndef BYTESTRACKER_H
 #define BYTESTRACKER_H
 
-class BytesTracker 
+class SONGIMPORTERLIB_EXPORT BytesTracker
 {
 public:
 	[[nodiscard]] OperationResult checkSpaceAvailable(const QList<QUrl>& files, const QString& destination);
