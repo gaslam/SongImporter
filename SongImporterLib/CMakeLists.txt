@@ -27,7 +27,7 @@ add_library(SongImporterLib SHARED
   Song.h
   BytesTracker.h
   BytesTracker.cpp
-  songAnalyzer.h
+  SongAnalyzer.h
   SongAnalyzer.cpp
 )
 

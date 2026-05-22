@@ -1,4 +1,4 @@
-#include "songAnalyzer.h"
+#include "SongAnalyzer.h"
 
 SongAnalyzer::SongAnalyzer(const QString& file, QObject *parent)
     : QObject{parent},
