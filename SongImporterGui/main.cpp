@@ -8,6 +8,7 @@
 #include <Song.h>
 #include <SoftwareUtils.h>
 #include <FileUtils.h>
+#include <BytesTracker.h>
 
 
 int main(int argc, char *argv[])
@@ -39,9 +40,21 @@ int main(int argc, char *argv[])
     engine.loadFromModule("SongImporterGui", "Main");
 
     BytesTracker tracker{};
-    if(tracker.checkSpaceAvailable(QList<QUrl>{QUrl{ "E:/testfill.txt" }}, "E:/"))
+
+    constexpr qsizetype fileCount{4985};
+    QList<QUrl> files{fileCount};
+
+    for(qsizetype i{}; i < fileCount; ++i)
     {
-        qInfo() << "yey";
+        files[i] = "E:/testFind_Your_Dreams.flac.flac";
+    }
+
+    for(int i{}; i < 2; ++i)
+    {
+        if(tracker.checkSpaceAvailable(files, "E:/"))
+        {
+            qInfo() << "yey";
+        }
     }
 
     return app.exec();
