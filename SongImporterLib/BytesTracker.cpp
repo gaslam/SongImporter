@@ -2,6 +2,7 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QuaZip.h>
+#include <QStorageInfo>
 #include "FileUtils.h"
 
 OperationResult BytesTracker::checkSpaceAvailable(const QList<QUrl>& files, const QString& destination)
@@ -33,5 +34,21 @@ OperationResult BytesTracker::checkSpaceAvailable(const QList<QUrl>& files, cons
 			size += info.size();
 		}
 	}
+
+    QStorageInfo storage = QStorageInfo{destination};
+
+    auto bytesAv{storage.bytesAvailable()};
+    qint64 newSize{size + m_TotalBytes};
+
+    if(bytesAv < newSize)
+    {
+
+        const QString error{QString{"test"}};
+        return OperationResult::fail(error);
+    }
+
+    m_TotalBytes = newSize;
+
+
 	return OperationResult::succeed();
 }
