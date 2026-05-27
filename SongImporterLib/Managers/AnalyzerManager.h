@@ -13,7 +13,7 @@ signals:
 
 private:
     std::atomic<int> m_ActiveTasks{};
-    std::atomic<bool> m_StopRequested{false};
+    std::atomic<bool> m_IsStopRequested{false};
 };
 
 #endif // ANALYZERMANAGER_H
