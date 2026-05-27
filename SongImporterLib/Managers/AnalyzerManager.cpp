@@ -12,27 +12,28 @@ AnalyzerManager::AnalyzerManager(QObject *parent)
 
 void AnalyzerManager::process(const QString& file)
 {
-    auto future = QtConcurrent::run([this, file]
-                      {
-                          if (FileUtils::isNonEmptyZipFile(file))
-                              {
+    auto future {
+                QtConcurrent::run([this, file]
+                                  {
+                                      if (FileUtils::isNonEmptyZipFile(file))
+                                      {
 
-                              QuaZip zip(file);
+                                          QuaZip zip(file);
 
-                              if (!zip.open(QuaZip::mdUnzip))
-                              {
-                                  qWarning() << "Failed to open zip:"
-                                             << zip.getZipError();
+                                          if (!zip.open(QuaZip::mdUnzip))
+                                          {
+                                              qWarning() << "Failed to open zip:"
+                                                         << zip.getZipError();
 
-                                  return;
-                              }
+                                              return;
+                                          }
 
-                              QuaZipDir root(&zip);
+                                          QuaZipDir root(&zip);
 
-                              processDirectory(root, "",file);
-                            return;
-                          }
-                      });
+                                          processDirectory(root, "",file);
+                                          return;
+                                      }
+                                  })};
 }
 
 void AnalyzerManager::processWorker(AnalyzerManager* analyzerManager, const QString& file)
@@ -50,7 +51,7 @@ void AnalyzerManager::processWorker(AnalyzerManager* analyzerManager, const QStr
 }
 
 void AnalyzerManager::processDirectory(QuaZipDir& dir,
-                      const QString& path,const QString& zipPath)
+                                       const QString& path,const QString& zipPath)
 {
     QuaZipDir current = dir;
 
@@ -62,7 +63,7 @@ void AnalyzerManager::processDirectory(QuaZipDir& dir,
 
     const auto entries =
         current.entryInfoList(QDir::NoDotAndDotDot |
-                          QDir::AllEntries);
+                              QDir::AllEntries);
 
     const QString currPath{current.path() + "/"};
 
