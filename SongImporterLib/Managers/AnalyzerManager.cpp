@@ -38,8 +38,8 @@ void AnalyzerManager::process(const QList<QUrl>& files, const QString& destinati
 
                                               if (!zip.open(QuaZip::mdUnzip))
                                               {
-                                                  qWarning() << "Failed to open zip:"
-                                                             << zip.getZipError();
+                                                  const QString errorMessage{"Failed to open zip: " + file};
+                                                  emit errorReceived(errorMessage);
 
                                                   continue;
                                               }
