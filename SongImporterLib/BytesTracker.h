@@ -1,6 +1,8 @@
 #ifndef BYTESTRACKER_H
 #define BYTESTRACKER_H
 
+#include <QMutex>
+
 class SONGIMPORTERLIB_EXPORT BytesTracker
 {
 public:
@@ -23,6 +25,8 @@ private:
         return QString::number(bytes / kb, floatFormat, precision) + " KB";
     };
 
-	qint64 m_TotalBytes;
+    qint64 m_TotalBytes{};
+
+    QMutex m_Mutex;
 };
 #endif

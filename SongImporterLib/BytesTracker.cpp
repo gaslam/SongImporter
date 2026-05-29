@@ -7,13 +7,14 @@
 
 OperationResult BytesTracker::checkSpaceAvailable(const QList<QUrl>& files, const QString& destination)
 {
+        QMutexLocker locker(&m_Mutex);
 	qint64 size{};
     foreach(const QUrl& file, files)
 	{
 
 		if (FileUtils::isNonEmptyZipFile(file))
 		{
-			QuaZip zip{ file.toString() };
+            QuaZip zip{ file.toString() };
 
             if (!zip.open(QuaZip::mdUnzip))
 				continue;

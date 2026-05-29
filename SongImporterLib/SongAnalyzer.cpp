@@ -7,7 +7,6 @@
 #include <taglib/tpropertymap.h>
 #include <taglib/tbytevectorstream.h>
 #include "Song.h"
-#include "Helpers/SongEventWrapper.h"
 
 using namespace TagLib;
 
@@ -54,8 +53,7 @@ void SongAnalyzer::getSongFromFile()
         emit errorReceived(result.errorMessage);
         return;
     }
-    SongEventWrapper wrapper{song,file};
-    emit songProcessed(wrapper);
+    emit songProcessed(song);
 }
 
 void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filename)
@@ -109,9 +107,7 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
             return;
         }
         song.filename = m_FileToProcess;
-
-        SongEventWrapper wrapper{song,file};
-        emit songProcessed(wrapper);
+        emit songProcessed(song);
 
     }catch (std::exception& e){
         const QString error{ QString{"%1 for file: %2"}.arg(e.what(),zipPath)};
