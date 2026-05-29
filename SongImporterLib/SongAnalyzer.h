@@ -19,7 +19,7 @@ public slots:
 
 signals:
 
-    void songProcessed(const SongEventWrapper& wrapper);
+    void songProcessed(const Song& wrapper);
     void errorReceived(const QString& error);
 private:
     const QString m_FileToProcess;

@@ -18,7 +18,7 @@ signals:
     void processStarted();
     void processStopped();
     void errorReceived(const QString& error);
-    void songAnalyzed(const Song& song);
+    void songAnalyzed(const Song& wrapper);
 private:
     BytesTracker m_BytesTracker;
     std::atomic<int> m_ActiveTasks{};
