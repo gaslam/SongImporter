@@ -5,8 +5,9 @@
 
 struct Song;
 namespace TagLib{
- class FileRef;
+struct FileRef;
 }
+struct SongEventWrapper;
 class SONGIMPORTERLIB_EXPORT SongAnalyzer : public QObject
 {
     Q_OBJECT
@@ -18,7 +19,7 @@ public slots:
 
 signals:
 
-    void songProcessed(const Song& song, const TagLib::FileRef& ref);
+    void songProcessed(const SongEventWrapper& wrapper);
     void errorReceived(const QString& error);
 private:
     const QString m_FileToProcess;
