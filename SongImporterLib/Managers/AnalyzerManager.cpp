@@ -41,13 +41,12 @@ void AnalyzerManager::process(const QList<QUrl>& files, const QString& destinati
                                                   qWarning() << "Failed to open zip:"
                                                              << zip.getZipError();
 
-                                                  return;
+                                                  continue;
                                               }
 
                                               QuaZipDir root(&zip);
 
                                               processDirectory(root, "",file);
-                                              return;
                                           }
                                           else
                                           {
@@ -83,7 +82,19 @@ void AnalyzerManager::processDirectory(QuaZipDir& dir,
             return;
     }
 
-    const auto entries =
+    // recurse directories first
+    const auto dirs =
+        current.entryInfoList(
+            QStringList(),
+            QDir::Dirs | QDir::NoDotAndDotDot);
+
+    for (const auto& entry : dirs)
+    {
+        processDirectory(current, entry.name, zipPath);
+    }
+
+    // process audio files
+    const auto files =
         current.entryInfoList(
             QStringList() << "*.mp3"
                           << "*.flac",
@@ -91,20 +102,17 @@ void AnalyzerManager::processDirectory(QuaZipDir& dir,
 
     const QString currPath{current.path() + "/"};
 
-    for (const auto& entry : entries)
+    for (const auto& entry : files)
     {
-        QString fullPath = currPath + entry.name;
+        const QString finalFile =
+            zipPath + '/' + currPath + entry.name;
 
-        const auto finalChar{fullPath.length() - 1};
-        if (fullPath[finalChar] == '/')
-        {
-            processDirectory(current, entry.name,zipPath);
-        }
-        else
-        {
-            const QString finalFile{zipPath + fullPath};
-            auto future{ QtConcurrent::run(AnalyzerManager::processWorker, this,finalFile)};
-            m_ActiveTasks++;
-        }
+        auto future =
+            QtConcurrent::run(
+                AnalyzerManager::processWorker,
+                this,
+                finalFile);
+
+        m_ActiveTasks++;
     }
 }
