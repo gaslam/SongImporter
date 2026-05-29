@@ -1,7 +1,7 @@
 #ifndef ANALYZERMANAGER_H
 #define ANALYZERMANAGER_H
 
-#include <QObject>
+#include "../BytesTracker.h"
 
 struct Song;
 class QuaZipDir;
@@ -12,7 +12,7 @@ public:
     explicit AnalyzerManager(QObject *parent = nullptr);
 
     [[nodiscard]] bool IsStopRequested() const { return m_IsStopRequested;}
-    void process(const QString& file);
+    void process(const QList<QUrl>& files, const QString& destination);
 
 signals:
     void processStarted();
@@ -20,6 +20,7 @@ signals:
     void errorReceived(const QString& error);
     void songAnalyzed(const Song& song);
 private:
+    BytesTracker m_BytesTracker;
     std::atomic<int> m_ActiveTasks{};
     std::atomic<bool> m_IsStopRequested{false};
 

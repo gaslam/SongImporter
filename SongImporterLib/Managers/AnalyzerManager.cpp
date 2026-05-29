@@ -10,28 +10,50 @@ AnalyzerManager::AnalyzerManager(QObject *parent)
     : QObject{parent}
 {}
 
-void AnalyzerManager::process(const QString& file)
+void AnalyzerManager::process(const QList<QUrl>& files, const QString& destination)
 {
     auto future {
-                QtConcurrent::run([this, file]
+                QtConcurrent::run([this, files,destination]
+                                  ()
                                   {
-                                      if (FileUtils::isNonEmptyZipFile(file))
+                                      auto result{m_BytesTracker.checkSpaceAvailable(files,destination)};
+                                      if(!result)
                                       {
+                                          emit errorReceived(result.errorMessage);
+                                          return;
+                                      }
 
-                                          QuaZip zip(file);
+                                      foreach (auto& url, files) {
 
-                                          if (!zip.open(QuaZip::mdUnzip))
+                                          const QString file{url.path()};
+                                          if (FileUtils::isNonEmptyZipFile(file))
                                           {
-                                              qWarning() << "Failed to open zip:"
-                                                         << zip.getZipError();
 
+                                              if(m_IsStopRequested)
+                                              {
+                                                  return;
+                                              }
+
+                                              QuaZip zip(file);
+
+                                              if (!zip.open(QuaZip::mdUnzip))
+                                              {
+                                                  qWarning() << "Failed to open zip:"
+                                                             << zip.getZipError();
+
+                                                  return;
+                                              }
+
+                                              QuaZipDir root(&zip);
+
+                                              processDirectory(root, "",file);
                                               return;
                                           }
-
-                                          QuaZipDir root(&zip);
-
-                                          processDirectory(root, "",file);
-                                          return;
+                                          else
+                                          {
+                                              auto future{ QtConcurrent::run(AnalyzerManager::processWorker, this,file)};
+                                              m_ActiveTasks++;
+                                          }
                                       }
                                   })};
 }
@@ -62,8 +84,10 @@ void AnalyzerManager::processDirectory(QuaZipDir& dir,
     }
 
     const auto entries =
-        current.entryInfoList(QDir::NoDotAndDotDot |
-                              QDir::AllEntries);
+        current.entryInfoList(
+            QStringList() << "*.mp3"
+                          << "*.flac",
+            QDir::Files | QDir::NoDotAndDotDot);
 
     const QString currPath{current.path() + "/"};
 
@@ -78,7 +102,7 @@ void AnalyzerManager::processDirectory(QuaZipDir& dir,
         }
         else
         {
-            const QString finalFile{QDir{zipPath}.filePath(fullPath)};
+            const QString finalFile{zipPath + fullPath};
             auto future{ QtConcurrent::run(AnalyzerManager::processWorker, this,finalFile)};
             m_ActiveTasks++;
         }
