@@ -66,7 +66,12 @@ void AnalyzerManager::addWorker(const QString& file)
     m_ActiveTasks++;
 }
 
-void AnalyzerManager::songReceived(const Song &song)
+void AnalyzerManager::songReceived(const Song &)
+{
+    updateActiveTasks();
+}
+
+void AnalyzerManager::updateActiveTasks()
 {
     --m_ActiveTasks;
 
@@ -88,6 +93,7 @@ void AnalyzerManager::processWorker(AnalyzerManager* analyzerManager, const QStr
     connect(analyzer,&SongAnalyzer::songProcessed,analyzerManager,&AnalyzerManager::songAnalyzed);
     connect(analyzer,&SongAnalyzer::songProcessed,analyzerManager,&AnalyzerManager::songReceived);
     connect(analyzer,&SongAnalyzer::errorReceived,analyzerManager,&AnalyzerManager::errorReceived);
+    connect(analyzer,&SongAnalyzer::errorReceived,analyzerManager,&AnalyzerManager::updateActiveTasks);
     analyzer->startProcess();
 }
 

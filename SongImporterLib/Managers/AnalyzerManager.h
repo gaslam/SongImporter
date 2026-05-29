@@ -23,12 +23,11 @@ signals:
 private slots:
 
     void songReceived(const Song& song);
+    void updateActiveTasks();
 private:
     BytesTracker m_BytesTracker;
     std::atomic<int> m_ActiveTasks{};
     std::atomic<bool> m_IsStopRequested{false};
-
-
     void addWorker(const QString& file);
     void processDirectory(QuaZipDir& dir,
                           const QString& path,
