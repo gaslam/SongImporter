@@ -18,12 +18,18 @@ signals:
     void processStarted();
     void processStopped();
     void errorReceived(const QString& error);
-    void songAnalyzed(const Song& wrapper);
+    void songAnalyzed(const Song& song);
+
+private slots:
+
+    void songReceived(const Song& song);
 private:
     BytesTracker m_BytesTracker;
     std::atomic<int> m_ActiveTasks{};
     std::atomic<bool> m_IsStopRequested{false};
 
+
+    void addWorker(const QString& file);
     void processDirectory(QuaZipDir& dir,
                           const QString& path,
                           const QString& zipPath);

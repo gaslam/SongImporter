@@ -50,11 +50,30 @@ void AnalyzerManager::process(const QList<QUrl>& files, const QString& destinati
                                           }
                                           else
                                           {
-                                              auto future{ QtConcurrent::run(AnalyzerManager::processWorker, this,file)};
-                                              m_ActiveTasks++;
+                                              addWorker(file);
                                           }
                                       }
                                   })};
+}
+
+void AnalyzerManager::addWorker(const QString& file)
+{
+    auto future{ QtConcurrent::run(AnalyzerManager::processWorker, this,file)};
+    if(m_ActiveTasks == 0)
+    {
+        emit processStarted();
+    }
+    m_ActiveTasks++;
+}
+
+void AnalyzerManager::songReceived(const Song &song)
+{
+    --m_ActiveTasks;
+
+    if(m_ActiveTasks == 0)
+    {
+        emit processStopped();
+    }
 }
 
 void AnalyzerManager::processWorker(AnalyzerManager* analyzerManager, const QString& file)
@@ -67,6 +86,7 @@ void AnalyzerManager::processWorker(AnalyzerManager* analyzerManager, const QStr
         return;
     }
     connect(analyzer,&SongAnalyzer::songProcessed,analyzerManager,&AnalyzerManager::songAnalyzed);
+    connect(analyzer,&SongAnalyzer::songProcessed,analyzerManager,&AnalyzerManager::songReceived);
     connect(analyzer,&SongAnalyzer::errorReceived,analyzerManager,&AnalyzerManager::errorReceived);
     analyzer->startProcess();
 }
@@ -82,6 +102,24 @@ void AnalyzerManager::processDirectory(QuaZipDir& dir,
             return;
     }
 
+    // process audio files
+    const auto files =
+        current.entryInfoList(
+            QStringList() << "*.mp3"
+                          << "*.flac",
+            QDir::Files | QDir::NoDotAndDotDot);
+
+    const QString originPath{current.path()};
+    const QString currPath{originPath.isEmpty() ? "" : originPath + '/'};
+
+    for (const auto& entry : files)
+    {
+        const QString finalFile =
+            zipPath + '/' + currPath + entry.name;
+
+        addWorker(finalFile);
+    }
+
     // recurse directories first
     const auto dirs =
         current.entryInfoList(
@@ -91,28 +129,5 @@ void AnalyzerManager::processDirectory(QuaZipDir& dir,
     for (const auto& entry : dirs)
     {
         processDirectory(current, entry.name, zipPath);
-    }
-
-    // process audio files
-    const auto files =
-        current.entryInfoList(
-            QStringList() << "*.mp3"
-                          << "*.flac",
-            QDir::Files | QDir::NoDotAndDotDot);
-
-    const QString currPath{current.path() + "/"};
-
-    for (const auto& entry : files)
-    {
-        const QString finalFile =
-            zipPath + '/' + currPath + entry.name;
-
-        auto future =
-            QtConcurrent::run(
-                AnalyzerManager::processWorker,
-                this,
-                finalFile);
-
-        m_ActiveTasks++;
     }
 }
