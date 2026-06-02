@@ -67,6 +67,8 @@ target_precompile_headers(appSongImporterGui PUBLIC
     stdafx.h
 )
 
+set(SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS ON CACHE BOOL "Enable album cover art extraction." FORCE)
+
 include(GNUInstallDirs)
 install(TARGETS appSongImporterGui
     BUNDLE DESTINATION .
