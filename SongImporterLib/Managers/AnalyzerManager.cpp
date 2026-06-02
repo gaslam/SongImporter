@@ -24,8 +24,12 @@ void AnalyzerManager::process(const QList<QUrl>& files, const QString& destinati
                                       }
 
                                       foreach (auto& url, files) {
+                                          QString file = url.path();
+                                          if(url.isLocalFile())
+                                          {
+                                              file = url.toLocalFile();
+                                          }
 
-                                          const QString file{url.path()};
                                           if (FileUtils::isNonEmptyZipFile(file))
                                           {
 
