@@ -30,6 +30,7 @@ add_library(SongImporterLib SHARED
   SongAnalyzer.h
   SongAnalyzer.cpp
   Managers/AnalyzerManager.h Managers/AnalyzerManager.cpp
+  Providers/AlbumCoverProvider.h Providers/AlbumCoverProvider.cpp
 
 )
 
