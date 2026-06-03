@@ -24,6 +24,9 @@ private:
     const QString m_FileToProcess;
 
     [[nodiscard]] OperationResult getSongFromFileRef (const TagLib::FileRef& file,Song& song);
+#if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
+    void extractAlbumCoverArt(TagLib::FileRef& fileref ,Song& song);
+#endif
     void getSongFromFile();
     void getSongFromZip(const QString& zipPath, const QString& filename);
 };

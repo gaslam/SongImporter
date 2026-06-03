@@ -45,6 +45,12 @@ find_package(TagLib 2.0.0 REQUIRED)
 target_link_libraries(SongImporterLib PUBLIC ZLIB::ZLIB QuaZip::QuaZip TagLib::tag)
 target_link_libraries(SongImporterLib PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Concurrent)
 
+set(SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS ON CACHE BOOL "Enable album cover art extraction.")
+
+if(SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS)
+  target_compile_definitions(SongImporterLib PUBLIC SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS=1)
+endif()
+
 target_precompile_headers(SongImporterLib PUBLIC
     stdafx.h
 )
