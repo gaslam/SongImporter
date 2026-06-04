@@ -15,7 +15,7 @@ class SONGIMPORTERLIB_EXPORT AlbumCoverProvider : public QQuickImageProvider
 {
     Q_OBJECT
 public:
-    explicit AlbumCoverProvider();
+    explicit AlbumCoverProvider(QString& defaultId,QImage& defaultLogo);
 
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
     bool hasCover(Song& song);
