@@ -15,14 +15,10 @@ AlbumCoverProvider::AlbumCoverProvider()
 void AlbumCoverProvider::setImage(Song& song,const QImage &image)
 {
     QString songId{QString("%1_%2").arg(song.albumArtists.toLower(),song.album.toLower())};
-
+    if(hasCover(song))
     {
-        QMutexLocker locker{&m_Locker};
-        if(m_AlbumCovers.contains(songId))
-        {
-            song.coverId = songId;
-            return;
-        }
+        song.coverId = songId;
+        return;
     }
 
     extractAlbumCoverArt(song.filename,songId,song);
@@ -96,4 +92,10 @@ QImage AlbumCoverProvider::requestImage(const QString &id, QSize *size, const QS
         return m_AlbumCovers[id];
     }
     return m_AlbumCovers[m_DefaultCoverKey];
+}
+
+bool AlbumCoverProvider::hasCover(Song &song)
+{
+    const QMutexLocker locker{&m_Locker};
+    return m_AlbumCovers.contains(song.coverId);
 }

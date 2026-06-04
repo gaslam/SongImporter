@@ -15,6 +15,7 @@ public:
 
     void setImage(Song& song,const QImage &image);
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
+    bool hasCover(Song& song);
 
 private:
     QHash<QString,QImage> m_AlbumCovers;
