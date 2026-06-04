@@ -25,7 +25,7 @@ private:
     const QString m_FileToProcess;
     AlbumCoverProvider* m_pProvider;
 
-    [[nodiscard]] OperationResult getSongFromFileRef (const TagLib::FileRef& file,Song& song);
+    [[nodiscard]] OperationResult getSongFromFileRef (TagLib::FileRef& file,Song& song);
 #if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
     void extractAlbumCoverArt(TagLib::FileRef& fileref ,Song& song);
 #endif
