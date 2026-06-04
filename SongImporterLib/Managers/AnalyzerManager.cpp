@@ -89,20 +89,14 @@ void AnalyzerManager::updateActiveTasks()
 
 void AnalyzerManager::processWorker(AnalyzerManager* analyzerManager, const QString& file)
 {
-    QSharedPointer<SongAnalyzer> provider{ new SongAnalyzer{file}};
+    QSharedPointer<SongAnalyzer> provider{ new SongAnalyzer{file,analyzerManager->getAlbumCoverProvider()}};
     SongAnalyzer* analyzer{provider.get()};
 
     if(analyzerManager->IsStopRequested())
     {
         return;
     }
-#if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
-    auto pProvider{analyzerManager->getAlbumCoverProvider()};
-    connect(analyzer,&SongAnalyzer::songProcessed,pProvider,&AlbumCoverProvider::setImage);
-    connect(pProvider,&AlbumCoverProvider::albumCoverAdded,analyzerManager,&AnalyzerManager::songReceived);
-#else
     connect(analyzer,&SongAnalyzer::songProcessed,analyzerManager,&AnalyzerManager::songReceived);
-#endif
     connect(analyzer,&SongAnalyzer::errorReceived,analyzerManager,&AnalyzerManager::errorReceived);
     connect(analyzer,&SongAnalyzer::errorReceived,analyzerManager,&AnalyzerManager::updateActiveTasks);
     analyzer->startProcess();
