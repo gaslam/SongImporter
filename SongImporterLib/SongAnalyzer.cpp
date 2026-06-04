@@ -6,11 +6,6 @@
 #include <QuaZipFile.h>
 #include <taglib/tpropertymap.h>
 #include <taglib/tbytevectorstream.h>
-#include <taglib/id3v2tag.h>
-#include <taglib/attachedpictureframe.h>
-#include <flacfile.h>
-#include <QImage>
-#include <mpegfile.h>
 #include "Song.h"
 
 using namespace TagLib;
@@ -58,10 +53,6 @@ void SongAnalyzer::getSongFromFile()
         emit errorReceived(result.errorMessage);
         return;
     }
-
-#if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
-    extractAlbumCoverArt(file,song);
-#endif
     emit songProcessed(song);
 }
 
@@ -178,53 +169,3 @@ OperationResult SongAnalyzer::getSongFromFileRef (const TagLib::FileRef& file,So
 
     return OperationResult::succeed();
 }
-
-#if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
-void SongAnalyzer::extractAlbumCoverArt(FileRef& fileref ,Song& song)
-{
-    TagLib::File* file{fileref.file()};
-
-    if(!file)
-    {
-        return;
-    }
-
-    QImage image{};
-    if(FLAC::File* flac{dynamic_cast<FLAC::File*>(file)})
-    {
-        auto picList{flac->pictureList()};
-        if(!picList.isEmpty())
-        {
-            const TagLib::FLAC::Picture* pic{ picList.front()};
-
-            const TagLib::ByteVector data { pic->data()};
-
-            image = QImage::fromData(
-                reinterpret_cast<const uchar*>(data.data()),
-                data.size()
-                );
-        }
-    }
-
-    if(image.isNull())
-    {
-        if (auto mpeg = dynamic_cast<TagLib::MPEG::File*>(file)) {
-            TagLib::ID3v2::Tag *tag = mpeg->ID3v2Tag(); // may return nullptr
-            if (tag)
-            {
-                const TagLib::ID3v2::FrameList& frameList{tag->frameList("APIC")};
-                if(!frameList.isEmpty())
-                {
-                    auto pictureFrame = static_cast<TagLib::ID3v2::AttachedPictureFrame *> (frameList.front());
-
-                    const TagLib::ByteVector data = pictureFrame->picture();
-                    image = QImage::fromData(
-                        reinterpret_cast<const uchar*>(data.data()),
-                        data.size()
-                        );
-                }
-            }
-        }
-    }
-}
-#endif
