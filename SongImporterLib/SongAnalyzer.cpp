@@ -108,12 +108,6 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
             return;
         }
         song.filename = m_FileToProcess;
-        #if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
-        if(m_pProvider)
-        {
-            m_pProvider->setImage(song,file);
-        }
-        #endif
         emit songProcessed(song);
 
     }catch (std::exception& e){
