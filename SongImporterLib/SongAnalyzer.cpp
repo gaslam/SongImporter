@@ -6,7 +6,6 @@
 #include <QuaZipFile.h>
 #include <taglib/tpropertymap.h>
 #include <taglib/tbytevectorstream.h>
-#include "Song.h"
 
 using namespace TagLib;
 

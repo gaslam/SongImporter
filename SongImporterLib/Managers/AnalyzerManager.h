@@ -2,32 +2,34 @@
 #define ANALYZERMANAGER_H
 
 #include "../BytesTracker.h"
-
-struct Song;
+#include "../Song.h"
 class QuaZipDir;
+class AlbumCoverProvider;
 class SONGIMPORTERLIB_EXPORT AnalyzerManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit AnalyzerManager(QObject *parent = nullptr);
+    AnalyzerManager(AlbumCoverProvider* albumCoverProvider,QObject *parent = nullptr);
 
     [[nodiscard]] bool IsStopRequested() const { return m_IsStopRequested;}
+    [[nodiscard]] AlbumCoverProvider* getAlbumCoverProvider() const {return m_AlbumCoverProvider;}
     void process(const QList<QUrl>& files, const QString& destination);
 
 signals:
     void processStarted();
     void processStopped();
     void errorReceived(const QString& error);
-    void songAnalyzed(const Song& song);
 
 private slots:
 
-    void songReceived(const Song& song);
+    void songReceived(Song song);
     void updateActiveTasks();
 private:
     BytesTracker m_BytesTracker;
     std::atomic<int> m_ActiveTasks{};
     std::atomic<bool> m_IsStopRequested{false};
+    AlbumCoverProvider* m_AlbumCoverProvider{};
+
     void addWorker(const QString& file);
     void processDirectory(QuaZipDir& dir,
                           const QString& path,

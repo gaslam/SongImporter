@@ -12,7 +12,7 @@ AlbumCoverProvider::AlbumCoverProvider()
     : QQuickImageProvider{QQuickImageProvider::Image}
 {}
 
-void AlbumCoverProvider::setImage(Song& song,const QImage &image)
+void AlbumCoverProvider::setImage(Song song)
 {
     QString songId{QString("%1_%2").arg(song.albumArtists.toLower(),song.album.toLower())};
     if(hasCover(song))
@@ -82,6 +82,7 @@ void AlbumCoverProvider::extractAlbumCoverArt(const QString& filePath, const QSt
     {
         song.coverId = m_DefaultCoverKey;
     }
+    emit albumCoverAdded(song);
 }
 
 QImage AlbumCoverProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)

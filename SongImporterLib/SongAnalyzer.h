@@ -2,8 +2,8 @@
 #define SONGANALYZER_H
 
 #include <QObject>
+#include "Song.h"
 
-struct Song;
 namespace TagLib{
 struct FileRef;
 }
@@ -18,7 +18,7 @@ public slots:
 
 signals:
 
-    void songProcessed(const Song& song);
+    void songProcessed(Song song);
     void errorReceived(const QString& error);
 private:
     const QString m_FileToProcess;

@@ -5,9 +5,11 @@
 #include <QtConcurrent>
 #include <quazipfile.h>
 #include <quazipdir.h>
+#include "../Providers/AlbumCoverProvider.h"
 
-AnalyzerManager::AnalyzerManager(QObject *parent)
-    : QObject{parent}
+AnalyzerManager::AnalyzerManager(AlbumCoverProvider* provider,QObject *parent)
+    : QObject{parent},
+    m_AlbumCoverProvider{provider}
 {}
 
 void AnalyzerManager::process(const QList<QUrl>& files, const QString& destination)
@@ -70,7 +72,7 @@ void AnalyzerManager::addWorker(const QString& file)
     m_ActiveTasks++;
 }
 
-void AnalyzerManager::songReceived(const Song &)
+void AnalyzerManager::songReceived(Song song)
 {
     updateActiveTasks();
 }
@@ -94,8 +96,13 @@ void AnalyzerManager::processWorker(AnalyzerManager* analyzerManager, const QStr
     {
         return;
     }
-    connect(analyzer,&SongAnalyzer::songProcessed,analyzerManager,&AnalyzerManager::songAnalyzed);
+#if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
+    auto pProvider{analyzerManager->getAlbumCoverProvider()};
+    connect(analyzer,&SongAnalyzer::songProcessed,pProvider,&AlbumCoverProvider::setImage);
+    connect(pProvider,&AlbumCoverProvider::albumCoverAdded,analyzerManager,&AnalyzerManager::songReceived);
+#else
     connect(analyzer,&SongAnalyzer::songProcessed,analyzerManager,&AnalyzerManager::songReceived);
+#endif
     connect(analyzer,&SongAnalyzer::errorReceived,analyzerManager,&AnalyzerManager::errorReceived);
     connect(analyzer,&SongAnalyzer::errorReceived,analyzerManager,&AnalyzerManager::updateActiveTasks);
     analyzer->startProcess();
