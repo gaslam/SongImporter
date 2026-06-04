@@ -11,7 +11,6 @@
 #include <BytesTracker.h>
 #include <QThread>
 #include <Providers/AlbumCoverProvider.h>
-#include <Managers/AnalyzerManager.h>
 
 
 int main(int argc, char *argv[])
@@ -37,13 +36,18 @@ int main(int argc, char *argv[])
 
     QThread* providerThread{new QThread{}};
     providerThread->setObjectName("albumProvider");
-    AlbumCoverProvider* albumCoverProvider{new AlbumCoverProvider{}};
+    QImage image{":/icons/logo-icon.png"};
+    QString defaultId{"default"};
+    AlbumCoverProvider* albumCoverProvider{new AlbumCoverProvider{defaultId,image}};
+    engine.addImageProvider(defaultId,albumCoverProvider);
     albumCoverProvider->moveToThread(providerThread);
     // ensure provider is deleted when thread finishes
     QObject::connect(providerThread, &QThread::finished, albumCoverProvider, &QObject::deleteLater);
     // delete thread when app destroyed
     QObject::connect(&app, &QCoreApplication::aboutToQuit, providerThread, &QThread::quit);
     QObject::connect(providerThread, &QThread::finished, providerThread, &QObject::deleteLater);
+
+    providerThread->start();
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
