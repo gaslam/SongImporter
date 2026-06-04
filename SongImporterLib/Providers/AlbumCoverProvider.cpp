@@ -9,9 +9,12 @@
 
 using namespace TagLib;
 
-AlbumCoverProvider::AlbumCoverProvider()
-    : QQuickImageProvider{QQuickImageProvider::Image}
-{}
+AlbumCoverProvider::AlbumCoverProvider(QString& defaultId,QImage& defaultLogo)
+    : QQuickImageProvider{QQuickImageProvider::Image},
+    m_DefaultCoverKey{defaultId}
+{
+    m_AlbumCovers[defaultId] = defaultLogo;
+}
 
 void AlbumCoverProvider::setImage(Song song,FileRef& fileref)
 {

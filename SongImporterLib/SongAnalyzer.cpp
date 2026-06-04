@@ -125,15 +125,20 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
 }
 
 
-OperationResult SongAnalyzer::getSongFromFileRef (const TagLib::FileRef& file,Song& song)
+OperationResult SongAnalyzer::getSongFromFileRef (TagLib::FileRef& file,Song& song)
 {
     //Get the tag and check if it's valid
     auto tag{file.tag()};
 
     if(tag->isEmpty())
     {
-        const QString error{QString{"Problem reading information from file: %1.\nFile is empty or cannot be opened."}.arg(m_FileToProcess)};
-        return OperationResult::fail(error);
+#if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
+        if(m_pProvider)
+        {
+            m_pProvider->setImage(song,file);
+        }
+#endif
+        return OperationResult::succeed();
     }
 
     //Gather all the data that can be retreived from simple functions.
