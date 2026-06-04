@@ -6,12 +6,14 @@
 #include <QuaZipFile.h>
 #include <taglib/tpropertymap.h>
 #include <taglib/tbytevectorstream.h>
+#include "Providers/AlbumCoverProvider.h"
 
 using namespace TagLib;
 
-SongAnalyzer::SongAnalyzer(const QString& file, QObject *parent)
+SongAnalyzer::SongAnalyzer(const QString& file, AlbumCoverProvider* provider, QObject *parent)
     : QObject{parent},
-    m_FileToProcess{file}
+    m_FileToProcess{file},
+    m_pProvider{provider}
 {}
 
 void SongAnalyzer::startProcess()
@@ -106,6 +108,12 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
             return;
         }
         song.filename = m_FileToProcess;
+        #if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
+        if(m_pProvider)
+        {
+            m_pProvider->setImage(song,file);
+        }
+        #endif
         emit songProcessed(song);
 
     }catch (std::exception& e){

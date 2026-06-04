@@ -5,6 +5,7 @@
 #include <taglib/mpegfile.h>
 #include <taglib/attachedpictureframe.h>
 #include <taglib/id3v2tag.h>
+#include <taglib/fileref.h>
 
 using namespace TagLib;
 
@@ -12,26 +13,28 @@ AlbumCoverProvider::AlbumCoverProvider()
     : QQuickImageProvider{QQuickImageProvider::Image}
 {}
 
-void AlbumCoverProvider::setImage(Song song)
+void AlbumCoverProvider::setImage(Song song,FileRef& fileref)
 {
     QString songId{QString("%1_%2").arg(song.albumArtists.toLower(),song.album.toLower())};
-    if(hasCover(song))
-    {
-        song.coverId = songId;
-        return;
-    }
 
-    extractAlbumCoverArt(song.filename,songId,song);
+    extractAlbumCoverArt(fileref,songId,song);
 }
 
-void AlbumCoverProvider::extractAlbumCoverArt(const QString& filePath, const QString& id, Song& song)
+void AlbumCoverProvider::extractAlbumCoverArt(FileRef& fileref, const QString& id, Song& song)
 {
-    FileRef fileref{filePath.toStdString().c_str()};
     File* file{fileref.file()};
 
     if(!file)
     {
         return;
+    }
+
+    {
+        QMutexLocker locker{&m_Locker};
+        if (m_AlbumCovers.contains(id)) {
+            song.coverId = id;
+            return;
+        }
     }
 
     QImage image{};
@@ -73,6 +76,7 @@ void AlbumCoverProvider::extractAlbumCoverArt(const QString& filePath, const QSt
     }
 
     QMutexLocker locker{&m_Locker};
+
     if(!image.isNull())
     {
         m_AlbumCovers[id] = image;
@@ -82,7 +86,6 @@ void AlbumCoverProvider::extractAlbumCoverArt(const QString& filePath, const QSt
     {
         song.coverId = m_DefaultCoverKey;
     }
-    emit albumCoverAdded(song);
 }
 
 QImage AlbumCoverProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
