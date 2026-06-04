@@ -9,6 +9,9 @@
 #include <SoftwareUtils.h>
 #include <FileUtils.h>
 #include <BytesTracker.h>
+#include <QThread>
+#include <Providers/AlbumCoverProvider.h>
+#include <Managers/AnalyzerManager.h>
 
 
 int main(int argc, char *argv[])
@@ -31,6 +34,16 @@ int main(int argc, char *argv[])
         [&app](QQmlEngine*, QJSEngine*) -> QObject* {
             return new FileUtils(&app);
         });
+
+    QThread* providerThread{new QThread{}};
+    providerThread->setObjectName("albumProvider");
+    AlbumCoverProvider* albumCoverProvider{new AlbumCoverProvider{}};
+    albumCoverProvider->moveToThread(providerThread);
+    // ensure provider is deleted when thread finishes
+    QObject::connect(providerThread, &QThread::finished, albumCoverProvider, &QObject::deleteLater);
+    // delete thread when app destroyed
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, providerThread, &QThread::quit);
+    QObject::connect(providerThread, &QThread::finished, providerThread, &QObject::deleteLater);
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
