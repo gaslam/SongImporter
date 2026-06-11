@@ -16,7 +16,7 @@ AlbumCoverProvider::AlbumCoverProvider(QString& defaultId,QImage& defaultLogo)
     m_AlbumCovers[defaultId] = defaultLogo;
 }
 
-void AlbumCoverProvider::setImage(Song song,FileRef& fileref)
+void AlbumCoverProvider::setImage(Song& song,FileRef& fileref)
 {
     QString songId{QString("%1_%2").arg(song.albumArtists.toLower(),song.album.toLower())};
 
