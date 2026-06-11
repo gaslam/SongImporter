@@ -41,6 +41,7 @@ set_source_files_properties(${qml_singletons}
 qt_add_qml_module(appSongImporterGui
     URI SongImporterGui
     QML_FILES ${plain_qml_files} ${qml_singletons}
+    SOURCES Models/SongModel.h Models/SongModel.cpp
 )
 
 

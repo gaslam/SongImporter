@@ -11,6 +11,7 @@
 #include <BytesTracker.h>
 #include <QThread>
 #include <Providers/AlbumCoverProvider.h>
+#include "Models/SongModel.h"
 
 
 int main(int argc, char *argv[])
@@ -47,7 +48,9 @@ int main(int argc, char *argv[])
     QObject::connect(&app, &QCoreApplication::aboutToQuit, providerThread, &QThread::quit);
     QObject::connect(providerThread, &QThread::finished, providerThread, &QObject::deleteLater);
 
-    providerThread->start();
+    SongModel* model{new SongModel{albumCoverProvider,&app}};
+    qmlRegisterSingletonInstance("SongImporterGui.SongListModel",1,0,"SongListModel",model);
+
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
