@@ -19,6 +19,7 @@ public:
 	QString artists;
 	QString albumArtists;
 	QString filename;
+    QString coverId;
     unsigned int bpm{0};
 
 	bool operator==(const Song& other) const

@@ -2,8 +2,9 @@
 #define SONGANALYZER_H
 
 #include <QObject>
+#include "Song.h"
 
-struct Song;
+class AlbumCoverProvider;
 namespace TagLib{
 struct FileRef;
 }
@@ -11,19 +12,20 @@ class SONGIMPORTERLIB_EXPORT SongAnalyzer : public QObject
 {
     Q_OBJECT
 public:
-    explicit SongAnalyzer(const QString& file,QObject *parent = nullptr);
+    explicit SongAnalyzer(const QString& file,AlbumCoverProvider* provider,QObject *parent = nullptr);
 
 public slots:
     void startProcess();
 
 signals:
 
-    void songProcessed(const Song& song);
+    void songProcessed(Song song);
     void errorReceived(const QString& error);
 private:
     const QString m_FileToProcess;
+    AlbumCoverProvider* m_pProvider;
 
-    [[nodiscard]] OperationResult getSongFromFileRef (const TagLib::FileRef& file,Song& song);
+    [[nodiscard]] OperationResult getSongFromFileRef (TagLib::FileRef& file,Song& song);
 #if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
     void extractAlbumCoverArt(TagLib::FileRef& fileref ,Song& song);
 #endif

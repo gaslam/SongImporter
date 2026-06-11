@@ -6,18 +6,14 @@
 #include <QuaZipFile.h>
 #include <taglib/tpropertymap.h>
 #include <taglib/tbytevectorstream.h>
-#include <taglib/id3v2tag.h>
-#include <taglib/attachedpictureframe.h>
-#include <flacfile.h>
-#include <QImage>
-#include <mpegfile.h>
-#include "Song.h"
+#include "Providers/AlbumCoverProvider.h"
 
 using namespace TagLib;
 
-SongAnalyzer::SongAnalyzer(const QString& file, QObject *parent)
+SongAnalyzer::SongAnalyzer(const QString& file, AlbumCoverProvider* provider, QObject *parent)
     : QObject{parent},
-    m_FileToProcess{file}
+    m_FileToProcess{file},
+    m_pProvider{provider}
 {}
 
 void SongAnalyzer::startProcess()
@@ -58,10 +54,6 @@ void SongAnalyzer::getSongFromFile()
         emit errorReceived(result.errorMessage);
         return;
     }
-
-#if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
-    extractAlbumCoverArt(file,song);
-#endif
     emit songProcessed(song);
 }
 
@@ -127,15 +119,20 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
 }
 
 
-OperationResult SongAnalyzer::getSongFromFileRef (const TagLib::FileRef& file,Song& song)
+OperationResult SongAnalyzer::getSongFromFileRef (TagLib::FileRef& file,Song& song)
 {
     //Get the tag and check if it's valid
     auto tag{file.tag()};
 
     if(tag->isEmpty())
     {
-        const QString error{QString{"Problem reading information from file: %1.\nFile is empty or cannot be opened."}.arg(m_FileToProcess)};
-        return OperationResult::fail(error);
+#if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
+        if(m_pProvider)
+        {
+            m_pProvider->setImage(song,file);
+        }
+#endif
+        return OperationResult::succeed();
     }
 
     //Gather all the data that can be retreived from simple functions.
@@ -178,53 +175,3 @@ OperationResult SongAnalyzer::getSongFromFileRef (const TagLib::FileRef& file,So
 
     return OperationResult::succeed();
 }
-
-#if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
-void SongAnalyzer::extractAlbumCoverArt(FileRef& fileref ,Song& song)
-{
-    TagLib::File* file{fileref.file()};
-
-    if(!file)
-    {
-        return;
-    }
-
-    QImage image{};
-    if(FLAC::File* flac{dynamic_cast<FLAC::File*>(file)})
-    {
-        auto picList{flac->pictureList()};
-        if(!picList.isEmpty())
-        {
-            const TagLib::FLAC::Picture* pic{ picList.front()};
-
-            const TagLib::ByteVector data { pic->data()};
-
-            image = QImage::fromData(
-                reinterpret_cast<const uchar*>(data.data()),
-                data.size()
-                );
-        }
-    }
-
-    if(image.isNull())
-    {
-        if (auto mpeg = dynamic_cast<TagLib::MPEG::File*>(file)) {
-            TagLib::ID3v2::Tag *tag = mpeg->ID3v2Tag(); // may return nullptr
-            if (tag)
-            {
-                const TagLib::ID3v2::FrameList& frameList{tag->frameList("APIC")};
-                if(!frameList.isEmpty())
-                {
-                    auto pictureFrame = static_cast<TagLib::ID3v2::AttachedPictureFrame *> (frameList.front());
-
-                    const TagLib::ByteVector data = pictureFrame->picture();
-                    image = QImage::fromData(
-                        reinterpret_cast<const uchar*>(data.data()),
-                        data.size()
-                        );
-                }
-            }
-        }
-    }
-}
-#endif

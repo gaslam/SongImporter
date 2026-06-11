@@ -2,37 +2,46 @@
 #define ANALYZERMANAGER_H
 
 #include "../BytesTracker.h"
-
-struct Song;
+#include <QFuture>
+#include <QFutureWatcher>
+#include "../Song.h"
 class QuaZipDir;
+class AlbumCoverProvider;
 class SONGIMPORTERLIB_EXPORT AnalyzerManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit AnalyzerManager(QObject *parent = nullptr);
+    AnalyzerManager(AlbumCoverProvider* albumCoverProvider,QObject *parent = nullptr);
 
-    [[nodiscard]] bool IsStopRequested() const { return m_IsStopRequested;}
+    [[nodiscard]] AlbumCoverProvider* getAlbumCoverProvider() const {return m_AlbumCoverProvider;}
     void process(const QList<QUrl>& files, const QString& destination);
 
 signals:
     void processStarted();
     void processStopped();
     void errorReceived(const QString& error);
-    void songAnalyzed(const Song& song);
+    void songReceived(Song song);
 
-private slots:
+public slots:
+    [[nodiscard]] bool isStopRequested() const { return m_IsStopRequested.load();}
+    void requestStop() noexcept;
 
-    void songReceived(const Song& song);
-    void updateActiveTasks();
 private:
-    BytesTracker m_BytesTracker;
-    std::atomic<int> m_ActiveTasks{};
     std::atomic<bool> m_IsStopRequested{false};
+    std::atomic<qsizetype> m_ActiveTasks{};
+    BytesTracker m_BytesTracker;
+    QMutex m_StarterWatchersMutex;
+    QMutex m_WorkerWatchersMutex;
+    QVector<QFutureWatcher<void>*> m_StarterWatchers;
+    QVector<QFutureWatcher<void>*> m_WorkerWatchers;
+    AlbumCoverProvider* m_AlbumCoverProvider{};
+
     void addWorker(const QString& file);
+    void removeWorker(QFutureWatcher<void>* watcher);
     void processDirectory(QuaZipDir& dir,
                           const QString& path,
                           const QString& zipPath);
-    static void processWorker(AnalyzerManager* analyzerManager, const QString& file);
+    static void processWorker(AnalyzerManager* analyzerManager,QFutureWatcher<void>* watcher, const QString& file);
 };
 
 #endif // ANALYZERMANAGER_H
