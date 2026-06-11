@@ -93,12 +93,27 @@ void AlbumCoverProvider::extractAlbumCoverArt(FileRef& fileref, const QString& i
 
 QImage AlbumCoverProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
-    QMutexLocker locker{&m_Locker};
-    if(m_AlbumCovers.contains(id))
+    QImage image;
     {
-        return m_AlbumCovers[id];
+        QMutexLocker locker{&m_Locker};
+        if(m_AlbumCovers.contains(id))
+        {
+            image =  m_AlbumCovers[id];
+        }
+        else
+        {
+            image = m_AlbumCovers[m_DefaultCoverKey];
+        }
+
+        if (size)
+            *size = image.size();
+
+        if (!requestedSize.isValid())
+            return image;
     }
-    return m_AlbumCovers[m_DefaultCoverKey];
+
+    image = image.scaled(requestedSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    return image;
 }
 
 bool AlbumCoverProvider::hasCover(Song &song)
