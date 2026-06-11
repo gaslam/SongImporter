@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     QImage image{":/icons/logo-icon.png"};
     QString defaultId{"default"};
     AlbumCoverProvider* albumCoverProvider{new AlbumCoverProvider{defaultId,image}};
-    engine.addImageProvider(defaultId,albumCoverProvider);
+    engine.addImageProvider("albumProvider",albumCoverProvider);
     albumCoverProvider->moveToThread(providerThread);
     // ensure provider is deleted when thread finishes
     QObject::connect(providerThread, &QThread::finished, albumCoverProvider, &QObject::deleteLater);
