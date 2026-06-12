@@ -10,27 +10,40 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Concurrent Quick)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Concurrent Quick)
+
+set (utils_folder "Utils")
+set (validators_folder "Validators")
+set (song_folder "Song")
+set (managers_folder "Managers")
+set (providers_folder "Providers")
+
+set(cpp_files
+        ${utils_folder}/BytesTracker.h
+        ${utils_folder}/BytesTracker.cpp
+        ${utils_folder}/FileUtils.h
+        ${utils_folder}/FileUtils.cpp
+        ${utils_folder}/SoftwareUtils.h
+        ${utils_folder}/SoftwareUtils.cpp
+        ${utils_folder}/OperationResult.h
+        ${validators_folder}/SongValidator.h
+        ${validators_folder}/IsFileValidator.h
+        ${validators_folder}/IsFileValidator.cpp
+        ${validators_folder}/IsFolderValidator.h
+        ${validators_folder}/IsFolderValidator.cpp
+        ${song_folder}/Song.h
+        ${song_folder}/SongAnalyzer.h
+        ${song_folder}/SongAnalyzer.cpp
+        ${managers_folder}/AnalyzerManager.h
+        ${managers_folder}/AnalyzerManager.cpp
+        ${providers_folder}/AlbumCoverProvider.h
+        ${providers_folder}/AlbumCoverProvider.cpp
+    )
+
+
 add_library(SongImporterLib SHARED
+
+  ${cpp_files}
   SongImporterLib_global.h
-  SongImporterLib.cpp
-  SongImporterLib.h
-  OperationResult.h
-  SongValidator.h
-  IsFileValidator.h
-  IsFileValidator.cpp
-  IsFolderValidator.h
-  IsFolderValidator.cpp
-  SoftwareUtils.h
-  SoftwareUtils.cpp
-  FileUtils.h
-  FileUtils.cpp
-  Song.h
-  BytesTracker.h
-  BytesTracker.cpp
-  SongAnalyzer.h
-  SongAnalyzer.cpp
-  Managers/AnalyzerManager.h Managers/AnalyzerManager.cpp
-  Providers/AlbumCoverProvider.h Providers/AlbumCoverProvider.cpp
 )
 
 target_compile_definitions(SongImporterLib PRIVATE SONGIMPORTERLIB_LIBRARY)
@@ -53,4 +66,8 @@ endif()
 
 target_precompile_headers(SongImporterLib PUBLIC
     stdafx.h
+)
+
+target_include_directories(SongImporterLib PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
 )

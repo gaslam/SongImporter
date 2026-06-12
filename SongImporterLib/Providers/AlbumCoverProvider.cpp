@@ -1,5 +1,5 @@
 #include "AlbumCoverProvider.h"
-#include "../Song.h"
+#include "Song/Song.h"
 #include <taglib/fileref.h>
 #include <taglib/flacfile.h>
 #include <taglib/mpegfile.h>
