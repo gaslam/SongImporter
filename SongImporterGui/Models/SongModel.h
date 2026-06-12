@@ -3,7 +3,7 @@
 
 #include <QAbstractListModel>
 #include <QQmlEngine>
-#include <Song.h>
+#include <Song/Song.h>
 #include <Managers/AnalyzerManager.h>
 
 class AlbumCoverProvider;

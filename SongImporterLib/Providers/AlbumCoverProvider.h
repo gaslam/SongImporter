@@ -5,7 +5,7 @@
 #include <QQuickImageProvider>
 #include <QImage>
 #include <QMutex>
-#include "../Song.h"
+#include "Song/Song.h"
 
 namespace TagLib{
 class FileRef;

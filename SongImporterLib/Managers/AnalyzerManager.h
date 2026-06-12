@@ -1,10 +1,10 @@
 #ifndef ANALYZERMANAGER_H
 #define ANALYZERMANAGER_H
 
-#include "../BytesTracker.h"
+#include "Utils/BytesTracker.h"
 #include <QFuture>
 #include <QFutureWatcher>
-#include "../Song.h"
+#include "Song/Song.h"
 class QuaZipDir;
 class AlbumCoverProvider;
 class SONGIMPORTERLIB_EXPORT AnalyzerManager : public QObject

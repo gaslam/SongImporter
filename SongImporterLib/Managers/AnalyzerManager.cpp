@@ -1,11 +1,11 @@
 #include "AnalyzerManager.h"
-#include "../FileUtils.h"
-#include "../songAnalyzer.h"
+#include "Utils/FileUtils.h"
+#include "Song/SongAnalyzer.h"
 
 #include <QtConcurrent>
 #include <quazipfile.h>
 #include <quazipdir.h>
-#include "../Providers/AlbumCoverProvider.h"
+#include "Providers/AlbumCoverProvider.h"
 
 AnalyzerManager::AnalyzerManager(AlbumCoverProvider* provider,QObject *parent)
     : QObject{parent},
