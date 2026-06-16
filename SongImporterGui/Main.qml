@@ -1,4 +1,5 @@
 import QtQuick
+import "./Forms"
 
 Window {
     width: 640
