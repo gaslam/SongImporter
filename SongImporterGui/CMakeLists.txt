@@ -24,6 +24,7 @@ set (components_folder "Components")
 set (forms_folder "Forms")
 set (styles_folder "Styles")
 set (models_folder "Models")
+set (tables_folder "Tables")
 
 set(plain_qml_files
     Main.qml
@@ -32,6 +33,7 @@ set(plain_qml_files
     ${components_folder}/InputFieldButton.qml
     ${components_folder}/FileDropArea.qml
     ${forms_folder}/SongExportForm.qml
+    ${tables_folder}/SongTable.qml
 )
 set(qml_singletons
        ${styles_folder}/Theme.qml
