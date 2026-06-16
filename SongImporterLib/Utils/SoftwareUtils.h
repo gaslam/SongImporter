@@ -79,13 +79,7 @@ public slots:
 			return false;
 		}
 		const SupportedAudioFormats audio{ stringToAudioFormat(info.suffix()) };
-        auto test{ supportsAudioFormat(software, audio)};
-
-        if(test)
-        {
-            return true;
-        }
-        return false;
+        return supportsAudioFormat(software, audio);
 	}
 
 private:
