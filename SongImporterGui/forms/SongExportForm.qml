@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 import SongImporterLib.Utils
 import SongImporterLib.Rules
+import "../Tables"
+import "../Components"
 
 Page{
 	anchors.margins: 20
@@ -23,9 +25,21 @@ Page{
         }
     }
 
+	FileDialog {
+		id: audioFileDialog
+		title: "Select the audio files"
+		fileMode: FileDialog.OpenFiles
+		nameFilters: [
+			"All files (*.mp3 *.aiff *.flac *.zip)"
+		]
+		onAccepted: {
+			songTable.addSongsFromFileToList(selectedFiles,folderFieldButton.valueText)
+		}
+	}
+
     FolderDialog {
-        id: folderDialog
-        title: "Select an audio file"
+		id: exportFolderDialog
+		title: "Select the destination"
         onAccepted: {
             folderFieldButton.valueText = FileUtils.toLocalFile(selectedFolder)
         }
@@ -33,11 +47,11 @@ Page{
 
 	GridLayout{
 		columns: 2
-		rows: 2
+		rows: 3
 		anchors.fill: parent
 		columnSpacing: 50
 		InputFieldButton{
-		    Layout.alignment: Qt.AlignTop 
+			Layout.alignment: Qt.AlignTop
 			id:fileFieldButton
 			Layout.row: 0
 			Layout.column: 0
@@ -62,18 +76,37 @@ Page{
 			valueText: FileUtils.getUserMusicFolder()
 			Layout.preferredWidth: 200
 			onButtonClicked: {
-				folderDialog.open()
+				exportFolderDialog.open()
 			}
 			inputValidator: IsFolderValidator{
 			}
 		}
 
-		FileDropArea{
+
+		ImporterButton{
+			id: audioFileFieldButton
+			Layout.row: 1
+			Layout.column: 0
+			text: "Import music files"
+			Layout.preferredWidth: 200
+			onButtonClicked: {
+				audioFileDialog.open()
+			}
+		}
+		SongTable{
+			id:songTable
+			Layout.row: 2
 			Layout.column: 0
 			Layout.columnSpan: 2
-			Layout.row:1
-			Layout.fillHeight: true
 			Layout.fillWidth: true
+			Layout.fillHeight: true
+			FileDropArea{
+				anchors.fill: parent
+				onDropped: function(dropEvent)
+				{
+					songTable.addSongsFromFileToList(dropEvent.urls,folderFieldButton.valueText)
+				}
+			}
 		}
 	}
 }

@@ -15,6 +15,7 @@ class SONGIMPORTERLIB_EXPORT SoftwareUtils  : public QObject
 		FLAC,
 		ALAC,
 		AAC,
+        ZIP,
 	};
 	Q_ENUM(SupportedAudioFormats)
 
@@ -78,12 +79,18 @@ public slots:
 			return false;
 		}
 		const SupportedAudioFormats audio{ stringToAudioFormat(info.suffix()) };
-		return supportsAudioFormat(software, audio);
+        auto test{ supportsAudioFormat(software, audio)};
+
+        if(test)
+        {
+            return true;
+        }
+        return false;
 	}
 
 private:
 	inline static SoftwareAudioFormats m_SupportedFileFormats = {
-		{ SoftwareUtils::Rekordbox, { SoftwareUtils::AIFF, SoftwareUtils::MP3 } }
+        { SoftwareUtils::Rekordbox, { SoftwareUtils::AIFF,SoftwareUtils::FLAC, SoftwareUtils::MP3, SoftwareUtils::ZIP } }
 	};
 };
 
