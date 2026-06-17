@@ -172,11 +172,11 @@ ColumnLayout
                 Layout.fillHeight: true    // take the rest of the column under the red bar
             }
         }
+    }
 
-        function addSongsFromFileToList(files,destination)
-        {
-            SongListModel.addFiles(files,destination)
-            emptyTableText.visible = false
-        }
+    function addSongsFromFileToList(files,destination)
+    {
+        SongListModel.addFiles(files,destination)
+        emptyTableText.visible = false
     }
 }
