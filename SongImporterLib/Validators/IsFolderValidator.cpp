@@ -29,11 +29,6 @@ State IsFolderValidator::validate(QString& value, int&) const
         return State::Intermediate;
     }
 
-    if (actualDirectory.isEmpty())
-    {
-        setErrorMessage("Directory is empty. Enter a valid directory!");
-        return State::Intermediate;
-    }
     clearErrorMessage();
     return State::Acceptable;
 }
