@@ -16,7 +16,7 @@ ColumnLayout
         Text {
             id: emptyTableText
             anchors.fill: parent
-            text: "No songs were imported. Add a song in a supported audio format."
+            text: "No songs were imported. Click Import by clicking the button above or drag a supported audio file into this field."
             anchors.centerIn: parent
             wrapMode: Text.Wrap
             width: parent.width
