@@ -2,8 +2,8 @@ import QtQuick
 import "./Forms"
 
 Window {
-    width: 640
-    height: 480
+    width: 700
+    height: 525
     visible: true
     title: qsTr("Hello World")
 
