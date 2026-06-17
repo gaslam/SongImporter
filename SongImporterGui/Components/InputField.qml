@@ -13,22 +13,29 @@ GridLayout {
     anchors.top: parent.top
 
     property string headerText: "header"
-    property string valueText: "value"
+    property string inputText: "value"
     property alias inputValidator: input.validator
     property alias inputVerticalCenter: input.verticalCenter
-
-signal inputTextChanged(string text)
 
     clip: true
     Layout.minimumWidth: 100
 
+    onInputTextChanged:
+    {
+        console.log("ok")
+    }
+
+    function test()
+    {
+        console.log(test);
+    }
+
     Text {
         Layout.row: 0
-        text: headerText
+        text: root.headerText
         color: Theme.black
         font.pointSize: 8
         Layout.leftMargin: 4
-
         Layout.fillWidth: true
         wrapMode: Text.NoWrap
         elide: Text.ElideRight
@@ -37,7 +44,7 @@ signal inputTextChanged(string text)
     TextField {
         Layout.row: 1
         id: input
-        text: root.valueText
+        text: root.inputText
         activeFocusOnTab: true
         font.pointSize: 10
         cursorVisible: activeFocus
@@ -53,8 +60,7 @@ signal inputTextChanged(string text)
         padding: 4
         color: Theme.black
         onTextEdited:{
-            root.valueText = text;
-            inputTextChanged(text)
+            root.inputText = text;
         }
 
         background: Rectangle {

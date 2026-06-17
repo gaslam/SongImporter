@@ -15,17 +15,16 @@ Page{
 		color: "white"
 	}
 
-    FileDialog {
-        id: fileDialog
-        title: "Select a music file"
-        nameFilters: [
-            "XML files (*.xml)"
-        ]
-        onAccepted: {
-
-            fileFieldButton.valueText = FileUtils.toLocalFile(selectedFile)
-        }
-    }
+	FileDialog {
+		id: fileDialog
+		title: "Select a music file"
+		nameFilters: [
+			"XML files (*.xml)"
+		]
+		onAccepted: {
+			fileFieldButton.setInputText(FileUtils.toLocalFile(selectedFile));
+		}
+	}
 
 	FileDialog {
 		id: audioFileDialog
@@ -54,7 +53,7 @@ Page{
 		id: exportFolderDialog
 		title: "Select the destination"
         onAccepted: {
-            folderFieldButton.valueText = FileUtils.toLocalFile(selectedFolder)
+			folderFieldButton.setInputText(FileUtils.toLocalFile(selectedFolder))
         }
     }
 
@@ -80,7 +79,7 @@ Page{
 			Layout.row: 1
 			Layout.column: 0
 			headerText: "Export file location: (default = software location)"
-			valueText: SoftwareUtils.softwareDataLocation(SoftwareUtils.Rekordbox)
+			inputText: SoftwareUtils.softwareDataLocation(SoftwareUtils.Rekordbox)
 			buttonText: "Select"
 			Layout.preferredWidth: 200
 			onButtonClicked: {
@@ -97,7 +96,7 @@ Page{
 			Layout.column: 1
 			headerText: "Export location:"
 			buttonText: "Select"
-			valueText: FileUtils.getUserMusicFolder()
+			inputText: FileUtils.getUserMusicFolder()
 			Layout.preferredWidth: 200
 			onButtonClicked: {
 				exportFolderDialog.open()
