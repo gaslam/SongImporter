@@ -1,4 +1,4 @@
-﻿import QtQuick
+import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
@@ -29,9 +29,20 @@ Page{
 		id: audioFileDialog
 		title: "Select the audio files"
 		fileMode: FileDialog.OpenFiles
-		nameFilters: [
-			"All files (*.mp3 *.aiff *.flac *.zip)"
-		]
+		nameFilters: {
+
+			let result = SoftwareUtils.supportedAudioFormatsString(SoftwareUtils.Rekordbox);
+			let nameFilters = [];
+			let fileRegex = " *."
+
+			nameFilters.push("All files (" + fileRegex + result.join(fileRegex) + ")");
+
+			for (let i=0;i<result.length;i++)
+				nameFilters.push(result[i].toUpperCase() + " files (" + fileRegex + result[i] + ")")
+
+			return nameFilters;
+
+		}
 		onAccepted: {
 			songTable.addSongsFromFileToList(selectedFiles,folderFieldButton.valueText)
 		}
