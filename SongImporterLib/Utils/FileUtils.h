@@ -23,12 +23,6 @@ public slots:
 		return url.toLocalFile();
 	}
 
-	[[nodiscard]] inline static QString test()
-	{
-		QuaZip zip{ "test.zip" };
-		return zip.getCurrentFileName();
-	}
-
 	[[nodiscard]] inline static OperationResult isNonEmptyZipFile(const QUrl& url)
 	{
 		QFile f(url.toString());
