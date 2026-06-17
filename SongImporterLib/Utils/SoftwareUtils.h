@@ -3,7 +3,7 @@
 #include <QDir>
 #include <QUrl>
 #include <QuaZip.h>
-
+#include <QCoreApplication>
 class SONGIMPORTERLIB_EXPORT SoftwareUtils  : public QObject
 {
 	Q_OBJECT
@@ -47,13 +47,13 @@ public slots:
     }
 	[[nodiscard]] inline static QString softwareDataLocation(const SupportedSoftware& software)
 	{
-		QDir installDir{ QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) };
+        QDir installDir{ QCoreApplication::applicationDirPath() + "/ExportDefaultFiles/" };
 
 		switch (software)
 		{
 
 		case Rekordbox:
-			installDir = installDir.filePath("../rekordbox/rekordbox/rekordbox.xml");
+            installDir = installDir.filePath("./rekordbox.xml");
 			break;
 		}
 
