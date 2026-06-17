@@ -4,10 +4,12 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 import SongImporterLib.Utils
 import SongImporterLib.Rules
+import SongImporterGui.SongListModel
 import "../Tables"
 import "../Components"
 
 Page{
+	id:root
 	anchors.margins: 20
 	background: Rectangle{
 		color: "white"
@@ -118,6 +120,35 @@ Page{
 					songTable.addSongsFromFileToList(dropEvent.urls,folderFieldButton.valueText)
 				}
 			}
+		}
+
+		Connections {
+			target: SongListModel
+
+			function onErrorReceived(error) {
+				addError(error);
+			}
+
+			property var errors: []
+
+			function addError(error) {
+				let dialog = errorDialogComponent.createObject(root, { informativeText: error });
+				if (dialog) dialog.open();
+			}
+
+		}
+	}
+
+
+	Component {
+		id: errorDialogComponent
+
+		MessageDialog {
+			text: "An error has occurred"
+			buttons: MessageDialog.Ok
+
+			onAccepted: destroy()
+			onRejected: destroy()
 		}
 	}
 }
