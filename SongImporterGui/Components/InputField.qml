@@ -20,16 +20,6 @@ GridLayout {
     clip: true
     Layout.minimumWidth: 100
 
-    onInputTextChanged:
-    {
-        console.log("ok")
-    }
-
-    function test()
-    {
-        console.log(test);
-    }
-
     Text {
         Layout.row: 0
         text: root.headerText
