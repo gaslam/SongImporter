@@ -2,12 +2,15 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <SongValidator.h>
-#include <IsFolderValidator.h>
-#include <IsFileValidator.h>
-#include <Song.h>
-#include <SoftwareUtils.h>
-#include <FileUtils.h>
+#include <Validators/SongValidator.h>
+#include <Validators/IsFolderValidator.h>
+#include <Validators/IsFileValidator.h>
+#include <Song/Song.h>
+#include <Utils/SoftwareUtils.h>
+#include <Utils/FileUtils.h>
+#include <QThread>
+#include <Providers/AlbumCoverProvider.h>
+#include "Models/SongModel.h"
 
 
 int main(int argc, char *argv[])
@@ -30,6 +33,23 @@ int main(int argc, char *argv[])
         [&app](QQmlEngine*, QJSEngine*) -> QObject* {
             return new FileUtils(&app);
         });
+
+    QThread* providerThread{new QThread{}};
+    providerThread->setObjectName("albumProvider");
+    QImage image{":/icons/logo-icon.png"};
+    QString defaultId{"default"};
+    AlbumCoverProvider* albumCoverProvider{new AlbumCoverProvider{defaultId,image}};
+    engine.addImageProvider("albumProvider",albumCoverProvider);
+    albumCoverProvider->moveToThread(providerThread);
+    // ensure provider is deleted when thread finishes
+    QObject::connect(providerThread, &QThread::finished, albumCoverProvider, &QObject::deleteLater);
+    // delete thread when app destroyed
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, providerThread, &QThread::quit);
+    QObject::connect(providerThread, &QThread::finished, providerThread, &QObject::deleteLater);
+
+    SongModel* model{new SongModel{albumCoverProvider,&app}};
+    qmlRegisterSingletonInstance("SongImporterGui.SongListModel",1,0,"SongListModel",model);
+
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
@@ -37,8 +57,6 @@ int main(int argc, char *argv[])
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
     engine.loadFromModule("SongImporterGui", "Main");
-
-
 
     return app.exec();
 }

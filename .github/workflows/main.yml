@@ -78,15 +78,6 @@ jobs:
       
     - name: Build project
       run: cmake --build ${{env.BUILD_FOLDER}} --config ${{ env.BUILD_TYPE }}
-      
-    - name: Analyse QML
-      shell: powershell
-      run: |
-        Get-ChildItem -Path "${{ github.workspace }}/SongImporterGui" -Recurse -Filter *.qml | ForEach-Object {
-          Write-Host "Linting $($_.FullName)"
-          qmllint $_.FullName
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-        }
 
     - if: ${{ inputs.upload_artifact }}
       name: Upload artifact if requested

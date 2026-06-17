@@ -23,6 +23,8 @@ qt_add_executable(appSongImporterGui
 set (components_folder "Components")
 set (forms_folder "Forms")
 set (styles_folder "Styles")
+set (models_folder "Models")
+set (tables_folder "Tables")
 
 set(plain_qml_files
     Main.qml
@@ -31,16 +33,24 @@ set(plain_qml_files
     ${components_folder}/InputFieldButton.qml
     ${components_folder}/FileDropArea.qml
     ${forms_folder}/SongExportForm.qml
+    ${tables_folder}/SongTable.qml
 )
 set(qml_singletons
        ${styles_folder}/Theme.qml
 )
+
+set(cpp_files
+        ${models_folder}/SongModel.h
+        ${models_folder}/SongModel.cpp
+    )
+
 set_source_files_properties(${qml_singletons}
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 qt_add_qml_module(appSongImporterGui
     URI SongImporterGui
     QML_FILES ${plain_qml_files} ${qml_singletons}
+    SOURCES ${cpp_files}
 )
 
 
@@ -66,6 +76,8 @@ target_link_libraries(appSongImporterGui
 target_precompile_headers(appSongImporterGui PUBLIC
     stdafx.h
 )
+
+set(SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS ON CACHE BOOL "Enable album cover art extraction." FORCE)
 
 include(GNUInstallDirs)
 install(TARGETS appSongImporterGui
