@@ -79,6 +79,17 @@ target_precompile_headers(appSongImporterGui PUBLIC
 
 set(SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS ON CACHE BOOL "Enable album cover art extraction." FORCE)
 
+set(RESOURCE_SRC "${CMAKE_CURRENT_SOURCE_DIR}/ExportDefaultFiles")
+
+set_target_properties(appSongImporterGui PROPERTIES
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIG>"
+)
+
+add_custom_command(TARGET appSongImporterGui POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different "${RESOURCE_SRC}" "$<TARGET_FILE_DIR:appSongImporterGui>/ExportDefaultFiles"
+  COMMENT "Copying ExportDefaultFiles to executable folder"
+)
+
 include(GNUInstallDirs)
 install(TARGETS appSongImporterGui
     BUNDLE DESTINATION .

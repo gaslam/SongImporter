@@ -60,15 +60,26 @@ Page{
 
 	GridLayout{
 		columns: 2
-		rows: 3
+		rows: 4
 		anchors.fill: parent
 		columnSpacing: 50
+		Text{
+			text:"Song Importer for Rekordbox"
+			font.bold: true
+			font.pointSize: 15
+			Layout.row: 0
+			Layout.column: 0
+			Layout.columnSpan: 2
+			Layout.fillWidth: true
+			horizontalAlignment: Text.AlignHCenter
+			verticalAlignment: Text.AlignVCenter
+		}
 		InputFieldButton{
 			Layout.alignment: Qt.AlignTop
 			id:fileFieldButton
-			Layout.row: 0
+			Layout.row: 1
 			Layout.column: 0
-			headerText: "DJ software export file location:"
+			headerText: "Export file location: (default = software location)"
 			valueText: SoftwareUtils.softwareDataLocation(SoftwareUtils.Rekordbox)
 			buttonText: "Select"
 			Layout.preferredWidth: 200
@@ -82,7 +93,7 @@ Page{
 		InputFieldButton{
 			id: folderFieldButton
 			Layout.alignment: Qt.AlignTop
-			Layout.row: 0
+			Layout.row: 1
 			Layout.column: 1
 			headerText: "Export location:"
 			buttonText: "Select"
@@ -98,7 +109,7 @@ Page{
 
 		ImporterButton{
 			id: audioFileFieldButton
-			Layout.row: 1
+			Layout.row: 2
 			Layout.column: 0
 			text: "Import music files"
 			Layout.preferredWidth: 200
@@ -108,7 +119,7 @@ Page{
 		}
 		SongTable{
 			id:songTable
-			Layout.row: 2
+			Layout.row: 3
 			Layout.column: 0
 			Layout.columnSpan: 2
 			Layout.fillWidth: true
