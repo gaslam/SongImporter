@@ -1,4 +1,5 @@
 #include "AnalyzerManager.h"
+#include "Utils/SoftwareUtils.h"
 #include "Utils/FileUtils.h"
 #include "Song/SongAnalyzer.h"
 
@@ -33,6 +34,8 @@ void AnalyzerManager::process(const QList<QUrl>& files, const QString& destinati
                                       // If stop requested before we start, bail out early
                                       if (isStopRequested()) return;
 
+                                      auto supportedFiles{SoftwareUtils::supportedAudioFormatsString(SoftwareUtils::Rekordbox)};
+
                                       foreach (auto& url, files) {
                                           if(m_IsStopRequested)
                                           {
@@ -59,7 +62,7 @@ void AnalyzerManager::process(const QList<QUrl>& files, const QString& destinati
 
                                               QuaZipDir root(&zip);
 
-                                              processDirectory(root, "",file);
+                                              processDirectory(root, "",file,supportedFiles);
                                           }
                                           else
                                           {
@@ -145,7 +148,7 @@ void AnalyzerManager::removeWorker(QFutureWatcher<void>* watcher)
 }
 
 void AnalyzerManager::processDirectory(QuaZipDir& dir,
-                                       const QString& path,const QString& zipPath)
+                                       const QString& path,const QString& zipPath, const QList<QString>& supportedFiles)
 {
     if(isStopRequested()) return;
     QuaZipDir current = dir;
@@ -159,8 +162,6 @@ void AnalyzerManager::processDirectory(QuaZipDir& dir,
     // process audio files
     const auto files =
         current.entryInfoList(
-            QStringList() << "*.mp3"
-                          << "*.flac",
             QDir::Files | QDir::NoDotAndDotDot);
 
     const QString originPath{current.path()};
@@ -184,6 +185,6 @@ void AnalyzerManager::processDirectory(QuaZipDir& dir,
     for (const auto& entry : dirs)
     {
         if(isStopRequested()) return;
-        processDirectory(current, entry.name, zipPath);
+        processDirectory(current, entry.name, zipPath,supportedFiles);
     }
 }

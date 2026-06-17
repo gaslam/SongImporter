@@ -1,13 +1,15 @@
-﻿import QtQuick
+import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
 import SongImporterLib.Utils
 import SongImporterLib.Rules
+import SongImporterGui.SongListModel
 import "../Tables"
 import "../Components"
 
 Page{
+	id:root
 	anchors.margins: 20
 	background: Rectangle{
 		color: "white"
@@ -29,9 +31,20 @@ Page{
 		id: audioFileDialog
 		title: "Select the audio files"
 		fileMode: FileDialog.OpenFiles
-		nameFilters: [
-			"All files (*.mp3 *.aiff *.flac *.zip)"
-		]
+		nameFilters: {
+
+			let result = SoftwareUtils.supportedAudioFormatsString(SoftwareUtils.Rekordbox);
+			let nameFilters = [];
+			let fileRegex = " *."
+
+			nameFilters.push("All files (" + fileRegex + result.join(fileRegex) + ")");
+
+			for (let i=0;i<result.length;i++)
+				nameFilters.push(result[i].toUpperCase() + " files (" + fileRegex + result[i] + ")")
+
+			return nameFilters;
+
+		}
 		onAccepted: {
 			songTable.addSongsFromFileToList(selectedFiles,folderFieldButton.valueText)
 		}
@@ -107,6 +120,35 @@ Page{
 					songTable.addSongsFromFileToList(dropEvent.urls,folderFieldButton.valueText)
 				}
 			}
+		}
+
+		Connections {
+			target: SongListModel
+
+			function onErrorReceived(error) {
+				addError(error);
+			}
+
+			property var errors: []
+
+			function addError(error) {
+				let dialog = errorDialogComponent.createObject(root, { informativeText: error });
+				if (dialog) dialog.open();
+			}
+
+		}
+	}
+
+
+	Component {
+		id: errorDialogComponent
+
+		MessageDialog {
+			text: "An error has occurred"
+			buttons: MessageDialog.Ok
+
+			onAccepted: destroy()
+			onRejected: destroy()
 		}
 	}
 }

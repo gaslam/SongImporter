@@ -40,7 +40,8 @@ private:
     void removeWorker(QFutureWatcher<void>* watcher);
     void processDirectory(QuaZipDir& dir,
                           const QString& path,
-                          const QString& zipPath);
+                          const QString& zipPath,
+                           const QList<QString>& supportedFiles);
     static void processWorker(AnalyzerManager* analyzerManager,QFutureWatcher<void>* watcher, const QString& file);
 };
 
