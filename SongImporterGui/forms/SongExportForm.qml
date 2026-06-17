@@ -68,7 +68,7 @@ Page{
 			id:fileFieldButton
 			Layout.row: 0
 			Layout.column: 0
-			headerText: "DJ software export file location:"
+			headerText: "Export file location: (default = software location)"
 			valueText: SoftwareUtils.softwareDataLocation(SoftwareUtils.Rekordbox)
 			buttonText: "Select"
 			Layout.preferredWidth: 200
