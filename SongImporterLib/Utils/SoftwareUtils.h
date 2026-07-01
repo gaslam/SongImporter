@@ -95,6 +95,20 @@ public slots:
         return supportsAudioFormat(software, audio);
 	}
 
+    [[nodiscard]] inline static bool isFileListValid(const SupportedSoftware& software, const QList<QUrl>& files)
+    {
+        return std::all_of(files.begin(),files.end(),[software](const QUrl& file){
+            const QFileInfo info{ file.toLocalFile()};
+
+            if (!info.exists())
+            {
+                return false;
+            }
+            const SupportedAudioFormats audio{ stringToAudioFormat(info.suffix()) };
+            return supportsAudioFormat(software, audio);
+        });
+    }
+
     [[nodiscard]] inline static QList<QString> supportedAudioFormatsString(const SupportedSoftware& software)
     {
         QList<SupportedAudioFormats> formats{supportedAudioFormats(software)};
