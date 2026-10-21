@@ -32,6 +32,7 @@ void AlbumCoverProvider::extractAlbumCoverArt(FileRef& fileref, const QString& i
         return;
     }
 
+    /// If the album cover id already exists, set the cover id.
     {
         QMutexLocker locker{&m_Locker};
         if (m_AlbumCovers.contains(id)) {
@@ -40,7 +41,7 @@ void AlbumCoverProvider::extractAlbumCoverArt(FileRef& fileref, const QString& i
         }
     }
 
-    QImage image{};
+    /// Retrieve the album covers based on the file type.
     if(FLAC::File* flac{dynamic_cast<FLAC::File*>(file)})
     {
         auto picList{flac->pictureList()};

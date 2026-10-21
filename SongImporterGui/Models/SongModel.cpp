@@ -4,7 +4,9 @@ SongModel::SongModel(AlbumCoverProvider* provider,QObject *parent)
     : QAbstractListModel{parent},
     m_AnalyzerManager{provider,parent}
 {
+    //When the analyzer receives an error, the event must be sent through this class.
     connect(&m_AnalyzerManager,&AnalyzerManager::errorReceived,this,&SongModel::errorReceived);
+    //When the analyzer receives a song, the signal must be sent to this class
     connect(&m_AnalyzerManager,&AnalyzerManager::songReceived,this,&SongModel::addSong);
 }
 
@@ -69,5 +71,6 @@ QHash<int, QByteArray> SongModel::roleNames() const
 
 void SongModel::addFiles(const QList<QUrl> &files, const QString& destination)
 {
+    //Runs multithreaded
     m_AnalyzerManager.process(files,destination);
 }

@@ -4,6 +4,11 @@
 #include <QUrl>
 #include <QuaZip.h>
 #include <QCoreApplication>
+/// I have multiple questions for this class
+/// If I want to expose them in QML, I can't just put them inside of functions, I must use a class
+/// At the same time, audio formats do not belong in in this class.
+/// I will refactor this class when time possible.
+/// Also, this class gives warnings.
 class SONGIMPORTERLIB_EXPORT SoftwareUtils  : public QObject
 {
 	Q_OBJECT
@@ -42,9 +47,13 @@ public slots:
         case SupportedAudioFormats::ALAC:    return QStringLiteral("alac");
         case SupportedAudioFormats::AAC:     return QStringLiteral("aac");
         case SupportedAudioFormats::ZIP:     return QStringLiteral("zip");
+        case SupportedAudioFormats::MP4:    return QStringLiteral("mp4");
         default:                            return QStringLiteral("unknown");
         }
     }
+
+    /// Retreives the data file to be read by the dj software.
+    /// \param software The specific software used for this application. This will be selected through a dropdown.
 	[[nodiscard]] inline static QString softwareDataLocation(const SupportedSoftware& software)
 	{
         QDir installDir{ QCoreApplication::applicationDirPath() + "/ExportDefaultFiles/" };
@@ -60,6 +69,9 @@ public slots:
 		return installDir.absolutePath();
 	}
 
+    /// Checks if the audio format is supported for the specificly chosen software.
+    /// \param software The specific software used for this application. This will be selected through a dropdown.
+    /// \param audio The audio format to check.
 	[[nodiscard]] inline static bool supportsAudioFormat(const SupportedSoftware& software, const SupportedAudioFormats& audio)
 	{
 		if (!m_SupportedFileFormats.contains(software))
@@ -70,19 +82,18 @@ public slots:
 		return m_SupportedFileFormats[software].contains(audio);
 	}
 
-	[[nodiscard]] inline static bool test()
-	{
-		QuaZip zip{ "test.zip" };
-
-		return true;
-	}
-
+    /// Checks if the audio format is supported for the specificly chosen software.
+    /// \param software The specific software used for this application. This will be selected through a dropdown.
+    /// \param audio The audio format to check.
 	[[nodiscard]] inline static bool supportsAudioFormats(const SupportedSoftware& software, const QString& audioFormat)
 	{
 		const SupportedAudioFormats audio{ stringToAudioFormat(audioFormat) };
 		return supportsAudioFormat(software,audio);
 	}
 
+    /// Checks if the audio format is supported for the specificly chosen software.
+    /// \param software The specific software used for this application. This will be selected through a dropdown.
+    /// \param file The url of the selected file.
 	[[nodiscard]] inline static bool supportsAudioFormatFromUrl(const SupportedSoftware& software, const QUrl& file)
 	{
 		const QFileInfo info{ file.toLocalFile()};
@@ -95,6 +106,9 @@ public slots:
         return supportsAudioFormat(software, audio);
 	}
 
+    /// When the user of the application selects a few files to be copied, this function checks all chosen file types based on validity.
+    /// \param software The specific software used for this application. This will be selected through a dropdown.
+    /// \param files The urls of the selected files.
     [[nodiscard]] inline static bool isFileListValid(const SupportedSoftware& software, const QList<QUrl>& files)
     {
         return std::all_of(files.begin(),files.end(),[software](const QUrl& file){
@@ -109,6 +123,9 @@ public slots:
         });
     }
 
+    /// When the user of the application selects a few files to be copied, this function checks all chosen file types based on validity.
+    /// \param software The specific software used for this application. This will be selected through a dropdown.
+    /// \param files The urls of the selected files.
     [[nodiscard]] inline static QList<QString> supportedAudioFormatsString(const SupportedSoftware& software)
     {
         QList<SupportedAudioFormats> formats{supportedAudioFormats(software)};
@@ -123,6 +140,8 @@ public slots:
         return result;
     }
 
+    /// When the user of the application selects a few files to be copied, this function checks all chosen file types based on validity.
+    /// \param software The specific software used for this application. This will be selected through a dropdown.
     [[nodiscard]] inline static QList<SupportedAudioFormats> supportedAudioFormats(const SupportedSoftware& software)
     {
         if(m_SupportedFileFormats.contains(software))

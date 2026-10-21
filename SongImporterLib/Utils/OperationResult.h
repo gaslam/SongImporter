@@ -3,6 +3,11 @@
 #include <QMetaType>
 #include "SongImporterLib_global.h"
 
+
+/// This is a struct that helps certain parts of the code.
+/// This way, the code doesn't have to rely on throwing an exception
+/// Can also be expanded to log the messages.
+/// TODO: Optional logging of messages.
 struct SONGIMPORTERLIB_EXPORT OperationResult {
 	Q_GADGET
 	Q_PROPERTY(bool isSuccessful MEMBER bIsSuccessful)

@@ -21,9 +21,11 @@ void AnalyzerManager::process(const QList<QUrl>& files, const QString& destinati
         emit processStarted();
     }
 
+    /// Start multithreaded process to analyze the file.
     QFutureWatcher<void>* watcher = new QFutureWatcher<void>{};
     auto future{QtConcurrent::run([this, files,destination]()
                                   {
+                                    /// Check if enough space is left on the destination hard drive
                                       auto result{m_BytesTracker.checkSpaceAvailable(files,destination)};
                                       if(!result)
                                       {
@@ -31,7 +33,7 @@ void AnalyzerManager::process(const QList<QUrl>& files, const QString& destinati
                                           return;
                                       }
 
-                                      // If stop requested before we start, bail out early
+                                      /// If stop requested, bail out early
                                       if (isStopRequested()) return;
 
                                       auto supportedFiles{SoftwareUtils::supportedAudioFormatsString(SoftwareUtils::Rekordbox)};
@@ -44,9 +46,11 @@ void AnalyzerManager::process(const QList<QUrl>& files, const QString& destinati
                                           QString file = url.path();
                                           if(url.isLocalFile())
                                           {
+                                              //Qt can get annoying if the file url is incorrect
                                               file = url.toLocalFile();
                                           }
 
+                                          //If file is a zip file, cycly through all files
                                           if (FileUtils::isNonEmptyZipFile(file))
                                           {
 
@@ -103,6 +107,7 @@ void AnalyzerManager::addWorker(const QString& file)
 
     auto *watcher = new QFutureWatcher<void>();
 
+    /// Remove the watcher from the tracked workers when processing finishes.
     connect(watcher, &QFutureWatcher<void>::finished, [this, watcher]() {
         removeWorker(watcher);
     });
@@ -111,6 +116,7 @@ void AnalyzerManager::addWorker(const QString& file)
         removeWorker(watcher);
     });
 
+    //Run the process in a multithreaded fashion.
     QFuture<void> future = QtConcurrent::run(AnalyzerManager::processWorker, this,watcher, file);
     watcher->setFuture(future);
 
@@ -120,8 +126,10 @@ void AnalyzerManager::addWorker(const QString& file)
 
 void AnalyzerManager::processWorker(AnalyzerManager* analyzerManager,QFutureWatcher<void>* watcher, const QString& file)
 {
-    QSharedPointer<SongAnalyzer> provider{ new SongAnalyzer{file,analyzerManager->getAlbumCoverProvider()}};
-    SongAnalyzer* analyzer{provider.get()};
+    /// Run the process in a multithreaded fashion.
+    /// Analyzer is of type QSharedPointer to release memory, when the analyzer is finished
+    /// The object must be alive, until it finishes.
+    /// Using local variables causes segmentation faults
 
     if(analyzerManager->isStopRequested())
     {
@@ -150,6 +158,7 @@ void AnalyzerManager::removeWorker(QFutureWatcher<void>* watcher)
 void AnalyzerManager::processDirectory(QuaZipDir& dir,
                                        const QString& path,const QString& zipPath, const QList<QString>& supportedFiles)
 {
+    /// Abort directory traversal if cancellation has been requested.
     if(isStopRequested()) return;
     QuaZipDir current = dir;
 
@@ -159,7 +168,7 @@ void AnalyzerManager::processDirectory(QuaZipDir& dir,
             return;
     }
 
-    // process audio files
+    /// process audio files
     const auto files =
         current.entryInfoList(
             QDir::Files | QDir::NoDotAndDotDot);
@@ -176,12 +185,13 @@ void AnalyzerManager::processDirectory(QuaZipDir& dir,
         addWorker(finalFile);
     }
 
-    // recurse directories first
+    /// recurse directories first
     const auto dirs =
         current.entryInfoList(
             QStringList(),
             QDir::Dirs | QDir::NoDotAndDotDot);
 
+    /// Iterate the subdirectories using recursion.
     for (const auto& entry : dirs)
     {
         if(isStopRequested()) return;
