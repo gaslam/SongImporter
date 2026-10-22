@@ -39,7 +39,7 @@ void SongAnalyzer::startProcess()
 
 void SongAnalyzer::getSongFromFile()
 {
-    FileRef file {m_FileToProcess.toStdString().c_str()};
+    FileRef file {m_FileToProcess.toStdWString().c_str()};
     if(file.isNull())
     {
         const QString error{QString{"Cannot read file: %1.\nFile might not exist or cannot be read."}.arg(m_FileToProcess)};
