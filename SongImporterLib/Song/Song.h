@@ -1,5 +1,6 @@
 #ifndef SONG_H
 #define SONG_H
+#include "Utils/SoftwareUtils.h"
 
 struct SONGIMPORTERLIB_EXPORT Song {
 	Q_GADGET
