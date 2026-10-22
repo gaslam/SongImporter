@@ -32,6 +32,7 @@ public:
     /// \param id The image id received throughout Qt's image provider url.
     /// \param size The size of the image that must get passed to render.
     /// \param requestedSize The requested size of the image that is scaled inside the function.
+    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) override;
 
     /// Checks if the image provider already has a cover of the song.
     /// \param song A pointer to the song struct of the album cover.
