@@ -1,13 +1,6 @@
 #include "SoftwareUtils.h"
 #include <QMetaEnum>
 
-SoftwareUtils::SoftwareUtils(QObject *parent)
-	: QObject(parent)
-{}
-
-SoftwareUtils::~SoftwareUtils()
-{}
-
 SoftwareUtils::SupportedAudioFormats SoftwareUtils::stringToAudioFormat(const QString & audioFormat)
 {
     /// Prevent any dots from appearing in the format.

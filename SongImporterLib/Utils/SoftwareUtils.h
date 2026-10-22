@@ -4,6 +4,7 @@
 #include <QUrl>
 #include <QuaZip.h>
 #include <QCoreApplication>
+
 /// I have multiple questions for this class
 /// If I want to expose them in QML, I can't just put them inside of functions, I must use a class
 /// At the same time, audio formats do not belong in in this class.
@@ -14,6 +15,8 @@ class SONGIMPORTERLIB_EXPORT SoftwareUtils  : public QObject
 	Q_OBJECT
 
 public:
+    explicit SoftwareUtils(QObject* parent) : QObject(parent){}
+
     enum SupportedAudioFormats {
         UNKNOWN,
         MP3,
@@ -32,8 +35,6 @@ public:
     Q_ENUM(SupportedSoftware)
 
     using SoftwareAudioFormats = QHash<SupportedSoftware, QList<SupportedAudioFormats>>;
-	SoftwareUtils(QObject *parent);
-	~SoftwareUtils();
 
 public slots:
 	[[nodiscard]] static SupportedAudioFormats stringToAudioFormat(const QString& audioFormat);
