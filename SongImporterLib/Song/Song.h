@@ -20,6 +20,7 @@ public:
 	QString albumArtists;
 	QString filename;
     QString coverId;
+    SoftwareUtils::SupportedAudioFormats format;
     unsigned int bpm{0};
 
 	bool operator==(const Song& other) const
