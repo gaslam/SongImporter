@@ -45,7 +45,7 @@ Page{
 
 		}
 		onAccepted: {
-			songTable.addSongsFromFileToList(selectedFiles,folderFieldButton.valueText)
+			SongListModel.addFiles(selectedFiles,folderFieldButton.inputText);
 		}
 	}
 
@@ -123,12 +123,9 @@ Page{
 			Layout.columnSpan: 2
 			Layout.fillWidth: true
 			Layout.fillHeight: true
-			FileDropArea{
-				anchors.fill: parent
-				onDropped: function(dropEvent)
-				{
-					songTable.addSongsFromFileToList(dropEvent.urls,folderFieldButton.valueText)
-				}
+			onSongDropped: function (dropEvent)
+			{
+				SongListModel.addFiles(dropEvent.urls,folderFieldButton.inputText)
 			}
 		}
 
@@ -145,7 +142,6 @@ Page{
 				let dialog = errorDialogComponent.createObject(root, { informativeText: error });
 				if (dialog) dialog.open();
 			}
-
 		}
 	}
 
