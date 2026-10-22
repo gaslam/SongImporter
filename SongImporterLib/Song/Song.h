@@ -2,6 +2,8 @@
 #define SONG_H
 #include "Utils/SoftwareUtils.h"
 
+
+///Contains all the data needed to display via the qml interface and to copy the file.
 struct SONGIMPORTERLIB_EXPORT Song {
 	Q_GADGET
 	Q_PROPERTY(unsigned int year MEMBER year)
