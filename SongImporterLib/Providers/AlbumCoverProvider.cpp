@@ -162,8 +162,7 @@ QImage AlbumCoverProvider::requestImage(const QString &id, QSize *size, const QS
             return image;
     }
 
-    image = image.scaled(requestedSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    return image;
+    return image.scaled(requestedSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
 bool AlbumCoverProvider::hasCover(Song* song)
