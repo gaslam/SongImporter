@@ -19,8 +19,10 @@ public:
 
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
     bool hasCover(Song& song);
+    bool hasCover(Song* song);
 
     void setImage(Song& song,TagLib::FileRef& fileref);
+    void setImage(Song* song,TagLib::FileRef& fileref);
 
 private:
     QHash<QString,QImage> m_AlbumCovers;
@@ -28,6 +30,7 @@ private:
     QMutex m_Locker;
 
     void extractAlbumCoverArt(TagLib::FileRef& fileref, const QString& id, Song& song);
+    void extractAlbumCoverArt(TagLib::FileRef& fileref, const QString& id, Song* song);
 };
 
 #endif // ALBUMCOVERPROVIDER_H
