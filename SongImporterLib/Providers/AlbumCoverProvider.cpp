@@ -92,6 +92,36 @@ void AlbumCoverProvider::extractAlbumCoverArt(FileRef& fileref, const QString& i
     }
 }
 
+QImage AlbumCoverProvider::extractImageFromTag(ID3v2::Tag* tag) const
+{
+    if (tag)
+    {
+        /// Retrieve all APIC (Attached Picture) frames from the tag.
+        /// These frames store embedded images, such as album covers.
+        const TagLib::ID3v2::FrameList& frameList{tag->frameList("APIC")};
+
+        /// Check if the tag contains at least one attached picture frame.
+        if(!frameList.isEmpty())
+        {
+
+            /// The first frame is the album cover.
+            auto pictureFrame = static_cast<TagLib::ID3v2::AttachedPictureFrame *> (frameList.front());
+
+            /// Retrieve the picture's data
+            const TagLib::ByteVector data = pictureFrame->picture();
+
+            /// Decode the image data into a QImage and return it.
+            /// We're not changing the raw data. No type checking is required so, reinterpret_cast was used for this case.
+            return QImage::fromData(
+                reinterpret_cast<const uchar*>(data.data()),
+                data.size()
+                );
+        }
+    }
+    /// If all failse, return nothing.
+    return{};
+}
+
 QImage AlbumCoverProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
     QImage image;

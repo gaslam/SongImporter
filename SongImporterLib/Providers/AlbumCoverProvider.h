@@ -61,6 +61,7 @@ private:
     /// Extracts the album cover from a tag
     /// \param tag A pointer pointing towards the ID3v2 tag of the file.
     /// \return The extracted album cover of the file's ID3v2 tag. Otherwise nothing returns.
+    QImage extractImageFromTag(TagLib::ID3v2::Tag* tag) const;
 };
 
 #endif // ALBUMCOVERPROVIDER_H
