@@ -117,7 +117,7 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
             emit errorReceived(result.errorMessage);
             return;
         }
-        song.filename = m_FileToProcess;
+        song->filename = m_FileToProcess;
         emit songProcessed(song);
 
     }catch (std::exception& e){
