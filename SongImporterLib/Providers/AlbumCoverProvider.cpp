@@ -6,6 +6,8 @@
 #include <taglib/attachedpictureframe.h>
 #include <taglib/id3v2tag.h>
 #include <taglib/fileref.h>
+#include <taglib/aifffile.h>
+#include <taglib/mp4file.h>
 
 using namespace TagLib;
 
