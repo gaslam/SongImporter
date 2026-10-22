@@ -62,9 +62,9 @@ void SongAnalyzer::getSongFromFile()
 
 void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filename)
 {
-    //TODO: try to make this more efficient
-    //If not, make this more readable
-    // Open the zip
+    /// TODO: try to make this more efficient
+    /// If not, make this more readable
+    /// Open the zip
     QuaZip zip(zipPath);
 
     if (!zip.open(QuaZip::mdUnzip)) {
@@ -74,6 +74,7 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
         return;
     }
 
+    /// Set the current filename of the zip.
     if (!zip.setCurrentFile(filename))
     {
         const QString error{ QString{"File: %1 not found inside zip: %2"}.arg(zipPath,filename)};
@@ -81,7 +82,7 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
         return;
     }
 
-    // Open the zip file
+    /// Open the zip file
     QuaZipFile zipFile(&zip);
 
     if (!zipFile.open(QIODevice::ReadOnly)) {
@@ -90,6 +91,10 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
         return;
     }
 
+
+/// Read the data.
+/// Just using QuaZipFile is not enough.
+/// All data must be read. Otherwise, TagLib will complain.
     QByteArray data{zipFile.readAll()};
     //TODO: try to make this more efficient
     try{
@@ -153,8 +158,8 @@ OperationResult SongAnalyzer::getSongFromFileRef (TagLib::FileRef& file,Song* so
     song->title = title;
     song->year = tag->year();
 
-    //Gather all the data that is not always present in an audio file.
-    // BPM = Beats Per Minute
+    /// Gather all the data that is not always present in an audio file.
+    /// BPM = Beats Per Minute
     auto properties = file.properties();
 
     if (properties.contains("BPM")) {
@@ -166,7 +171,7 @@ OperationResult SongAnalyzer::getSongFromFileRef (TagLib::FileRef& file,Song* so
             song->bpm = bpm;
     }
 
-    //AlbumArtist
+    /// AlbumArtist
     if (properties.contains("ALBUMARTIST")) {
         auto albumArtistList = properties["ALBUMARTIST"];
 
