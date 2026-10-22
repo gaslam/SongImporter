@@ -40,49 +40,66 @@ void AlbumCoverProvider::extractAlbumCoverArt(FileRef& fileref, const QString& i
             return;
         }
     }
+    QImage image;
 
     /// Retrieve the album covers based on the file type.
-    if(FLAC::File* flac{dynamic_cast<FLAC::File*>(file)})
+    switch (song->format)
     {
-        auto picList{flac->pictureList()};
-        if(!picList.isEmpty())
-        {
-            const TagLib::FLAC::Picture* pic{ picList.front()};
+    case SoftwareUtils::SupportedAudioFormats::FLAC:
+    {
+        auto *flac = dynamic_cast<TagLib::FLAC::File *>(file);
 
-            const TagLib::ByteVector data { pic->data()};
-
+        const auto &pictures = flac->pictureList();
+        if (!pictures.isEmpty()) {
+            const auto data = pictures.front()->data();
             image = QImage::fromData(
-                reinterpret_cast<const uchar*>(data.data()),
-                data.size()
-                );
+                reinterpret_cast<const uchar *>(data.data()),
+                data.size());
         }
+        break;
     }
 
-    if(image.isNull())
+    case SoftwareUtils::SupportedAudioFormats::MP3:
     {
-        if (auto mpeg = dynamic_cast<TagLib::MPEG::File*>(file)) {
-            TagLib::ID3v2::Tag *tag = mpeg->ID3v2Tag(); // may return nullptr
-            if (tag)
-            {
-                const TagLib::ID3v2::FrameList& frameList{tag->frameList("APIC")};
-                if(!frameList.isEmpty())
-                {
-                    auto pictureFrame = static_cast<TagLib::ID3v2::AttachedPictureFrame *> (frameList.front());
-
-                    const TagLib::ByteVector data = pictureFrame->picture();
-                    image = QImage::fromData(
-                        reinterpret_cast<const uchar*>(data.data()),
-                        data.size()
-                        );
-                }
-            }
-        }
+        auto *mpeg = dynamic_cast<TagLib::MPEG::File *>(file);
+        image = extractImageFromTag(mpeg->ID3v2Tag());
+        break;
     }
 
-    QMutexLocker locker{&m_Locker};
+    case SoftwareUtils::SupportedAudioFormats::AIFF:
+    case SoftwareUtils::SupportedAudioFormats::WAV:
+    {
+        auto *riff = dynamic_cast<TagLib::RIFF::File *>(file);
+
+        if(auto* tag{dynamic_cast<ID3v2::Tag*>(riff->tag())})
+        {
+            image = extractImageFromTag(tag);
+        }
+
+        break;
+    }
+
+    case SoftwareUtils::SupportedAudioFormats::ALAC:
+    {
+        auto *mp4 = dynamic_cast<TagLib::MP4::File *>(file);
+
+        if(auto* tag{dynamic_cast<ID3v2::Tag*>(mp4->tag())})
+        {
+            image = extractImageFromTag(tag);
+        }
+        break;
+    }
+
+    case SoftwareUtils::SupportedAudioFormats::AAC:
+    case SoftwareUtils::SupportedAudioFormats::ZIP:
+    case SoftwareUtils::SupportedAudioFormats::UNKNOWN:
+    default:
+        break;
+    }
 
     if(!image.isNull())
     {
+        QMutexLocker locker{&m_Locker};
         m_AlbumCovers[id] = image;
         song->coverId = id;
     }
