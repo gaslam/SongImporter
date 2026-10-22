@@ -11,6 +11,11 @@ namespace TagLib{
 class FileRef;
 }
 
+namespace TagLib::ID3v2 {
+class Tag;
+}
+
+
 /// This is the image importer. Gui applications when request it for generating albumCovers
 /// To minimize too much memory on the stack, the images are kept in m_AlbumCovers.
 /// If the image already exists, no extra memory is used.
