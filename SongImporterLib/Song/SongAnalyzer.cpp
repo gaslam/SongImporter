@@ -136,12 +136,6 @@ OperationResult SongAnalyzer::getSongFromFileRef (TagLib::FileRef& file,Song* so
 
     if(tag->isEmpty())
     {
-#if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
-        if(m_pProvider)
-        {
-            m_pProvider->setImage(song,file);
-        }
-#endif
         return OperationResult::succeed();
     }
 
