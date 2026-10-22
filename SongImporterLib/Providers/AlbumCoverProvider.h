@@ -38,8 +38,11 @@ public:
     /// \param song A file reference to the audio file of the album cover
     void setImage(Song* song,TagLib::FileRef& fileref);
 
+
 private:
+    /// A hashmap that stores album covers by it's id.
     QHash<QString,QImage> m_AlbumCovers;
+    /// The default key set by the users gui application in case the image cannot be extracted.
     QString m_DefaultCoverKey;
     QMutex m_Locker;
 
