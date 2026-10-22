@@ -26,6 +26,7 @@ public:
         ALAC,
         AAC,
         ZIP,
+        MP4,
     };
     Q_ENUM(SupportedAudioFormats)
 
@@ -154,8 +155,10 @@ public slots:
     }
 
 private:
+    /// A compiled list of software that is currently compatible.
+    /// This list can easily be extended without ever changing to code to import songs
 	inline static SoftwareAudioFormats m_SupportedFileFormats = {
-        { SoftwareUtils::Rekordbox, { SoftwareUtils::AIFF,SoftwareUtils::FLAC, SoftwareUtils::MP3, SoftwareUtils::ZIP } }
+        { SoftwareUtils::Rekordbox, { SoftwareUtils::AIFF,SoftwareUtils::FLAC, SoftwareUtils::MP3, SoftwareUtils::ZIP, SoftwareUtils::WAV } }
 	};
 };
 
