@@ -38,12 +38,13 @@ public slots:
 signals:
     void errorReceived(const QString& error);
     //Sends the song
+    void songReceived(Song* song);
 private slots:
-    void addSong(Song song);
+    void addSong(Song* song);
 private:
     //A helper class used to manage all instances of AnalyzerManager.
     AnalyzerManager m_AnalyzerManager;
-    QList<Song> m_Songs{};
+    std::vector<std::unique_ptr<Song>> m_Songs{};
 };
 
 #endif // SONGMODEL_H

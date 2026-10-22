@@ -30,6 +30,7 @@ signals:
 
     /// Emitted when a song has been successfully processed.
     /// \param song Pointer to the processed song.
+    void songProcessed(Song* song);
 
     /// Emitted when an error occurs during file processing.
     /// \param error Description of the error.
@@ -44,10 +45,12 @@ private:
     /// \param file A taglib file reference to the audio file being analyzed.
     /// \param song A pointer to the song that is updated with all the data.
     /// \returns The result of the operation.
+    [[nodiscard]] OperationResult getSongFromFileRef (TagLib::FileRef& file,Song* song);
 #if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
     /// Extracts album cover artwork from the file and associates it with the song.
     /// \param fileref Reference to the audio file being analyzed.
     /// \param song Pointer to the Song object that receives the album cover information
+    void extractAlbumCoverArt(TagLib::FileRef& fileref ,Song* song);
 #endif
     void getSongFromFile();
     void getSongFromZip(const QString& zipPath, const QString& filename);

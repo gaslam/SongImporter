@@ -46,7 +46,9 @@ void SongAnalyzer::getSongFromFile()
         emit errorReceived(error);
         return;
     }
-    Song song;
+    Song* song = new Song{};
+    song->format = SoftwareUtils::stringToAudioFormat(QFileInfo(m_FileToProcess).suffix());
+
     auto result{getSongFromFileRef(file,song)};
 
     if(!result)
@@ -54,6 +56,7 @@ void SongAnalyzer::getSongFromFile()
         emit errorReceived(result.errorMessage);
         return;
     }
+
     emit songProcessed(song);
 }
 
@@ -99,7 +102,14 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
             return;
         }
 
-        Song song;
+        /// TODO: urgently replace this method of coding.
+        /// If the gui rejects this song, or doesn't do anything with it, it leaves a memory leak.
+        Song* song {new Song};
+
+        /// The full directory of the zip.
+        QString name { zip.getCurrentFileName()};
+        song->format = SoftwareUtils::stringToAudioFormat(QFileInfo(name).suffix());
+
         auto result{getSongFromFileRef(file,song)};
 
         if(!result)
@@ -119,7 +129,7 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
 }
 
 
-OperationResult SongAnalyzer::getSongFromFileRef (TagLib::FileRef& file,Song& song)
+OperationResult SongAnalyzer::getSongFromFileRef (TagLib::FileRef& file,Song* song)
 {
     //Get the tag and check if it's valid
     auto tag{file.tag()};
@@ -135,17 +145,19 @@ OperationResult SongAnalyzer::getSongFromFileRef (TagLib::FileRef& file,Song& so
         return OperationResult::succeed();
     }
 
-    //Gather all the data that can be retreived from simple functions.
-    //They're guaranteed to be there.
-    song.filename = file.file()->name().toString().toCString();
-    song.album = tag->album().toCString();
+    /// Gather all the data that can be retreived from simple functions.
+    /// They're guaranteed to be there.
+    song->filename = QString::fromStdWString(file.file()->name().wstr());
 
-    song.artists = tag->artist().toCString();
+    /// convert to wstring to display all possible characters
+    song->album = QString::fromStdWString(tag->album().toCWString());
 
-    QString title{tag->title().toCString()};
-    if(title.isEmpty()) title = QFileInfo{song.filename}.baseName().replace('_', ' ');
-    song.title = title;
-    song.year = tag->year();
+    song->artists = QString::fromStdWString(tag->artist().toCWString());
+
+    QString title{QString::fromStdWString(tag->title().toCWString())};
+    if(title.isEmpty()) title = QFileInfo{song->filename}.baseName().replace('_', ' ');
+    song->title = title;
+    song->year = tag->year();
 
     //Gather all the data that is not always present in an audio file.
     // BPM = Beats Per Minute
@@ -157,7 +169,7 @@ OperationResult SongAnalyzer::getSongFromFileRef (TagLib::FileRef& file,Song& so
         int bpm = bpmList.front().toInt();
 
         if (bpm > 0)
-            song.bpm = bpm;
+            song->bpm = bpm;
     }
 
     //AlbumArtist
@@ -165,12 +177,12 @@ OperationResult SongAnalyzer::getSongFromFileRef (TagLib::FileRef& file,Song& so
         auto albumArtistList = properties["ALBUMARTIST"];
 
         if (!albumArtistList.isEmpty()) {
-            song.albumArtists = albumArtistList.front().toCString();
+            song->albumArtists = albumArtistList.front().toCString();
         }
     }
     else
     {
-        song.albumArtists = song.artists;
+        song->albumArtists = song->artists;
     }
 
 #if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS

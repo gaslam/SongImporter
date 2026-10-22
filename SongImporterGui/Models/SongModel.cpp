@@ -17,7 +17,7 @@ int SongModel::columnCount(const QModelIndex &) const
 
 int SongModel::rowCount(const QModelIndex &) const
 {
-    return static_cast<int>(m_Songs.count());
+    return static_cast<int>(m_Songs.size());
 };
 
 
@@ -26,19 +26,24 @@ QVariant SongModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    const Song& song{m_Songs.at(index.row())};
+    const std::unique_ptr<Song>& song{m_Songs.at(index.row())};
+
+    if(!song)
+    {
+        return QVariant();
+    }
 
     switch (role) {
     case ContactRoles::AlbumCoverRole:
-        return song.coverId;
+        return song->coverId;
     case ContactRoles::AlbumRole:
-        return song.album;
+        return song->album;
     case ContactRoles::ArtistsRole:
-        return song.artists;
+        return song->artists;
     case ContactRoles::TitleRole:
-        return song.title;
+        return song->title;
     case ContactRoles::YearRole:
-        return song.year;
+        return song->year;
     default:
         return QVariant();
     }
@@ -46,16 +51,25 @@ QVariant SongModel::data(const QModelIndex &index, int role) const
 
 }
 
-void SongModel::addSong(Song song)
+void SongModel::addSong(Song* song)
 {
-    if(m_Songs.contains(song))
+    const bool bHasSong{std::any_of(m_Songs.cbegin(), m_Songs.cend(),[song](const std::unique_ptr<Song>& newSong)
+                    {
+            return newSong.get()->filename == song->filename;
+    })};
+    if(bHasSong)
     {
+        const QString error{QString{"%1 is already in the list!!"}.arg(song->title)};
+        emit errorReceived(error);
         return;
     }
-    beginInsertRows(QModelIndex(), m_Songs.size(),m_Songs.size());
-    m_Songs << song;
 
+    beginInsertRows(QModelIndex(), m_Songs.size(),m_Songs.size());
+    m_Songs.emplace_back(song);
     endInsertRows();
+    qDebug() << m_Songs.size() * sizeof(song)
+             << "bytes";
+    emit songReceived(song);
 }
 
 QHash<int, QByteArray> SongModel::roleNames() const
