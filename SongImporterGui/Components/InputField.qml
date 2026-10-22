@@ -10,7 +10,6 @@ GridLayout {
     columns:2
 
     width:parent.width
-    anchors.top: parent.top
 
     property string headerText: "header"
     property string inputText: "value"
