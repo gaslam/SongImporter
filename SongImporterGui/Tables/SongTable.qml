@@ -2,9 +2,12 @@ import QtQuick 2.15
 import SongImporterGui.SongListModel
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../Components"
 
 ColumnLayout
 {
+
+    signal songDropped(var dropEvent)
     Text{
         text: "Supported files: mp3, aiff, flac, zip"
     }
@@ -16,7 +19,7 @@ ColumnLayout
         Text {
             id: emptyTableText
             anchors.fill: parent
-            text: "No songs were imported. Add a song in a supported audio format."
+            text: "No songs were imported. Click Import by clicking the button above or drag a supported audio file into this field."
             anchors.centerIn: parent
             wrapMode: Text.Wrap
             width: parent.width
@@ -170,13 +173,22 @@ ColumnLayout
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true    // take the rest of the column under the red bar
+                FileDropArea{
+                    anchors.fill: parent
+                    onDropped: function(dropEvent)
+                    {
+                        songDropped(dropEvent);
+                    }
+                }
+            }
+
+            Connections {
+                target: SongListModel
+
+                function onSongReceived(song) {
+                emptyTableText.visible = false
+                }
             }
         }
-    }
-
-    function addSongsFromFileToList(files,destination)
-    {
-        SongListModel.addFiles(files,destination)
-        emptyTableText.visible = false
     }
 }
