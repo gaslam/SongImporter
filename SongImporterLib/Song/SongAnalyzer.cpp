@@ -39,14 +39,16 @@ void SongAnalyzer::startProcess()
 
 void SongAnalyzer::getSongFromFile()
 {
-    FileRef file {m_FileToProcess.toStdString().c_str()};
+    FileRef file {m_FileToProcess.toStdWString().c_str()};
     if(file.isNull())
     {
         const QString error{QString{"Cannot read file: %1.\nFile might not exist or cannot be read."}.arg(m_FileToProcess)};
         emit errorReceived(error);
         return;
     }
-    Song song;
+    Song song{};
+    song.format = SoftwareUtils::stringToAudioFormat(QFileInfo(m_FileToProcess).suffix());
+
     auto result{getSongFromFileRef(file,song)};
 
     if(!result)
@@ -54,14 +56,15 @@ void SongAnalyzer::getSongFromFile()
         emit errorReceived(result.errorMessage);
         return;
     }
+
     emit songProcessed(song);
 }
 
 void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filename)
 {
-    //TODO: try to make this more efficient
-    //If not, make this more readable
-    // Open the zip
+    /// TODO: try to make this more efficient
+    /// If not, make this more readable
+    /// Open the zip
     QuaZip zip(zipPath);
 
     if (!zip.open(QuaZip::mdUnzip)) {
@@ -71,6 +74,7 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
         return;
     }
 
+    /// Set the current filename of the zip.
     if (!zip.setCurrentFile(filename))
     {
         const QString error{ QString{"File: %1 not found inside zip: %2"}.arg(zipPath,filename)};
@@ -78,7 +82,7 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
         return;
     }
 
-    // Open the zip file
+    /// Open the zip file
     QuaZipFile zipFile(&zip);
 
     if (!zipFile.open(QIODevice::ReadOnly)) {
@@ -87,6 +91,10 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
         return;
     }
 
+
+/// Read the data.
+/// Just using QuaZipFile is not enough.
+/// All data must be read. Otherwise, TagLib will complain.
     QByteArray data{zipFile.readAll()};
     //TODO: try to make this more efficient
     try{
@@ -99,7 +107,14 @@ void SongAnalyzer::getSongFromZip(const QString& zipPath, const QString& filenam
             return;
         }
 
-        Song song;
+        /// TODO: urgently replace this method of coding.
+        /// If the gui rejects this song, or doesn't do anything with it, it leaves a memory leak.
+        Song song {};
+
+        /// The full directory of the zip.
+        QString name { zip.getCurrentFileName()};
+        song.format = SoftwareUtils::stringToAudioFormat(QFileInfo(name).suffix());
+
         auto result{getSongFromFileRef(file,song)};
 
         if(!result)
@@ -126,29 +141,25 @@ OperationResult SongAnalyzer::getSongFromFileRef (TagLib::FileRef& file,Song& so
 
     if(tag->isEmpty())
     {
-#if SONGIMPORTERLIB_EXTRACT_ALBUMCOVERS
-        if(m_pProvider)
-        {
-            m_pProvider->setImage(song,file);
-        }
-#endif
         return OperationResult::succeed();
     }
 
-    //Gather all the data that can be retreived from simple functions.
-    //They're guaranteed to be there.
-    song.filename = file.file()->name().toString().toCString();
-    song.album = tag->album().toCString();
+    /// Gather all the data that can be retreived from simple functions.
+    /// They're guaranteed to be there.
+    song.filename = QString::fromStdWString(file.file()->name().wstr());
 
-    song.artists = tag->artist().toCString();
+    /// convert to wstring to display all possible characters
+    song.album = QString::fromStdWString(tag->album().toCWString());
 
-    QString title{tag->title().toCString()};
+    song.artists = QString::fromStdWString(tag->artist().toCWString());
+
+    QString title{QString::fromStdWString(tag->title().toCWString())};
     if(title.isEmpty()) title = QFileInfo{song.filename}.baseName().replace('_', ' ');
     song.title = title;
     song.year = tag->year();
 
-    //Gather all the data that is not always present in an audio file.
-    // BPM = Beats Per Minute
+    /// Gather all the data that is not always present in an audio file.
+    /// BPM = Beats Per Minute
     auto properties = file.properties();
 
     if (properties.contains("BPM")) {
@@ -160,7 +171,7 @@ OperationResult SongAnalyzer::getSongFromFileRef (TagLib::FileRef& file,Song& so
             song.bpm = bpm;
     }
 
-    //AlbumArtist
+    /// AlbumArtist
     if (properties.contains("ALBUMARTIST")) {
         auto albumArtistList = properties["ALBUMARTIST"];
 

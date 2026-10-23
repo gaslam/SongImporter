@@ -7,7 +7,7 @@ DropArea{
 
     property color dragColor : Theme.pastelBlue
     property double rectRadius : 3
-    property bool isRejectedFileInArea : false
+    property bool isAcceptedFileInArea : false
 
     Rectangle {
         id:background
@@ -34,30 +34,23 @@ onEntered: function(drag)
 {
     background.opacity = 0.5
 
-    for (let i = 0; i < drag.urls.length; i++) {
-        if (!SoftwareUtils.supportsAudioFormatFromUrl(
-                SoftwareUtils.rekordBox,
-                drag.urls[i])) {
-            isRejectedFileInArea = true;
-            break;
-        }
-    }
+    isAcceptedFileInArea = SoftwareUtils.isFileListValid(SoftwareUtils.Rekordbox,drag.urls);
 
 }
 
 onPositionChanged: function(drag) {
-    drag.accepted = !isRejectedFileInArea;
+    drag.accepted = isAcceptedFileInArea;
 }
 
     onExited:
     {
         background.opacity = 0;
-        isRejectedFileInArea = false;
+        isAcceptedFileInArea = false;
     }
 
     onDropped:
     {
         background.opacity = 0;
-        isRejectedFileInArea = false;
+        isAcceptedFileInArea = false;
     }
 }
