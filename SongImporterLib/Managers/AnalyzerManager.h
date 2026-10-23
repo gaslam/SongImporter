@@ -37,7 +37,7 @@ signals:
     void errorReceived(const QString& error);
     ///Signals when an song was analyzed.
     /// \param song A pointer to the song that was analyzed.
-    void songReceived(Song* song);
+    void songReceived(Song song);
 
 public slots:
         ///Checks if a stop was requested for the process of analyzing a song.

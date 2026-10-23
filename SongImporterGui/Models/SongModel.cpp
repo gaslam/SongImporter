@@ -26,7 +26,7 @@ QVariant SongModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    const std::unique_ptr<Song>& song{m_Songs.at(index.row())};
+    Song song{m_Songs.at(index.row())};
 
     if(!song)
     {
@@ -35,15 +35,15 @@ QVariant SongModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case ContactRoles::AlbumCoverRole:
-        return song->coverId;
+        return song.coverId;
     case ContactRoles::AlbumRole:
-        return song->album;
+        return song.album;
     case ContactRoles::ArtistsRole:
-        return song->artists;
+        return song.artists;
     case ContactRoles::TitleRole:
-        return song->title;
+        return song.title;
     case ContactRoles::YearRole:
-        return song->year;
+        return song.year;
     default:
         return QVariant();
     }
@@ -51,15 +51,11 @@ QVariant SongModel::data(const QModelIndex &index, int role) const
 
 }
 
-void SongModel::addSong(Song* song)
+void SongModel::addSong(Song song)
 {
-    const bool bHasSong{std::any_of(m_Songs.cbegin(), m_Songs.cend(),[song](const std::unique_ptr<Song>& newSong)
-                    {
-            return newSong.get()->filename == song->filename;
-    })};
-    if(bHasSong)
+    if(m_Songs.contains(song))
     {
-        const QString error{QString{"%1 is already in the list!!"}.arg(song->title)};
+        const QString error{QString{"%1 is already in the list!!"}.arg(song.title)};
         emit errorReceived(error);
         return;
     }

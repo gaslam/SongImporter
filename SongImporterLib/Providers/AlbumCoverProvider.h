@@ -37,12 +37,12 @@ public:
     /// Checks if the image provider already has a cover of the song.
     /// \param song A pointer to the song struct of the album cover.
     /// \return Returns true if the cover is already associated with an image. Otherwise, it returns false.
-    bool hasCover(Song* song);
+    bool hasCover(Song song);
 
     /// Assigns the image to a song.
     /// \param song A pointer to the song struct of the album cover.
     /// \param song A file reference to the audio file of the album cover
-    void setImage(Song* song,TagLib::FileRef& fileref);
+    void setImage(Song& song,TagLib::FileRef& fileref);
 
 
 private:
@@ -56,7 +56,7 @@ private:
     /// \param fileref A reference to the TagLib file
     /// \param id The id of the album cover image
     /// \param song A pointer to the song struct of the album cover.
-    void extractAlbumCoverArt(TagLib::FileRef& fileref, const QString& id, Song* song);
+    void extractAlbumCoverArt(TagLib::FileRef& fileref, const QString& id, Song& song);
 
     /// Extracts the album cover from a tag
     /// \param tag A pointer pointing towards the ID3v2 tag of the file.

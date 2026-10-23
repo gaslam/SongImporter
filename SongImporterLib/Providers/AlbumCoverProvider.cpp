@@ -18,14 +18,14 @@ AlbumCoverProvider::AlbumCoverProvider(QString& defaultId,QImage& defaultLogo)
     m_AlbumCovers[defaultId] = defaultLogo;
 }
 
-void AlbumCoverProvider::setImage(Song* song,FileRef& fileref)
+void AlbumCoverProvider::setImage(Song& song,FileRef& fileref)
 {
-    QString songId{QString("%1_%2").arg(song->albumArtists.toLower(),song->album.toLower())};
+    QString songId{QString("%1_%2").arg(song.albumArtists.toLower(),song.album.toLower())};
 
     extractAlbumCoverArt(fileref,songId,song);
 }
 
-void AlbumCoverProvider::extractAlbumCoverArt(FileRef& fileref, const QString& id, Song* song)
+void AlbumCoverProvider::extractAlbumCoverArt(FileRef& fileref, const QString& id, Song& song)
 {
     File* file{fileref.file()};
 
@@ -38,14 +38,14 @@ void AlbumCoverProvider::extractAlbumCoverArt(FileRef& fileref, const QString& i
     {
         QMutexLocker locker{&m_Locker};
         if (m_AlbumCovers.contains(id)) {
-            song->coverId = id;
+            song.coverId = id;
             return;
         }
     }
     QImage image;
 
     /// Retrieve the album covers based on the file type.
-    switch (song->format)
+    switch (song.format)
     {
     case SoftwareUtils::SupportedAudioFormats::FLAC:
     {
@@ -103,11 +103,11 @@ void AlbumCoverProvider::extractAlbumCoverArt(FileRef& fileref, const QString& i
     {
         QMutexLocker locker{&m_Locker};
         m_AlbumCovers[id] = image;
-        song->coverId = id;
+        song.coverId = id;
     }
     else
     {
-        song->coverId = m_DefaultCoverKey;
+        song.coverId = m_DefaultCoverKey;
     }
 }
 
@@ -165,8 +165,8 @@ QImage AlbumCoverProvider::requestImage(const QString &id, QSize *size, const QS
     return image.scaled(requestedSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
-bool AlbumCoverProvider::hasCover(Song* song)
+bool AlbumCoverProvider::hasCover(Song song)
 {
     const QMutexLocker locker{&m_Locker};
-    return m_AlbumCovers.contains(song->coverId);
+    return m_AlbumCovers.contains(song.coverId);
 }
