@@ -6,7 +6,7 @@ on:
     branches:
       - main
     tags:
-      - "Release"
+      - "v*"
 
 jobs:
  build:
