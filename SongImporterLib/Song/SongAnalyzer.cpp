@@ -139,15 +139,20 @@ OperationResult SongAnalyzer::getSongFromFileRef (TagLib::FileRef& file,Song& so
     //Get the tag and check if it's valid
     auto tag{file.tag()};
 
+    /// Set the correct filename for the song.
+    /// We do this before the empty tag check.
+    /// Read the comment below as to why it happens.
+    song.filename = QString::fromStdWString(file.file()->name().wstr());
+
     if(tag->isEmpty())
     {
+        /// Some files have no Tags. For them, we return the file's name as a title
+        song.title = QFileInfo(m_FileToProcess).fileName();
         return OperationResult::succeed();
     }
 
     /// Gather all the data that can be retreived from simple functions.
     /// They're guaranteed to be there.
-    song.filename = QString::fromStdWString(file.file()->name().wstr());
-
     /// convert to wstring to display all possible characters
     song.album = QString::fromStdWString(tag->album().toCWString());
 
