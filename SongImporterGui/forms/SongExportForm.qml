@@ -116,6 +116,18 @@ Page{
 				audioFileDialog.open()
 			}
 		}
+
+		ImporterButton{
+			id: deleteSongsButton
+			Layout.row: 2
+			Layout.column: 1
+			text: "Remove selected songs"
+			Layout.preferredWidth: 200
+			onButtonClicked: {
+				songTable.deletedSelectedSongs();
+			}
+		}
+
 		SongTable{
 			id:songTable
 			Layout.row: 3

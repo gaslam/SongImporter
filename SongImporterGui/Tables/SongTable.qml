@@ -11,9 +11,22 @@ ColumnLayout
 
     property var selectedIndexes: []
     property int lastSelectedIndex: -1
+
+    function deletedSelectedSongs()
+    {
+
+        if (selectedIndexes.length > 0) {
+            console.log("songs deleted: ", selectedIndexes)
+            SongListModel.removeSongs(selectedIndexes)
+            selectedIndexes = []
+            lastSelectedIndex = -1
+        }
+    }
+
     Text{
         text: "Supported files: mp3, aiff, flac, zip"
     }
+
 
     Rectangle {
         color: Theme.darkGray
@@ -29,6 +42,7 @@ ColumnLayout
             width: parent.width
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
+            visible: listView.count === 0
 
         }
         Component{
@@ -51,6 +65,7 @@ ColumnLayout
                         anchors.fill: parent
 
                         onClicked: {
+                            listView.forceActiveFocus()
                             let updated = selectedIndexes.slice()
 
                             if (mouse.modifiers & Qt.ShiftModifier) {
@@ -211,27 +226,32 @@ ColumnLayout
 
             ListView {
                 id: listView
+
                 model: SongListModel
                 clip: true
                 delegate: contactDelegate
-                ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
+                focus: true
+                onCountChanged: console.log("Song count:", count)
+
+                ScrollBar.vertical: ScrollBar {
+                    policy: ScrollBar.AsNeeded
+                }
 
                 Layout.fillWidth: true
-                Layout.fillHeight: true    // take the rest of the column under the red bar
-                FileDropArea{
-                    anchors.fill: parent
-                    onDropped: function(dropEvent)
-                    {
-                        songDropped(dropEvent);
+                Layout.fillHeight: true
+
+                Keys.onPressed: function(event) {
+                if (event.key === Qt.Key_Delete) {
+                    deletedSelectedSongs();
                     }
                 }
-            }
 
-            Connections {
-                target: SongListModel
+                FileDropArea {
+                    anchors.fill: parent
 
-                function onSongReceived(song) {
-                emptyTableText.visible = false
+                    onDropped: function(dropEvent) {
+                        songDropped(dropEvent)
+                    }
                 }
             }
         }

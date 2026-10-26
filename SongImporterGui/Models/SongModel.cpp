@@ -15,10 +15,13 @@ int SongModel::columnCount(const QModelIndex &) const
     return ContactRoles::ColumnCount;
 }
 
-int SongModel::rowCount(const QModelIndex &) const
+int SongModel::rowCount(const QModelIndex& parent) const
 {
+    if (parent.isValid())
+        return 0;
+
     return static_cast<int>(m_Songs.size());
-};
+}
 
 
 QVariant SongModel::data(const QModelIndex &index, int role) const
@@ -83,4 +86,32 @@ void SongModel::addFiles(const QList<QUrl> &files, const QString& destination)
 {
     //Runs multithreaded
     m_AnalyzerManager.process(files,destination);
+}
+
+void SongModel::removeSongs(const QVariantList &indexes)
+{
+    long long i{indexes.count() - 1};
+
+    do {
+        bool isIndex{};
+        const int currId{indexes[i].toInt(&isIndex)};
+
+        if(!isIndex)
+        {
+            continue;
+        }
+
+
+
+        QModelIndex modelIndex { index(currId, 0)};
+
+        if (!modelIndex.isValid())
+            continue;
+
+        beginRemoveRows(QModelIndex{}, currId, currId);
+        m_Songs.erase(m_Songs.begin() + currId);
+        endRemoveRows();
+        --i;
+
+    } while (i >= 0);
 }

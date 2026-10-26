@@ -35,6 +35,7 @@ public:
 public slots:
     //Add a file and immediately starts the analyses.
     void addFiles(const QList<QUrl>& files, const QString& destination);
+    void removeSongs(const QVariantList& indexes);
 signals:
     void errorReceived(const QString& error);
     //Sends the song
