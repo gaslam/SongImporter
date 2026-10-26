@@ -40,6 +40,8 @@ signals:
     void errorReceived(const QString& error);
     //Sends the song
     void songReceived(Song song);
+    void processStarted();
+    void processStopped();
 private slots:
     void addSong(Song song);
 private:

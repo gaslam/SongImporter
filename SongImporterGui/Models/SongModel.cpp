@@ -8,6 +8,8 @@ SongModel::SongModel(AlbumCoverProvider* provider,QObject *parent)
     connect(&m_AnalyzerManager,&AnalyzerManager::errorReceived,this,&SongModel::errorReceived);
     //When the analyzer receives a song, the signal must be sent to this class
     connect(&m_AnalyzerManager,&AnalyzerManager::songReceived,this,&SongModel::addSong);
+    connect(&m_AnalyzerManager,&AnalyzerManager::processStarted,this,&SongModel::processStarted);
+    connect(&m_AnalyzerManager,&AnalyzerManager::processStopped,this,&SongModel::processStopped);
 }
 
 int SongModel::columnCount(const QModelIndex &) const

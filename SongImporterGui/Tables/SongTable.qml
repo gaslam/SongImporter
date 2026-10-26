@@ -11,6 +11,7 @@ ColumnLayout
 
     property var selectedIndexes: []
     property int lastSelectedIndex: -1
+    property bool isBusy: false
 
     function deletedSelectedSongs()
     {
@@ -29,7 +30,7 @@ ColumnLayout
 
 
     Rectangle {
-        color: Theme.darkGray
+        color: isBusy ? Theme.pastelBlue : Theme.darkGray
         Layout.fillWidth: true
         Layout.fillHeight: true
 
@@ -59,7 +60,7 @@ ColumnLayout
                 height: 50
                 Rectangle{
                     anchors.fill: parent
-                    color: selectedIndexes.includes(index) ? Theme.pastelBlue :  index % 2 == 0 ? Theme.lightBlack : Qt.lighter(Theme.lightBlack)
+                    color: selectedIndexes.includes(index) ? Theme.pastelBlue :  index % 2 == 0 ? (isBusy ? Theme.pastelBlue : Theme.lightBlack) : (isBusy ? Qt.lighter(Theme.pastelBlue) : Qt.lighter(Theme.lightBlack))
 
                     MouseArea {
                         anchors.fill: parent
@@ -221,6 +222,19 @@ ColumnLayout
                         wrapMode: Text.NoWrap
                         clip: true
                     }
+                }
+            }
+            Connections{
+                target: SongListModel
+
+                function onProcessStarted()
+                {
+                    isBusy = true;
+                }
+
+                function onProcessStopped()
+                {
+                    isBusy = false;
                 }
             }
 
