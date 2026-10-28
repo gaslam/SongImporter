@@ -230,11 +230,13 @@ ColumnLayout
                 function onProcessStarted()
                 {
                     isBusy = true;
+                    fileDropArea.isBusy = isBusy;
                 }
 
                 function onProcessStopped()
                 {
                     isBusy = false;
+                    fileDropArea.isBusy = isBusy;
                 }
             }
 
@@ -261,8 +263,8 @@ ColumnLayout
                 }
 
                 FileDropArea {
+                    id:fileDropArea
                     anchors.fill: parent
-
                     onDropped: function(dropEvent) {
                         songDropped(dropEvent)
                     }
