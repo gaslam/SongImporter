@@ -112,10 +112,24 @@ Page{
 			Layout.column: 0
 			text: "Import music files"
 			Layout.preferredWidth: 200
+
 			onButtonClicked: {
 				audioFileDialog.open()
 			}
 		}
+
+		ImporterButton{
+			id: deleteSongsButton
+			Layout.row: 2
+			Layout.column: 1
+			text: "Remove selected songs"
+			Layout.preferredWidth: 200
+			onButtonClicked: {
+				songTable.deletedSelectedSongs();
+			}
+
+		}
+
 		SongTable{
 			id:songTable
 			Layout.row: 3
@@ -126,6 +140,14 @@ Page{
 			onSongDropped: function (dropEvent)
 			{
 				SongListModel.addFiles(dropEvent.urls,folderFieldButton.inputText)
+			}
+
+			onIsBusyChanged: {
+				let enabled = !songTable.isBusy
+				deleteSongsButton.setEnabled(enabled)
+				audioFileFieldButton.setEnabled(enabled)
+				folderFieldButton.setEnabled(enabled)
+				fileFieldButton.setEnabled(enabled)
 			}
 		}
 

@@ -6,16 +6,34 @@ import "../Components"
 
 ColumnLayout
 {
-
+    id: root
     signal songDropped(var dropEvent)
+
+    property var selectedIndexes: []
+    property int lastSelectedIndex: -1
+    property bool isBusy: false
+
+    function deletedSelectedSongs()
+    {
+
+        if (selectedIndexes.length > 0) {
+            console.log("songs deleted: ", selectedIndexes)
+            SongListModel.removeSongs(selectedIndexes)
+            selectedIndexes = []
+            lastSelectedIndex = -1
+        }
+    }
+
     Text{
         text: "Supported files: mp3, aiff, flac, zip"
     }
 
+
     Rectangle {
-        color: Theme.darkGray
+        color: isBusy ? Theme.pastelBlue : Theme.darkGray
         Layout.fillWidth: true
         Layout.fillHeight: true
+
         Text {
             id: emptyTableText
             anchors.fill: parent
@@ -25,11 +43,13 @@ ColumnLayout
             width: parent.width
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
+            visible: listView.count === 0
 
         }
         Component{
             id: contactDelegate
             Item {
+                required property int index
                 required property string title
                 required property string artists
                 required property url albumCover
@@ -38,60 +58,101 @@ ColumnLayout
                 anchors.left: parent.left; anchors.right: parent.right
                 Layout.fillWidth: true
                 height: 50
-                RowLayout {
+                Rectangle{
                     anchors.fill: parent
-                    spacing: 10
+                    color: selectedIndexes.includes(index) ? Theme.pastelBlue :  index % 2 == 0 ? (isBusy ? Theme.pastelBlue : Theme.lightBlack) : (isBusy ? Qt.lighter(Theme.pastelBlue) : Qt.lighter(Theme.lightBlack))
 
-                    Image{
-                        source: "image://albumProvider/" + albumCover
+                    MouseArea {
+                        anchors.fill: parent
 
-                        Layout.preferredWidth: 4
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
+                        onClicked: {
+                            listView.forceActiveFocus()
+                            let updated = selectedIndexes.slice()
 
-                        fillMode: Image.PreserveAspectFit
-                        smooth: true
+                            if (mouse.modifiers & Qt.ShiftModifier) {
+                                if (lastSelectedIndex !== -1) {
+                                    updated = []
 
+                                    let start = Math.min(lastSelectedIndex, index)
+                                    let end = Math.max(lastSelectedIndex, index)
+
+                                    for (let i = start; i <= end; i++) {
+                                        updated.push(i)
+                                    }
+                                }
+                            }
+                            else if(mouse.modifiers & Qt.CTRL)
+                            {
+                                updated.push(index)
+                                lastSelectedIndex = index
+                            }
+
+                            else {
+                                updated = [index]
+                                lastSelectedIndex = index
+                            }
+
+                            selectedIndexes = updated
+                        }
                     }
 
-                    Text {
-                        text: (!title.length !== 0 ? title :"unknown")
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 7
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        elide: Text.ElideRight
-                        wrapMode: Text.NoWrap
-                        clip: true
-                    }
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 10
 
-                    Text {
-                        text: (album.length > 0 ? album : "unknown")
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 7
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        elide: Text.ElideRight
-                        wrapMode: Text.NoWrap
-                        clip: true
-                    }
-                    Text {
-                        text: (artists.length > 0 ? artists : "unknown")
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 7
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        elide: Text.ElideRight
-                        wrapMode: Text.NoWrap
-                        clip: true
-                    }
-                    Text {
-                        text: (year > 0 ? year : "unknown")
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 7
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        elide: Text.ElideRight
-                        wrapMode: Text.NoWrap
-                        clip: true
+                        Image{
+                            source: "image://albumProvider/" + albumCover
+
+                            Layout.preferredWidth: 4
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+
+                            fillMode: Image.PreserveAspectFit
+                            smooth: true
+
+                        }
+
+                        Text {
+                            text: (!title.length !== 0 ? title :"unknown")
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 7
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            elide: Text.ElideRight
+                            wrapMode: Text.NoWrap
+                            clip: true
+                        }
+
+                        Text {
+                            text: (album.length > 0 ? album : "unknown")
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 7
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            elide: Text.ElideRight
+                            wrapMode: Text.NoWrap
+                            clip: true
+                        }
+                        Text {
+                            text: (artists.length > 0 ? artists : "unknown")
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 7
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            elide: Text.ElideRight
+                            wrapMode: Text.NoWrap
+                            clip: true
+                        }
+                        Text {
+                            text: (year > 0 ? year : "unknown")
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 7
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            elide: Text.ElideRight
+                            wrapMode: Text.NoWrap
+                            clip: true
+                        }
                     }
                 }
+
+
             }
         }
 
@@ -163,30 +224,50 @@ ColumnLayout
                     }
                 }
             }
+            Connections{
+                target: SongListModel
 
-            ListView {
-                id: listView
-                model: SongListModel
-                clip: true
-                delegate: contactDelegate
-                ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
+                function onProcessStarted()
+                {
+                    isBusy = true;
+                    fileDropArea.isBusy = isBusy;
+                }
 
-                Layout.fillWidth: true
-                Layout.fillHeight: true    // take the rest of the column under the red bar
-                FileDropArea{
-                    anchors.fill: parent
-                    onDropped: function(dropEvent)
-                    {
-                        songDropped(dropEvent);
-                    }
+                function onProcessStopped()
+                {
+                    isBusy = false;
+                    fileDropArea.isBusy = isBusy;
                 }
             }
 
-            Connections {
-                target: SongListModel
+            ListView {
+                id: listView
 
-                function onSongReceived(song) {
-                emptyTableText.visible = false
+                model: SongListModel
+                clip: true
+                delegate: contactDelegate
+                focus: true
+                onCountChanged: console.log("Song count:", count)
+
+                ScrollBar.vertical: ScrollBar {
+                    policy: ScrollBar.AsNeeded
+                }
+
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                Keys.onPressed: function(event) {
+                if (event.key === Qt.Key_Delete) {
+                    deletedSelectedSongs();
+                    }
+                }
+
+                FileDropArea {
+                    id:fileDropArea
+                    anchors.fill: parent
+                    onDropped: function(dropEvent) {
+                        songDropped(dropEvent)
+                    }
                 }
             }
         }

@@ -15,6 +15,12 @@ GridLayout {
     property string inputText: "value"
     property alias inputValidator: input.validator
     property alias inputVerticalCenter: input.verticalCenter
+    property bool isEnabled : true
+
+    function setEnabled(enabled)
+    {
+        isEnabled = enabled;
+    }
 
     clip: true
     Layout.minimumWidth: 100
@@ -37,6 +43,7 @@ GridLayout {
         activeFocusOnTab: true
         font.pointSize: 10
         cursorVisible: activeFocus
+        enabled: isEnabled
 
         Layout.fillWidth: true
         Layout.maximumWidth: root.width
@@ -54,7 +61,7 @@ GridLayout {
 
         background: Rectangle {
             id: rectangle
-            border.color: Theme.black
+            border.color: isEnabled ? Theme.black : Theme.pastelBlue
             border.width: 1.5
             radius: 3
             color: "transparent"

@@ -12,6 +12,12 @@ RowLayout {
 
 	signal buttonClicked()
 
+	function setEnabled(enabled)
+	{
+		button.setEnabled(enabled)
+		inputField.setEnabled(enabled)
+	}
+
 	InputField {
 		id: inputField
 		headerText: root.headerText

@@ -9,6 +9,7 @@ Rectangle {
     property color backgroundColor: Theme.black
     property color hoverColor: Theme.lightGray
     property color pressedColor: Theme.lightBlack
+    property color disabledColor: Theme.pastelBlue
 
     signal buttonClicked()
     signal buttonDown()
@@ -19,6 +20,12 @@ Rectangle {
            : mouseArea.containsMouse
              ? hoverColor
              : backgroundColor
+
+    function setEnabled(enabled)
+    {
+        mouseArea.enabled = enabled;
+        control.color = enabled ? backgroundColor : disabledColor
+    }
 
     implicitWidth: label.implicitWidth + label.font.pixelSize
     implicitHeight: label.implicitHeight + label.font.pixelSize
