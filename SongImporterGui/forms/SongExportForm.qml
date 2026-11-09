@@ -105,10 +105,36 @@ Page{
 			}
 		}
 
+		GridLayout{
+			rows:2
+			Layout.row: 2
+			Layout.column: 0
+			Layout.preferredWidth: 200
+			Text {
+				Layout.row: 0
+				text: "Sort files by:"
+				color: Theme.black
+				font.pointSize: 8
+				Layout.leftMargin: 4
+				Layout.fillWidth: true
+				wrapMode: Text.NoWrap
+				elide: Text.ElideRight
+			}
+
+			ComboBox {
+				id: folderSortSelection
+				Layout.row: 1
+				Layout.alignment: Qt.AlignTop
+				Layout.preferredWidth: 200
+				model: ["Genre","Artist", "Key"]
+			}
+		}
+
+
 
 		ImporterButton{
 			id: audioFileFieldButton
-			Layout.row: 2
+			Layout.row: 3
 			Layout.column: 0
 			text: "Import music files"
 			Layout.preferredWidth: 200
@@ -120,7 +146,7 @@ Page{
 
 		ImporterButton{
 			id: deleteSongsButton
-			Layout.row: 2
+			Layout.row: 3
 			Layout.column: 1
 			text: "Remove selected songs"
 			Layout.preferredWidth: 200
@@ -129,10 +155,9 @@ Page{
 			}
 
 		}
-
 		SongTable{
 			id:songTable
-			Layout.row: 3
+			Layout.row: 4
 			Layout.column: 0
 			Layout.columnSpan: 2
 			Layout.fillWidth: true
